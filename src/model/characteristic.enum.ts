@@ -1,7 +1,7 @@
 export enum CharacteristicEnum {
-  STRENGTH= 'FOR',
-  DEXTERITY = 'DEX',
-  CONSTITUTION = 'CON',
-  APPEARANCE = 'APP',
-  MENTAL_HEALTH = 'SAN',
+  SAN = 'Santé mentale (SAN)',
+  PSY = 'Psychologie',
+  ARCHEO = 'Archéologie',
+  OCC = 'Occultisme',
+  HIST = 'Histoire'
 }

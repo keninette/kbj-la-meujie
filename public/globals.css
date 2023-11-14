@@ -42,3 +42,7 @@ header {
 .border-gradient--blue--to-left {
   border-image-source: linear-gradient(to top right, var(--color-lime), var(--color-blue--dark));
 }
+
+a {
+  text-decoration: underline;
+}

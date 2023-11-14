@@ -1,6 +1,9 @@
 import {CharacteristicEnum} from "./characteristic.enum";
 
 export type DiceRollType = {
-  value: string;
-  characteristic: CharacteristicEnum;
+  characteristic: [CharacteristicEnum];
+  type: string;
+  onSuccess?: DiceRollType | string;
+  onFail?: DiceRollType | string;
+  condition?: string;
 }

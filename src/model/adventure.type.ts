@@ -6,6 +6,7 @@ export type AdventureType = {
     name: string;
     universe: UniverseEnum;
     chapters: ChapterType[];
+    preparation?: string[];
     stuff: string[];
     players: {min: number, max: number};
 }

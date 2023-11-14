@@ -1,5 +1,5 @@
 import {StepType} from "./step.type";
-import {LightsType} from "./lights.type";
+import {LightType} from "./media.type";
 
 export type ChapterType = {
   id: string;
@@ -9,6 +9,6 @@ export type ChapterType = {
   description?: string;
   clues?: string[];
   sounds?: string[];
-  lights?: LightsType[];
+  lights?: LightType[];
   steps?: StepType[];
 }
