@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-red: rgb(255, 96, 96, 1);
+  --color-red--dark: rgb(255, 96, 96, 0.8);
+  --color-orange: rgb(253, 180, 58);
+  --color-orange--dark: rgb(253, 180, 58, 0.8);
+  --color-yellow: rgb(228, 239, 100);
+  --color-lime: rgb(230, 243, 82);
+  --color-lime--dark: rgb(230, 243, 82, 0.8);
+  --color-green: rgb(110, 231, 106);
+  --color-green--dark: rgb(110, 231, 106, 0.8);
+  --color-blue: rgb(106, 183, 231);
+  --color-blue--dark: rgb(106, 183, 231, 0.8);
+  --color-grey--dark: #1a1a1a;
+}
+
+body {
+  background-color: var(--color-grey--dark);
+  font-family: 'Inconsolata' !important;
+}
+
+#__next {
+  height: 100vh;
+}
+
+header {
+  background: linear-gradient( 90deg, var(--color-red) 0%, var(--color-orange) 25%, var(--color-lime) 40%, var(--color-green) 60%, var(--color-blue) 80% ) !important;
+}
+
+.border-gradient {
+  border: 2px solid;
+  border-image-slice: 1;
+}
+
+.border-gradient--red--to-right {
+  border-image-source: linear-gradient(to bottom right, var(--color-red--dark), var(--color-yellow));
+}
+
+.border-gradient--blue--to-left {
+  border-image-source: linear-gradient(to top right, var(--color-lime), var(--color-blue--dark));
+}
