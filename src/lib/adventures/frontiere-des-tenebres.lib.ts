@@ -15,7 +15,11 @@ const frontiereDesTenebres: AdventureType = {
     },
     {
       id: 'FDT-3', adventureId: 'a-la-frontiere-des-tenebres', name: "Recherches",
-      steps: getChapterSteps('FDT-3'), //nextChapterId: 'FDT-3'
+      steps: getChapterSteps('FDT-3'), nextChapterId: 'FDT-4'
+    },
+    {
+      id: 'FDT-4', adventureId: 'a-la-frontiere-des-tenebres', name: "La ferme",
+      steps: []
     }
   ],
   stuff: [

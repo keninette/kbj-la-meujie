@@ -3,5 +3,9 @@ export enum CharacteristicEnum {
   PSY = 'Psychologie',
   ARCHEO = 'Archéologie',
   OCC = 'Occultisme',
-  HIST = 'Histoire'
+  HIST = 'Histoire',
+  LANG_EGYPT = 'Langue (hieroglyphes égyptiens)',
+  CHARM = 'Charme',
+  BS = 'Baratin',
+  LIBRARY = 'Bibliothèque'
 }

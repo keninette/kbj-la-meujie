@@ -54,6 +54,7 @@ const fdtSteps: StepType[] = [
     chapterId: 'FDT-2',
     level: 4,
     description: "Ouverture de la boite",
+    lights: [{intensity: 3, ...LightEnum.DAY}],
     clues: ['Acte de propriété + clé', 'Lettre de Merriweather', 'Boîte en forme de sarcophage', 'Journal'],
     sounds: [{
       name: 'Ambiance café',
@@ -101,20 +102,61 @@ const fdtSteps: StepType[] = [
   {
     id: '3-1',
     chapterId: 'FDT-3',
-    level: 1,
+    level: 2,
     description: "Enquête sur la mort de Marion Allen",
+    clues: [
+      'Rapport de police',
+      'Rapport du médecin légiste'
+    ],
   },
   {
     id: '3-2',
     chapterId: 'FDT-3',
-    level: 1,
-    description: "Etude des hieroglyphes de la boite en or",
+    level: 2,
+    description: "Aller à la bibliothèque Orne de l'université Miskatonic",
+    diceRoll: {
+      type: '1d100',
+      characteristic: [CharacteristicEnum.LIBRARY],
+      condition: 'Tous les joueurs présents'
+    },
+    sounds: [{
+      name: 'Tic tac',
+      filename: 'tic_tac.mp3',
+      volume: 0.1,
+      loop: true
+    }],
+    clues: [
+      'Volume de référence mentionné dans le journal (virtuel)',
+      'Livre sur la civilisation mythique de Mu',
+      'Extrait de catalogue mentionnant une copie De Vermiis Mysteriis dans la collection privée (virtuel)'
+    ],
+    nextStepsIds: ['3-3', '3-4']
   },
   {
     id: '3-3',
     chapterId: 'FDT-3',
-    level: 1,
-    description: "Aller à la bibliothèque Orne de l'université Miskatonic",
+    level: 3,
+    description: "Etude des hieroglyphes de la boite en or",
+    diceRoll: {
+      condition: "Si OK, perte de 2/1d4 jours",
+      type: '1d100', characteristic: [CharacteristicEnum.ARCHEO, CharacteristicEnum.LANG_EGYPT],
+      onFail: {type: '1d100', characteristic: [CharacteristicEnum.BS, CharacteristicEnum.CHARM], condition: "Si demande d'aide à Warren Rice"}
+    },
+    clues: ['+/- Traduction des hiéroglyphes extérieurs'],
+    nextStepsIds: ['3-5']
+  },
+  {
+    id: '3-4',
+    chapterId: 'FDT-3',
+    level: 3,
+    description: "Rencontre avec le Dr Henry Armitage",
+    nextStepsIds: ['3-5']
+  },
+  {
+    id: '3-5',
+    chapterId: 'FDT-3',
+    level: 4,
+    description: "Se préparer à aller à la ferme",
   },
 ];
 

@@ -1,10 +1,10 @@
 import React, {useEffect, useRef} from 'react';
 import {StepType} from "@/model/step.type";
+import DiceRoll from "@/components/DiceRoll";
 
 type StepProps = {
   stepData: StepType;
 }
-
 
 export default function Step({stepData}: StepProps) {
   const refs = {};
@@ -27,7 +27,7 @@ export default function Step({stepData}: StepProps) {
       className="flex flex-col border-solid border-2 p-4 m-10 flex-grow z-10 border-gradient border-gradient--blue--to-left"
       id={stepData.id}
     >
-      <h3 className="flex justify-center text-xl">{stepData.description}</h3>
+      <h3 className="flex justify-center text-xl mb-4">{stepData.description}</h3>
       {stepData.lights && stepData.lights.map((light, index) => {
         return <p className="flex flex-col my-4" key={`light_${stepData.id}_${index}`}>💡 Lumière : {`${light.helper} ${light.color} - ${light.intensity}`}</p>
       })}
@@ -48,25 +48,15 @@ export default function Step({stepData}: StepProps) {
       })}
       <ul>
         {stepData.clues && stepData.clues.map((clue, index) => {
-          return <p key={`clue_${stepData.id}_${index}`}>🕵️‍♀️ Indice : {clue}</p>
+          return <div key={`clue_${stepData.id}_${index}`}>
+            <input type="checkbox" className="mr-2" /><label>🕵️‍♀️ Indice : {clue}</label>
+          </div>
         })}
       </ul>
       {stepData.diceRoll && (
-        <p className="flex flex-col my-4">
-          <p>🎲 {stepData.diceRoll.condition} {stepData.diceRoll.type} {stepData.diceRoll.characteristic.join(' | ')}</p>
-          { stepData.diceRoll.onSuccess  && typeof stepData.diceRoll.onSuccess === 'object' && (
-            <p className="ml-4">🟢 🎲 {stepData.diceRoll.onSuccess?.condition} {stepData.diceRoll.onSuccess.type} {stepData.diceRoll.onSuccess.characteristic.join(' | ')}</p>
-          )}
-          { stepData.diceRoll.onSuccess  && typeof stepData.diceRoll.onSuccess === 'string' && (
-            <p className="ml-4">🟢 {stepData.diceRoll.onSuccess}</p>
-          )}
-          { stepData.diceRoll.onFail && typeof stepData.diceRoll.onFail === 'object' && (
-            <p className="ml-4">🔴 🎲 {stepData.diceRoll.onFail?.condition} {stepData.diceRoll.onFail.type} {stepData.diceRoll.onFail.characteristic.join(' | ')}</p>
-          )}
-          { stepData.diceRoll.onFail && typeof stepData.diceRoll.onFail === 'string' && (
-            <p className="ml-4">🔴 {stepData.diceRoll.onFail}</p>
-          )}
-        </p>
+        <div className="flex flex-col my-4">
+          <DiceRoll diceRoll={stepData.diceRoll} />
+        </div>
       )}
       <ul>
         {stepData.nextStepsIds && stepData.nextStepsIds.map((nextStep) => {
