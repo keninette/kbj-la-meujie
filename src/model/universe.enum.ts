@@ -1,3 +1,3 @@
 export enum UniverseEnum {
-    CHTULHU = 'chtulhu'
-};
+  CHTULHU = 'chtulhu',
+}

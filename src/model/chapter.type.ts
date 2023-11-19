@@ -1,5 +1,5 @@
-import {StepType} from "./step.type";
-import {LightType} from "./media.type";
+import { StepType } from './step.type';
+import { LightType } from './media.type';
 
 export type ChapterType = {
   id: string;
@@ -11,4 +11,4 @@ export type ChapterType = {
   sounds?: string[];
   lights?: LightType[];
   steps?: StepType[];
-}
+};

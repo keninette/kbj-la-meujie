@@ -1,11 +1,22 @@
 export enum CharacteristicEnum {
   SAN = 'Santé mentale (SAN)',
   PSY = 'Psychologie',
+  PSY_ANA = 'Psychoanalyse',
   ARCHEO = 'Archéologie',
   OCC = 'Occultisme',
   HIST = 'Histoire',
   LANG_EGYPT = 'Langue (hieroglyphes égyptiens)',
   CHARM = 'Charme',
   BS = 'Baratin',
-  LIBRARY = 'Bibliothèque'
+  LIBRARY = 'Bibliothèque',
+  FHO = 'Trouver objet caché',
+  MED = 'Médecine',
+  BIO = 'Sciences (Biologie)',
+  NAT = 'Naturalisme',
+  URGENT_CARE = 'Premiers soins',
+  DEX = 'Dextérité',
+  LISTEN = 'Ecouter',
+  ESCAPE = 'Esquive',
+  MELEE = 'Corps à corps',
+  LUCK = 'Chance',
 }

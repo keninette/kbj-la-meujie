@@ -2,7 +2,7 @@ export type LightType = {
   color: string;
   intensity: number;
   helper: string;
-}
+};
 
 export type SoundType = {
   name: string;
@@ -10,4 +10,4 @@ export type SoundType = {
   loop: boolean;
   volume?: number;
   helper?: string;
-}
+};

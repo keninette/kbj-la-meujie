@@ -1,5 +1,5 @@
-import {DiceRollType} from "./dice-roll.type";
-import {LightType, SoundType} from "./media.type";
+import { DiceRollType } from './dice-roll.type';
+import { LightType, SoundType } from './media.type';
 
 export type StepType = {
   id: string;
@@ -9,7 +9,7 @@ export type StepType = {
   clues?: string[];
   sounds?: SoundType[];
   lights?: LightType[];
-  diceRoll?: DiceRollType;
+  diceRolls?: DiceRollType[];
   doNotForget?: string[];
   nextStepsIds?: string[];
-}
+};

@@ -19,7 +19,6 @@
 
 body {
   background-color: var(--color-grey--dark);
-  font-family: 'Inconsolata' !important;
 }
 
 #__next {
@@ -27,7 +26,14 @@ body {
 }
 
 header {
-  background: linear-gradient( 90deg, var(--color-red) 0%, var(--color-orange) 25%, var(--color-lime) 40%, var(--color-green) 60%, var(--color-blue) 80% ) !important;
+  background: linear-gradient(
+    90deg,
+    var(--color-red) 0%,
+    var(--color-orange) 25%,
+    var(--color-lime) 40%,
+    var(--color-green) 60%,
+    var(--color-blue) 80%
+  ) !important;
 }
 
 .border-gradient {
