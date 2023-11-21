@@ -5,13 +5,18 @@ import AudioPlayer from '@/components/AudioPlayer';
 
 type StepProps = {
   stepData: StepType;
+  handleClick: (step: StepType, activeSteps?: string[]) => void;
+  activeSteps: string[];
 };
 
-export default function Step({ stepData }: StepProps) {
+export default function Step({ stepData, handleClick, activeSteps }: StepProps) {
   return (
     <div
-      className='flex flex-col border-solid border-2 p-4 m-10 flex-grow z-10 border-gradient border-gradient--blue--to-left'
+      className={`flex flex-col border-solid border-2 p-4 m-10 flex-grow z-10 border-gradient border-gradient--blue--to-left ${
+        activeSteps.includes(stepData.id) ? 'opacity-100' : 'opacity-25'
+      }`}
       id={stepData.id}
+      onClick={() => handleClick(stepData)}
     >
       <h3 className='flex justify-center text-xl mb-4'>{stepData.description}</h3>
       {stepData.lights &&
