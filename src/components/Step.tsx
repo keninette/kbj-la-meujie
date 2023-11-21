@@ -27,8 +27,8 @@ export default function Step({ stepData, handleClick, activeSteps }: StepProps) 
             </p>
           );
         })}
-      {stepData.sounds &&
-        stepData.sounds.map((sound, index) => {
+      {stepData.audios &&
+        stepData.audios.map((sound, index) => {
           return <AudioPlayer audio={sound} id={index} stepId={stepData.id} key={`audio-player_${index}`} />;
         })}
       <ul>

@@ -1,5 +1,4 @@
 import { CharacteristicEnum } from './characteristic.enum';
-import { SoundType } from '@/model/media.type';
 
 export enum DiceRollCallbackTypeEnum {
   TEXT = 'text',

@@ -10,11 +10,12 @@ const fdtSteps: StepType[] = [
     level: 1,
     description: "Avant d'entrer dans la chambre",
     lights: [{ intensity: 3, color: LightEnum.WHITE, helper: 'Lumière blanche, hôpital' }],
-    sounds: [
+    audios: [
       {
         name: 'Ambiance hôpital',
         filename: 'ambiance_hopital.mp3',
         loop: true,
+        autoplay: true,
         volume: 0.05,
       },
     ],
@@ -25,11 +26,12 @@ const fdtSteps: StepType[] = [
     chapterId: 'FDT-2',
     level: 2,
     description: "Entrée dans la chambre d'hôpital",
-    sounds: [
+    audios: [
       {
         name: 'Ambiance chambre',
         filename: 'ambiance_hopital_chambre.mp3',
         loop: true,
+
         volume: 0.05,
       },
     ],
@@ -55,11 +57,11 @@ const fdtSteps: StepType[] = [
     chapterId: 'FDT-2',
     level: 3,
     description: 'Mort de Merriweather',
-    sounds: [
+    audios: [
       {
         name: 'ECG plat',
         filename: 'ecg_plat.mp3',
-        loop: false,
+
         volume: 0.5,
         helper: "Au moment de la mort de Merriweather, en plus de l'ambiance",
       },
@@ -80,11 +82,12 @@ const fdtSteps: StepType[] = [
     description: 'Ouverture de la boite',
     lights: [{ intensity: 5, color: LightEnum.YELLOW, helper: 'Lumière naturelle, jour' }],
     clues: ['Acte de propriété + clé', 'Lettre de Merriweather', 'Boîte en forme de sarcophage', 'Journal'],
-    sounds: [
+    audios: [
       {
         name: 'Ambiance café',
         filename: 'ambiance_cafe.mp3',
         loop: true,
+
         volume: 0.05,
         helper: "Si dans un café/cafétéria de l'hôpital",
       },
@@ -151,10 +154,11 @@ const fdtSteps: StepType[] = [
         condition: 'Tous les joueurs présents',
       },
     ],
-    sounds: [
+    audios: [
       {
         name: 'Tic tac',
         filename: 'tic_tac.mp3',
+
         volume: 0.1,
         loop: true,
       },
@@ -217,11 +221,12 @@ const fdtSteps: StepType[] = [
         },
       },
     ],
-    sounds: [
+    audios: [
       {
         name: 'Ambiance campagne 18h',
         filename: 'campagne_18h.mp3',
         loop: true,
+        autoplay: true,
         volume: 0.15,
       },
     ],
@@ -254,10 +259,11 @@ const fdtSteps: StepType[] = [
     chapterId: 'FDT-5',
     level: 1,
     description: 'La ferme',
-    sounds: [
+    audios: [
       {
         name: 'Ambiance maison abandonnée',
         filename: 'courant_air.mp3',
+        autoplay: true,
         loop: true,
       },
     ],
@@ -350,21 +356,20 @@ const fdtSteps: StepType[] = [
     level: 1,
     description: 'La ferme',
     clues: ['Description de la ferme  : Approcher de la ferme'],
-    sounds: [
+    audios: [
       {
         name: 'Ambiance maison abandonnée',
         filename: 'courant_air.mp3',
         loop: true,
+        autoplay: true,
       },
       {
         name: 'Balançoire qui grince',
         filename: 'grincement_metal.mp3',
-        loop: false,
       },
       {
         name: 'Porte qui grince',
         filename: 'porte_qui_grince.mp3',
-        loop: false,
       },
     ],
     lights: [
@@ -402,11 +407,10 @@ const fdtSteps: StepType[] = [
         onSuccess: { type: DiceRollCallbackTypeEnum.TEXT, value: 'Son : des bruits de pas dans un escalier' },
       },
     ],
-    sounds: [
+    audios: [
       {
         name: 'Pas dans un escalier',
         filename: 'escalier_course.mp3',
-        loop: false,
       },
     ],
     clues: ['Lampe à huile, mais vide et sans mèche'],
@@ -423,11 +427,10 @@ const fdtSteps: StepType[] = [
         onSuccess: { type: DiceRollCallbackTypeEnum.TEXT, value: 'Son : des bruits de pas dans un escalier' },
       },
     ],
-    sounds: [
+    audios: [
       {
         name: 'Pas en dessous',
         filename: 'pas_parquet_03.mp3',
-        loop: false,
       },
     ],
     clues: ['Description "La pièce de derrière"', 'Même symboles occultes sur une trappe au plafond'],
@@ -474,11 +477,10 @@ const fdtSteps: StepType[] = [
         },
       },
     ],
-    sounds: [
+    audios: [
       {
         name: 'Bruit du monstre essouflé après attaque',
         filename: 'monstre_11.mp3',
-        loop: false,
       },
     ],
   },
@@ -536,11 +538,12 @@ const fdtSteps: StepType[] = [
     level: 1,
     description: 'Inspection',
     clues: ['De quoi allumer la lampe à huile'],
-    sounds: [
+    audios: [
       {
         name: 'Ambiance maison abandonnée',
         filename: 'courant_air.mp3',
         loop: true,
+        autoplay: true,
       },
     ],
     lights: [{ intensity: 3, color: LightEnum.YELLOW, helper: 'Lampe à huile' }],
