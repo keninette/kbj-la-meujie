@@ -1,6 +1,6 @@
 import AdventureCard from '@/components/AdventureCard';
 import { allAdventures } from '@/lib/adventures/adventures.lib';
-import Header from '@/components/Header';
+import Header from '@/components/header/Header';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {

@@ -265,6 +265,7 @@ const fdtSteps: StepType[] = [
         filename: 'courant_air.mp3',
         autoplay: true,
         loop: true,
+        volume: 0.5,
       },
     ],
     nextStepsIds: ['5-2', '5-3', '5-4'],
@@ -362,10 +363,12 @@ const fdtSteps: StepType[] = [
         filename: 'courant_air.mp3',
         loop: true,
         autoplay: true,
+        volume: 0.5,
       },
       {
         name: 'Balançoire qui grince',
-        filename: 'grincement_metal.mp3',
+        filename: 'vieille-balancoire-grince.mp3',
+        volume: 0.5,
       },
       {
         name: 'Porte qui grince',
@@ -409,8 +412,15 @@ const fdtSteps: StepType[] = [
     ],
     audios: [
       {
+        name: 'Ambiance angoisse',
+        filename: 'ambiance-horreur-angoisse.mp3',
+        loop: true,
+        volume: 0.5,
+      },
+      {
         name: 'Pas dans un escalier',
         filename: 'escalier_course.mp3',
+        helper: 'Si Red Jake encore dans la maison',
       },
     ],
     clues: ['Lampe à huile, mais vide et sans mèche'],
@@ -429,8 +439,15 @@ const fdtSteps: StepType[] = [
     ],
     audios: [
       {
+        name: 'Ambiance angoisse',
+        filename: 'ambiance-horreur-angoisse.mp3',
+        loop: true,
+        volume: 0.5,
+      },
+      {
         name: 'Pas en dessous',
         filename: 'pas_parquet_03.mp3',
+        helper: 'Si Red Jake toujours dans la cave',
       },
     ],
     clues: ['Description "La pièce de derrière"', 'Même symboles occultes sur une trappe au plafond'],
@@ -458,31 +475,7 @@ const fdtSteps: StepType[] = [
     id: '6-5',
     chapterId: 'FDT-6',
     level: 3,
-    description: 'Ouvrir la trappe du grenier (TAI 90)',
-    diceRolls: [
-      {
-        type: '1d100, difficulté 2',
-        characteristic: [CharacteristicEnum.ESCAPE],
-        onSuccess: {
-          type: DiceRollCallbackTypeEnum.TEXT,
-          value: '- 1d4-1 PV, min 1 / -1/1d2 SAN',
-        },
-        onFail: {
-          type: DiceRollCallbackTypeEnum.DICE_ROLL,
-          value: {
-            type: '1d100',
-            characteristic: [CharacteristicEnum.SAN],
-            onFail: { type: DiceRollCallbackTypeEnum.TEXT, value: '-1d12 PV | -1/1d4 SAN' },
-          },
-        },
-      },
-    ],
-    audios: [
-      {
-        name: 'Bruit du monstre essouflé après attaque',
-        filename: 'monstre_11.mp3',
-      },
-    ],
+    description: 'Ouvrir la trappe du grenier -> châpitre dédié',
   },
   {
     id: '6-6',
@@ -537,16 +530,16 @@ const fdtSteps: StepType[] = [
     chapterId: 'FDT-7',
     level: 1,
     description: 'Inspection',
-    clues: ['De quoi allumer la lampe à huile'],
     audios: [
       {
-        name: 'Ambiance maison abandonnée',
-        filename: 'courant_air.mp3',
+        name: 'Ambiance angoisse',
+        filename: 'ambiance-horreur-angoisse.mp3',
         loop: true,
         autoplay: true,
+        volume: 0.5,
       },
     ],
-    lights: [{ intensity: 3, color: LightEnum.YELLOW, helper: 'Lampe à huile' }],
+    lights: [{ intensity: 3, color: LightEnum.YELLOW, helper: 'Lampe torche' }],
     nextStepsIds: ['7-2'],
   },
   {
@@ -584,12 +577,12 @@ const fdtSteps: StepType[] = [
     level: 4,
     description: "La malle (même sceaux à l'intérieur de la boîte)",
     clues: [
-      'Une lettre si ils veulent la lire',
+      'Une lettre 📜 Indice 5',
       '6 toges noires bien pliées',
       'Une boite de cigares',
       'Une liasse de papiers jaunis',
     ],
-    nextStepsIds: ['7-5'],
+    nextStepsIds: ['7-5', '7-6'],
   },
   {
     id: '7-5',
@@ -598,7 +591,120 @@ const fdtSteps: StepType[] = [
     description: 'La boite à cigares',
     clues: [
       'Un récipient avec de la poudre grossière brune',
-      'Une boite en bois avec une substance argentée qui ressemble à du talcdi',
+      'Une boite en bois précieux avec une substance argentée qui ressemble à du talc',
+    ],
+    diceRolls: [
+      {
+        type: '1d100',
+        characteristic: [CharacteristicEnum.SCIENCE, CharacteristicEnum.PHARMA, CharacteristicEnum.CHEM],
+        onSuccess: {
+          type: DiceRollCallbackTypeEnum.TEXT,
+          value: "Poudre argentée = mélange de souffre et d'oxyde de cuivre",
+        },
+      },
+    ],
+  },
+  {
+    id: '7-6',
+    chapterId: 'FDT-7',
+    level: 5,
+    description: 'La liasse de papiers jaunis',
+    clues: [
+      "6 copies d'un texte en latin 📜 Indice 6",
+      'Une feuille qui explique le texte en latin',
+      "Une feuille avec la description d'un pentagramme 📜 Indice 8",
+      'Un texte pour expliquer le rituel',
+    ],
+    diceRolls: [
+      {
+        type: '1d100',
+        characteristic: [CharacteristicEnum.LANG_LATIN],
+        onSuccess: { type: DiceRollCallbackTypeEnum.CLUE, value: '📜 Indice 7' },
+      },
+    ],
+  },
+  {
+    id: '8-1',
+    chapterId: 'FDT-8',
+    level: 1,
+    description: 'Ouverture (TAI90)',
+    audios: [
+      {
+        name: 'Ambiance angoisse',
+        filename: 'ambiance-horreur-angoisse.mp3',
+        loop: true,
+        autoplay: true,
+        volume: 0.5,
+      },
+      {
+        name: 'Grognement du monstre',
+        filename: 'FDT/monstre.mp3',
+      },
+      {
+        name: 'Chute',
+        filename: 'chute_corps_1.mp3',
+        volume: 0.1,
+      },
+    ],
+    diceRolls: [
+      {
+        type: '1d100 difficulté 2',
+        characteristic: [CharacteristicEnum.ESCAPE],
+        onSuccess: {
+          type: DiceRollCallbackTypeEnum.TEXT,
+          value: '- 1d3 PV pour la victime, - 1/1D2 SAN tout le monde',
+        },
+        onFail: {
+          type: DiceRollCallbackTypeEnum.TEXT,
+          value: '- 1D10 PV & -1d3 PV pour chute, - 1/1D3 SAN tout le monde',
+        },
+      },
+    ],
+    nextStepsIds: ['8-2'],
+  },
+  {
+    id: '8-2',
+    chapterId: 'FDT-8',
+    level: 2,
+    description: 'La cérémonie',
+    audios: [
+      {
+        name: 'Messe noire (ambiance)',
+        filename: 'messe-noire.mp3',
+        volume: 0.5,
+        loop: true,
+      },
+      {
+        name: 'Grognement du monstre',
+        filename: 'FDT/monstre.mp3',
+      },
+      {
+        name: 'Chant enfant',
+        filename: 'chant-enfant-indien.mp3',
+      },
+      {
+        name: 'Cri de femme',
+        filename: 'cri_peur_femme_02.mp3',
+      },
+      {
+        name: 'Cri de femme 2',
+        filename: 'SF-femme.mp3',
+      },
+      {
+        name: 'Cri de Jack',
+        filename: 'cri_homme_peur_delay_01.mp3',
+        helper: 'Couper au milieu',
+      },
+      {
+        name: 'Rires de lutin',
+        filename: 'lutin_rire_01.mp3',
+        helper: 'Couper au milieu',
+      },
+      {
+        name: "Rires d'enfants",
+        filename: 'SF-kids.mp3',
+        helper: 'Couper au milieu',
+      },
     ],
   },
 ];
@@ -607,4 +713,8 @@ const getChapterSteps = (chapterId: string) => {
   return fdtSteps.filter((step) => step.chapterId === chapterId);
 };
 
-export { getChapterSteps };
+const getChapterStep = (stepId: string) => {
+  return fdtSteps.filter((step) => step.id === stepId)[0] || undefined;
+};
+
+export { getChapterSteps, getChapterStep };

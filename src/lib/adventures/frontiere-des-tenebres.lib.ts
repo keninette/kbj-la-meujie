@@ -8,7 +8,13 @@ const frontiereDesTenebres: AdventureType = {
   universe: UniverseEnum.CHTULHU,
   players: { min: 2, max: 5 },
   chapters: [
-    { id: 'FDT-1', adventureId: 'a-la-frontiere-des-tenebres', name: 'Introduction', nextChapterId: 'FDT-2' },
+    {
+      id: 'FDT-1',
+      adventureId: 'a-la-frontiere-des-tenebres',
+      name: 'Introduction',
+      nextChapterId: 'FDT-2',
+      steps: [],
+    },
     {
       id: 'FDT-2',
       adventureId: 'a-la-frontiere-des-tenebres',
@@ -49,12 +55,20 @@ const frontiereDesTenebres: AdventureType = {
       adventureId: 'a-la-frontiere-des-tenebres',
       name: 'La cave',
       steps: getChapterSteps('FDT-7'),
+      nextChapterId: 'FDT-8',
+    },
+    {
+      id: 'FDT-8',
+      adventureId: 'a-la-frontiere-des-tenebres',
+      name: 'La trappe du grenier & le monstre',
+      steps: getChapterSteps('FDT-8'),
     },
   ],
   stuff: [
     "Boîte d'archivage/Boîte à souvenirs",
     'Lettre de Merriweather + envelope',
     'Acte de propriété + clé dans envelope en craft',
+    'Craie',
   ],
   preparation: [
     'Mettre acte de propriété + clé dans une envelope',

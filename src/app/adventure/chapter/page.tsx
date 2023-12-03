@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { getChapterById } from '@/lib/adventures/frontiere-des-tenebres.lib';
 import Xarrow from 'react-xarrows';
-import Step from '../../../components/Step';
+import Step from '../../../components/step/Step';
 import { getChapterRoute } from '@/app/routes';
 import { getAdventureById } from '@/lib/adventures/adventures.lib';
-import Header from '@/components/Header';
+import Header from '@/components/header/Header';
 import { StepType } from '@/model/step.type';
+import Sidenav from '@/components/sidenav/Sidenav';
 
 type ArrowCoordinatesType = {
   id: string;
@@ -107,54 +108,63 @@ export default function Chapter() {
   }
 
   return (
-    <main className='flex min-h-screen flex-col text-white'>
-      <Header chapters={adventure?.chapters} activeChapter={chapter}></Header>
-      <section className='flex flex-col w-full'>
-        {isClient && chapter && adventure && (
-          <>
-            <section className='flex h-full w-full flex-grow'>
-              <div className='flex flex-col h-full w-full m-4'>
-                <h2 className='flex justify-center w-full text-3xl'>{chapter.name}</h2>
-                {
-                  <div className='flex flex-col'>
-                    {isClient && organizedStepContent}
-                    {isClient &&
-                      arrows &&
-                      arrows.map((edge) => {
-                        return (
+    adventure && (
+      <main className='flex min-h-screen flex-col text-white'>
+        <Header chapters={adventure.chapters} activeChapter={chapter}></Header>
+        <div className='flex'>
+          <section className='flex w-1/5'>
+            <Sidenav chapters={adventure.chapters}></Sidenav>
+          </section>
+          <section className='flex flex-col w-4/5'>
+            {isClient && chapter && adventure && (
+              <>
+                <section className='flex h-full w-full flex-grow'>
+                  <div className='flex flex-col h-full w-full m-4'>
+                    <h2 className='flex justify-center w-full text-3xl'>{chapter.name}</h2>
+                    {
+                      <div className='flex flex-col'>
+                        {isClient && organizedStepContent}
+                        {isClient &&
+                          arrows &&
+                          arrows.map((edge) => {
+                            return (
+                              <div
+                                key={`arrow-wrapper_${edge.id}`}
+                                className={edge.isActive ? 'opacity-100' : 'opacity-20'}
+                              >
+                                <Xarrow
+                                  key={edge.id}
+                                  start={edge.start}
+                                  end={edge.end}
+                                  color='white'
+                                  strokeWidth={2}
+                                  path='grid'
+                                  zIndex={1}
+                                  startAnchor={'bottom'}
+                                  endAnchor={'top'}
+                                ></Xarrow>
+                              </div>
+                            );
+                          })}
+                        {nextChapterData && (
                           <div
-                            key={`arrow-wrapper_${edge.id}`}
-                            className={edge.isActive ? 'opacity-100' : 'opacity-20'}
+                            id='next-chapter'
+                            className='flex w-[94%] p-4 text-xl justify-center m-auto mt-10 border-solid border-2 flex-grow z-10 border-gradient border-gradient--red--to-right opacity-25'
                           >
-                            <Xarrow
-                              key={edge.id}
-                              start={edge.start}
-                              end={edge.end}
-                              color='white'
-                              strokeWidth={2}
-                              path='grid'
-                              zIndex={1}
-                              startAnchor={'bottom'}
-                              endAnchor={'top'}
-                            ></Xarrow>
+                            <a href={getChapterRoute(nextChapterData).path}>
+                              Prochain chapitre : {nextChapterData.name}
+                            </a>
                           </div>
-                        );
-                      })}
-                    {nextChapterData && (
-                      <div
-                        id='next-chapter'
-                        className='flex w-[94%] p-4 text-xl justify-center m-auto mt-10 border-solid border-2 flex-grow z-10 border-gradient border-gradient--red--to-right opacity-25'
-                      >
-                        <a href={getChapterRoute(nextChapterData).path}>Prochain chapitre : {nextChapterData.name}</a>
+                        )}
                       </div>
-                    )}
+                    }
                   </div>
-                }
-              </div>
-            </section>
-          </>
-        )}
-      </section>
-    </main>
+                </section>
+              </>
+            )}
+          </section>
+        </div>
+      </main>
+    )
   );
 }

@@ -10,5 +10,5 @@ export type ChapterType = {
   clues?: string[];
   sounds?: string[];
   lights?: LightType[];
-  steps?: StepType[];
+  steps: StepType[];
 };

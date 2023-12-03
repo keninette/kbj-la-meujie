@@ -6,6 +6,7 @@ export enum CharacteristicEnum {
   OCC = 'Occultisme',
   HIST = 'Histoire',
   LANG_EGYPT = 'Langue (hieroglyphes égyptiens)',
+  LANG_LATIN = 'Langue (latin)',
   CHARM = 'Charme',
   BS = 'Baratin',
   LIBRARY = 'Bibliothèque',
@@ -19,4 +20,7 @@ export enum CharacteristicEnum {
   ESCAPE = 'Esquive',
   MELEE = 'Corps à corps',
   LUCK = 'Chance',
+  SCIENCE = 'Sciences',
+  CHEM = 'Chimie',
+  PHARMA = 'Pharmacie',
 }
