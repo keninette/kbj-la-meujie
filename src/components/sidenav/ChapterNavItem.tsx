@@ -1,4 +1,4 @@
-import { faBookmark, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faBookmark, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ChapterType } from '@/model/chapter.type';
 import { getChapterRoute } from '@/app/routes';
@@ -15,8 +15,8 @@ export default function ChapterNavItem({ chapter }: ChapterNavItemPropsType) {
       <FontAwesomeIcon icon={faBookmark} size='xs' className='mx-2' />
       {route.name}
       {chapter.steps.length > 0 && route && (
-        <a href={route.path} className='ml-2' target='_blank'>
-          <FontAwesomeIcon icon={faUpRightFromSquare} size='xs' />
+        <a href={route.path} className='ml-2'>
+          <FontAwesomeIcon icon={faLink} size='xs' />
         </a>
       )}
     </>

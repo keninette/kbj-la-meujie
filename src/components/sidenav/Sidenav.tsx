@@ -7,27 +7,37 @@ import { getChapterById } from '@/lib/adventures/frontiere-des-tenebres.lib';
 import React from 'react';
 import ChapterTreeItem from '@/components/sidenav/ChapterTreeItem';
 import StepTreeItem from '@/components/sidenav/StepTreeItem';
+import { StepType } from '@/model/step.type';
 
 type SidenavPropsType = {
   chapters: ChapterType[];
+  onStepSelection: (activeStep: StepType) => void;
 };
 
 // todo pre-selected chapter
-export default function Sidenav({ chapters }: SidenavPropsType) {
+// todo style
+export default function Sidenav({ chapters, onStepSelection }: SidenavPropsType) {
   return (
-    <TreeView
-      aria-label='multi-select'
-      defaultCollapseIcon={<FontAwesomeIcon icon={faChevronDown} />}
-      defaultExpandIcon={<FontAwesomeIcon icon={faChevronRight} />}
-      multiSelect
-    >
-      {chapters.map((chapter: ChapterType) => (
-        <ChapterTreeItem key={chapter.id} nodeId={chapter.id} label={chapter.name}>
-          {getChapterSteps(chapter.id).map((step) => (
-            <StepTreeItem key={step.id} nodeId={step.id} label={step.description} />
-          ))}
-        </ChapterTreeItem>
-      ))}
-    </TreeView>
+    <div className='sticky top-0'>
+      <TreeView
+        aria-label='multi-select'
+        defaultCollapseIcon={<FontAwesomeIcon icon={faChevronDown} />}
+        defaultExpandIcon={<FontAwesomeIcon icon={faChevronRight} />}
+        multiSelect
+      >
+        {chapters.map((chapter: ChapterType) => (
+          <ChapterTreeItem key={chapter.id} nodeId={chapter.id} label={chapter.name}>
+            {getChapterSteps(chapter.id).map((step) => (
+              <StepTreeItem
+                key={step.id}
+                nodeId={step.id}
+                label={step.description}
+                onClick={() => onStepSelection(step)}
+              />
+            ))}
+          </ChapterTreeItem>
+        ))}
+      </TreeView>
+    </div>
   );
 }

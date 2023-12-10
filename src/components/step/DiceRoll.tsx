@@ -13,22 +13,22 @@ export default function DiceRoll({ diceRoll }: DiceRollPropsType) {
           🎲 {diceRoll.condition} {diceRoll.type} {diceRoll.characteristic.join(' | ')}
         </span>
         {diceRoll.onSuccess && diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.DICE_ROLL && (
-          <p className='ml-7'>🟢 {displayDiceRoll(diceRoll.onSuccess.value as DiceRollType)}</p>
+          <div className='ml-7'>🟢 {displayDiceRoll(diceRoll.onSuccess.value as DiceRollType)}</div>
         )}
         {diceRoll.onSuccess && diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.TEXT && (
-          <p className='ml-7'>🟢 {diceRoll.onSuccess.value as string}</p>
+          <div className='ml-7'>🟢 {diceRoll.onSuccess.value as string}</div>
         )}
         {diceRoll.onSuccess && diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.CLUE && (
-          <p className='ml-7'>🟢 🕵️‍♂️ Indice : {diceRoll.onSuccess.value as string}</p>
+          <div className='ml-7'>🟢 🕵️‍♂️ Indice : {diceRoll.onSuccess.value as string}</div>
         )}
         {diceRoll.onFail && diceRoll.onFail.type === DiceRollCallbackTypeEnum.DICE_ROLL && (
-          <p className='ml-7'>🔴 {displayDiceRoll(diceRoll.onFail.value as DiceRollType)}</p>
+          <div className='ml-7'>🔴 {displayDiceRoll(diceRoll.onFail.value as DiceRollType)}</div>
         )}
         {diceRoll.onFail && diceRoll.onFail.type === DiceRollCallbackTypeEnum.TEXT && (
-          <p className='ml-7'>🔴 {diceRoll.onFail.value as string}</p>
+          <div className='ml-7'>🔴 {diceRoll.onFail.value as string}</div>
         )}
         {diceRoll.onFail && diceRoll.onFail.type === DiceRollCallbackTypeEnum.CLUE && (
-          <p className='ml-7'>🔴 🕵️‍♂️ Indice : {diceRoll.onFail.value as string}</p>
+          <div className='ml-7'>🔴 🕵️‍♂️ Indice : {diceRoll.onFail.value as string}</div>
         )}
       </>
     );

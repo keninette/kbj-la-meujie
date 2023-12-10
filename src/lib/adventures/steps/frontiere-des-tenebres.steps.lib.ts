@@ -138,14 +138,14 @@ const fdtSteps: StepType[] = [
   {
     id: '3-1',
     chapterId: 'FDT-3',
-    level: 2,
+    level: 1,
     description: 'Enquête sur la mort de Marion Allen',
     clues: ['Rapport de police', 'Rapport du médecin légiste'],
   },
   {
     id: '3-2',
     chapterId: 'FDT-3',
-    level: 2,
+    level: 1,
     description: "Aller à la bibliothèque Orne de l'université Miskatonic",
     diceRolls: [
       {
@@ -173,7 +173,7 @@ const fdtSteps: StepType[] = [
   {
     id: '3-3',
     chapterId: 'FDT-3',
-    level: 3,
+    level: 2,
     description: 'Etude des hieroglyphes de la boite en or',
     diceRolls: [
       {
@@ -196,14 +196,14 @@ const fdtSteps: StepType[] = [
   {
     id: '3-4',
     chapterId: 'FDT-3',
-    level: 3,
+    level: 2,
     description: 'Rencontre avec le Dr Henry Armitage',
     nextStepsIds: ['3-5'],
   },
   {
     id: '3-5',
     chapterId: 'FDT-3',
-    level: 4,
+    level: 3,
     description: 'Se préparer à aller à la ferme',
   },
   {
@@ -713,8 +713,8 @@ const getChapterSteps = (chapterId: string) => {
   return fdtSteps.filter((step) => step.chapterId === chapterId);
 };
 
-const getChapterStep = (stepId: string) => {
+const getChapterStepById = (stepId: string) => {
   return fdtSteps.filter((step) => step.id === stepId)[0] || undefined;
 };
 
-export { getChapterSteps, getChapterStep };
+export { getChapterSteps, getChapterStepById };
