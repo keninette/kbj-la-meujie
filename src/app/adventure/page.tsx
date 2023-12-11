@@ -15,7 +15,7 @@ export default function Adventure() {
 
   return (
     <main className='flex min-h-screen flex-col text-white'>
-      <Header chapters={adventure?.chapters}></Header>
+      <Header></Header>
       <section className='flex flex-col w-full'>
         {adventure && (
           <>

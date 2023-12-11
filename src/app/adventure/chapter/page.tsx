@@ -43,7 +43,7 @@ export default function Chapter() {
   return (
     adventure && (
       <main className='flex min-h-screen flex-col text-white min-w-full'>
-        <Header chapters={adventure.chapters} activeChapter={chapter}></Header>
+        <Header></Header>
         <div className='flex'>
           <section className='flex w-1/5'>
             <Sidenav chapters={adventure.chapters} onStepSelection={onStepSelection}></Sidenav>

@@ -18,7 +18,7 @@ type SidenavPropsType = {
 // todo style
 export default function Sidenav({ chapters, onStepSelection }: SidenavPropsType) {
   return (
-    <div className='sticky top-0'>
+    <div className='h-screen sticky top-0'>
       <TreeView
         aria-label='multi-select'
         defaultCollapseIcon={<FontAwesomeIcon icon={faChevronDown} />}

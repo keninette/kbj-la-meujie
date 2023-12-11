@@ -4,12 +4,7 @@ import { ChapterType } from '@/model/chapter.type';
 import { getChapterRoute } from '@/app/routes';
 import HeaderLink from '@/components/header/HeaderLink';
 
-type HeaderPropsType = {
-  chapters?: ChapterType[];
-  activeChapter?: ChapterType;
-};
-
-export default function Header({ chapters, activeChapter }: HeaderPropsType) {
+export default function Header() {
   return (
     <header className='relative flex items-center px-6 py-8 mb-8'>
       <Image className='flex w-20 h-20 rounded-full' src={kbjImg} alt='avatar' />
@@ -19,15 +14,6 @@ export default function Header({ chapters, activeChapter }: HeaderPropsType) {
           <li className='opacity-50 hover:opacity-100'>
             <a href='/'>🏡 Home</a>
           </li>
-          {chapters &&
-            chapters.map((chapter) => (
-              <HeaderLink
-                key={`header__link--${chapter.id}`}
-                name={chapter.name}
-                isActive={chapter.id === activeChapter?.id}
-                href={getChapterRoute(chapter).path}
-              />
-            ))}
         </ul>
       </nav>
     </header>
