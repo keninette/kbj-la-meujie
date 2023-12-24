@@ -7,16 +7,23 @@ import { AdventureType } from '@/model/adventure.type';
 
 export default function Adventure({ params }: { params: { slug: string } }) {
   const [adventure, setAdventure] = useState<AdventureType>();
-
+  /*const onClick = async () => {
+    await fetch(`/adventure/api?slug=${params.slug}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  };*/
   useEffect(() => {
     (async function () {
-      const response = await fetch(`http://localhost:3000/adventure/api?slug=${params.slug}`, {
+      const response = await fetch(`/adventure/api?slug=${params.slug}`, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      const data = await response.json();
-      setAdventure(data.adventure);
+      const adventure = await response.json();
+      setAdventure(adventure);
     })();
   }, [params.slug]);
 
