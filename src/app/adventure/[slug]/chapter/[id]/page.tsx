@@ -15,14 +15,10 @@ export type ArrowCoordinatesType = {
   end: string;
 };
 
-export default function Chapter() {
+export default function Chapter({ params }: { params: { id: string } }) {
   const [isClient, setIsClient] = useState(false);
   const [activeStep, setActiveStep] = useState();
-  const chapterId = isClient
-    ? activeStep
-      ? (activeStep as StepType).chapterId
-      : new URL(window.location.toString()).searchParams.get('id')
-    : undefined;
+  const chapterId = isClient ? (activeStep ? (activeStep as StepType).chapterId : params.id) : undefined;
   const chapter = chapterId ? getChapterById(chapterId) : undefined;
   const nextChapterData = chapter?.nextChapterId ? getChapterById(chapter?.nextChapterId) : undefined;
   const adventure = chapter ? getAdventureById(chapter.adventureId) : undefined;

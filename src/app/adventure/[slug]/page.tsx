@@ -1,17 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { getChapterRoute } from '@/app/routes';
 import { getAdventureById } from '@/lib/adventures/adventures.lib';
 import Header from '@/components/header/Header';
 
-export default function Adventure() {
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-  const adventureId = isClient ? new URL(window.location.toString()).searchParams.get('id') : undefined;
-  const adventure = adventureId ? getAdventureById(adventureId) : undefined;
+export default function Adventure({ params }: { params: { slug: string } }) {
+  const adventure = getAdventureById(params.slug);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>

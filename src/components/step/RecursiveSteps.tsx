@@ -2,8 +2,8 @@
 import { getChapterStepById } from '@/lib/adventures/steps/frontiere-des-tenebres.steps.lib';
 import Step from '@/components/step/Step';
 import React from 'react';
-import { ArrowCoordinatesType } from '@/app/adventure/chapter/page';
 import Xarrow from 'react-xarrows';
+import { ArrowCoordinatesType } from '@/app/adventure/[slug]/chapter/[id]/page';
 
 type RecursiveStepPropsType = {
   stepIds: string[];

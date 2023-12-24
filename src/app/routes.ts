@@ -9,18 +9,18 @@ const routes = {
   } as RouteType,
   adventure: {
     name: '{adventureName}',
-    path: '/adventure?id={id}',
+    path: '/adventure/{slug}',
   } as RouteType,
   chapter: {
     name: '{chapterName}',
-    path: '/adventure/chapter?id={id}',
+    path: '/adventure/{slug}/chapter/{id}',
   } as RouteType,
 };
 
 const getAdventureRoute = (adventure: AdventureType): RouteType => {
   return {
     name: routes.adventure.name.replace('{adventureName}', adventure.name),
-    path: routes.adventure.path.replace('{id}', adventure.id),
+    path: routes.adventure.path.replace('{slug}', adventure.id),
   };
 };
 
