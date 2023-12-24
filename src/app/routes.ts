@@ -27,7 +27,7 @@ const getAdventureRoute = (adventure: AdventureType): RouteType => {
 const getChapterRoute = (chapter: ChapterType): RouteType => {
   return {
     name: routes.chapter.name.replace('{chapterName}', chapter.name),
-    path: routes.chapter.path.replace('{id}', chapter.id),
+    path: routes.chapter.path.replace('{slug}', chapter.adventureId).replace('{id}', chapter.id),
   };
 };
 

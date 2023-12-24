@@ -1,12 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getChapterRoute } from '@/app/routes';
-import { getAdventureById } from '@/lib/adventures/adventures.lib';
 import Header from '@/components/header/Header';
+import { AdventureType } from '@/model/adventure.type';
 
 export default function Adventure({ params }: { params: { slug: string } }) {
-  const adventure = getAdventureById(params.slug);
+  const [adventure, setAdventure] = useState<AdventureType>();
+
+  useEffect(() => {
+    (async function () {
+      const response = await fetch(`http://localhost:3000/adventure/api?slug=${params.slug}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await response.json();
+      setAdventure(data.adventure);
+    })();
+  }, [params.slug]);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>
