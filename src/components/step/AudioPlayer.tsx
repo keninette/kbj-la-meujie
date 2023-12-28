@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { AudioType } from '@/model/media.type';
+import { Audio } from '@/model/Audio.class';
 
 type AudioPlayerProps = {
-  audio: AudioType;
+  audio: Audio;
   stepId: string;
   id: number;
 };
@@ -34,7 +34,7 @@ export default function AudioPlayer({ audio, id, stepId }: AudioPlayerProps) {
         /*autoPlay={audio.autoplay} todo*/
         className='w-96 bg-white mt-2 mb-4 bg-opacity-50 rounded-lg'
       >
-        <source src={`../../assets/audio/${audio.filename}`} type='audio/mp3' />
+        <source src={`../../../assets/audio/${audio.filename}`} type='audio/mp3' />
       </audio>
     </div>
   );

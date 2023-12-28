@@ -1,8 +1,5 @@
 import Image from 'next/image';
 import kbjImg from '../../../public/assets/img/kbj.jpg';
-import { ChapterType } from '@/model/chapter.type';
-import { getChapterRoute } from '@/app/routes';
-import HeaderLink from '@/components/header/HeaderLink';
 
 export default function Header() {
   return (

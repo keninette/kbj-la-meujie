@@ -1,6 +1,10 @@
-import { RouteType } from '@/model/route.type';
-import { AdventureType } from '@/model/adventure.type';
-import { ChapterType } from '@/model/chapter.type';
+import { Adventure } from '@/model/Adventure.class';
+import { Chapter } from '@/model/Chapter.class';
+
+export type RouteType = {
+  name: string;
+  path: string;
+};
 
 const routes = {
   home: {
@@ -17,17 +21,18 @@ const routes = {
   } as RouteType,
 };
 
-const getAdventureRoute = (adventure: AdventureType): RouteType => {
+const getAdventureRoute = (adventure: Adventure): RouteType => {
+  // todo handle empty
   return {
-    name: routes.adventure.name.replace('{adventureName}', adventure.name),
-    path: routes.adventure.path.replace('{slug}', adventure.id),
+    name: routes.adventure.name.replace('{adventureName}', adventure.name || ''),
+    path: routes.adventure.path.replace('{slug}', adventure.slug || ''),
   };
 };
 
-const getChapterRoute = (chapter: ChapterType): RouteType => {
+const getChapterRoute = (chapter: Chapter, adventureSlug: string): RouteType => {
   return {
-    name: routes.chapter.name.replace('{chapterName}', chapter.name),
-    path: routes.chapter.path.replace('{slug}', chapter.adventureId).replace('{id}', chapter.id),
+    name: routes.chapter.name.replace('{chapterName}', chapter.name || ''),
+    path: routes.chapter.path.replace('{slug}', adventureSlug).replace('{id}', chapter.id || ''),
   };
 };
 

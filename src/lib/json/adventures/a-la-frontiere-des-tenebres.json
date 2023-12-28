@@ -1,8 +1,12 @@
 {
   "id": "a-la-frontiere-des-tenebres",
   "name": "A la frontière des ténèbres",
+  "prefix": "FDT",
   "universe": "chtulhu",
-  "players": { "min": 2, "max": 5 },
+  "players": {
+    "min": 2,
+    "max": 5
+  },
   "chapters": [
     {
       "id": "FDT-1",
@@ -21,7 +25,13 @@
           "chapterId": "FDT-2",
           "level": 1,
           "description": "Avant d'entrer dans la chambre",
-          "lights": [{ "intensity": 3, "color": "⚪", "helper": "Lumière blanche, hôpital" }],
+          "lights": [
+            {
+              "intensity": 3,
+              "color": "⚪",
+              "helper": "Lumière blanche, hôpital"
+            }
+          ],
           "audios": [
             {
               "name": "Ambiance hôpital",
@@ -39,7 +49,12 @@
           "level": 2,
           "description": "Entrée dans la chambre d'hôpital",
           "audios": [
-            { "name": "Ambiance chambre", "filename": "ambiance_hopital_chambre.mp3", "loop": true, "volume": 0.05 }
+            {
+              "name": "Ambiance chambre",
+              "filename": "ambiance_hopital_chambre.mp3",
+              "loop": true,
+              "volume": 0.05
+            }
           ],
           "clues": ["Boîte fermée (boîte d'archivage)"],
           "diceRolls": [
@@ -74,7 +89,10 @@
           "diceRolls": [
             {
               "characteristic": ["Santé mentale (SAN)"],
-              "onFail": { "type": "text", "value": "1 SAN" },
+              "onFail": {
+                "type": "text",
+                "value": "1 SAN"
+              },
               "type": "1d100"
             }
           ],
@@ -85,7 +103,13 @@
           "chapterId": "FDT-2",
           "level": 4,
           "description": "Ouverture de la boite",
-          "lights": [{ "intensity": 5, "color": "🟡", "helper": "Lumière naturelle, jour" }],
+          "lights": [
+            {
+              "intensity": 5,
+              "color": "🟡",
+              "helper": "Lumière naturelle, jour"
+            }
+          ],
           "clues": ["Acte de propriété + clé", "Lettre de Merriweather", "Boîte en forme de sarcophage", "Journal"],
           "audios": [
             {
@@ -98,8 +122,18 @@
           ],
           "nextStepsIds": ["2-5", "2-6", "2-7", "2-8"]
         },
-        { "id": "2-5", "chapterId": "FDT-2", "level": 5, "description": "L'acte de propriété et la clé" },
-        { "id": "2-6", "chapterId": "FDT-2", "level": 5, "description": "La lettre" },
+        {
+          "id": "2-5",
+          "chapterId": "FDT-2",
+          "level": 5,
+          "description": "L'acte de propriété et la clé"
+        },
+        {
+          "id": "2-6",
+          "chapterId": "FDT-2",
+          "level": 5,
+          "description": "La lettre"
+        },
         {
           "id": "2-7",
           "chapterId": "FDT-2",
@@ -109,7 +143,13 @@
             {
               "type": "1d100",
               "characteristic": ["Archéologie", "Histoire"],
-              "onSuccess": { "type": "dice roll", "value": { "type": "1d100", "characteristic": ["Occultisme"] } }
+              "onSuccess": {
+                "type": "dice roll",
+                "value": {
+                  "type": "1d100",
+                  "characteristic": ["Occultisme"]
+                }
+              }
             }
           ]
         },
@@ -122,7 +162,10 @@
             {
               "type": "1d100",
               "characteristic": ["Santé mentale (SAN)"],
-              "onFail": { "type": "text", "value": "1d2 SAN pour le lecteur" }
+              "onFail": {
+                "type": "text",
+                "value": "1d2 SAN pour le lecteur"
+              }
             }
           ]
         }
@@ -147,9 +190,20 @@
           "level": 1,
           "description": "Aller à la bibliothèque Orne de l'université Miskatonic",
           "diceRolls": [
-            { "type": "1d100", "characteristic": ["Bibliothèque"], "condition": "Tous les joueurs présents" }
+            {
+              "type": "1d100",
+              "characteristic": ["Bibliothèque"],
+              "condition": "Tous les joueurs présents"
+            }
           ],
-          "audios": [{ "name": "Tic tac", "filename": "tic_tac.mp3", "volume": 0.1, "loop": true }],
+          "audios": [
+            {
+              "name": "Tic tac",
+              "filename": "tic_tac.mp3",
+              "volume": 0.1,
+              "loop": true
+            }
+          ],
           "clues": [
             "Volume de référence mentionné dans le journal (virtuel) si jet de bibliothèque OK",
             "Livre sur la civilisation mythique de Mu si 2 jets de bibliothèque OK",
@@ -187,7 +241,12 @@
           "description": "Rencontre avec le Dr Henry Armitage",
           "nextStepsIds": ["3-5"]
         },
-        { "id": "3-5", "chapterId": "FDT-3", "level": 3, "description": "Se préparer à aller à la ferme" }
+        {
+          "id": "3-5",
+          "chapterId": "FDT-3",
+          "level": 3,
+          "description": "Se préparer à aller à la ferme"
+        }
       ],
       "nextChapterId": "FDT-4"
     },
@@ -207,7 +266,10 @@
               "characteristic": ["Psychologie"],
               "onSuccess": {
                 "type": "dice roll",
-                "value": { "type": "1d100", "characteristic": ["Charme", "Baratin"] }
+                "value": {
+                  "type": "1d100",
+                  "characteristic": ["Charme", "Baratin"]
+                }
               }
             }
           ],
@@ -243,7 +305,10 @@
               "condition": "Si mauvais jet auparavent",
               "type": "1d100",
               "characteristic": ["Charme"],
-              "onSuccess": { "type": "clue", "value": "Ma' leur parle de Maggie McPhirter" }
+              "onSuccess": {
+                "type": "clue",
+                "value": "Ma' leur parle de Maggie McPhirter"
+              }
             }
           ]
         }
@@ -289,7 +354,10 @@
               "characteristic": ["Santé mentale (SAN)"],
               "onSuccess": {
                 "type": "dice roll",
-                "value": { "type": "1d100", "characteristic": ["Premiers soins", "Médecine"] }
+                "value": {
+                  "type": "1d100",
+                  "characteristic": ["Premiers soins", "Médecine"]
+                }
               }
             }
           ],
@@ -304,7 +372,10 @@
             {
               "type": "1/1d4 1d100",
               "characteristic": ["Dextérité"],
-              "onFail": { "type": "text", "value": "- 1d4 PV" }
+              "onFail": {
+                "type": "text",
+                "value": "- 1d4 PV"
+              }
             }
           ],
           "clues": ["Quelques outils rouillés", "Aucun animal plus gros qu'un rat", "Vieux bois à sécher"]
@@ -318,7 +389,10 @@
             {
               "type": "1d100",
               "characteristic": ["Trouver objet caché"],
-              "onSuccess": { "type": "text", "value": "Présence de légumes bien mûrs" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Présence de légumes bien mûrs"
+              }
             }
           ],
           "nextStepsIds": ["5-6"]
@@ -334,13 +408,21 @@
               "characteristic": ["Trouver objet caché"],
               "onSuccess": {
                 "type": "dice roll",
-                "value": { "type": "1d100", "characteristic": ["Sciences (Biologie)", "Médecine", "Naturalisme"] }
+                "value": {
+                  "type": "1d100",
+                  "characteristic": ["Sciences (Biologie)", "Médecine", "Naturalisme"]
+                }
               }
             }
           ],
           "nextStepsIds": ["5-7"]
         },
-        { "id": "5-7", "chapterId": "FDT-5", "level": 5, "description": "Toilettes & puits" }
+        {
+          "id": "5-7",
+          "chapterId": "FDT-5",
+          "level": 5,
+          "description": "Toilettes & puits"
+        }
       ],
       "nextChapterId": "FDT-6"
     },
@@ -363,15 +445,31 @@
               "autoplay": true,
               "volume": 0.5
             },
-            { "name": "Balançoire qui grince", "filename": "vieille-balancoire-grince.mp3", "volume": 0.5 },
-            { "name": "Porte qui grince", "filename": "porte_qui_grince.mp3" }
+            {
+              "name": "Balançoire qui grince",
+              "filename": "vieille-balancoire-grince.mp3",
+              "volume": 0.5
+            },
+            {
+              "name": "Porte qui grince",
+              "filename": "porte_qui_grince.mp3"
+            }
           ],
-          "lights": [{ "color": "🟠", "intensity": 5, "helper": "Lumière naturelle, fin d'après-midi" }],
+          "lights": [
+            {
+              "color": "🟠",
+              "intensity": 5,
+              "helper": "Lumière naturelle, fin d'après-midi"
+            }
+          ],
           "diceRolls": [
             {
               "type": "1d100",
               "characteristic": ["Occultisme"],
-              "onSuccess": { "type": "text", "value": "Sceaux pour refouler les esprits malfaisants" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Sceaux pour refouler les esprits malfaisants"
+              }
             }
           ],
           "nextStepsIds": ["6-2", "6-3"]
@@ -381,16 +479,30 @@
           "chapterId": "FDT-6",
           "level": 2,
           "description": "La pièce principale",
-          "lights": [{ "color": "🟠", "intensity": 4, "helper": "Pièce un peu obscure" }],
+          "lights": [
+            {
+              "color": "🟠",
+              "intensity": 4,
+              "helper": "Pièce un peu obscure"
+            }
+          ],
           "diceRolls": [
             {
               "type": "1d100",
               "characteristic": ["Ecouter"],
-              "onSuccess": { "type": "text", "value": "Son : des bruits de pas dans un escalier" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Son : des bruits de pas dans un escalier"
+              }
             }
           ],
           "audios": [
-            { "name": "Ambiance angoisse", "filename": "ambiance-horreur-angoisse.mp3", "loop": true, "volume": 0.5 },
+            {
+              "name": "Ambiance angoisse",
+              "filename": "ambiance-horreur-angoisse.mp3",
+              "loop": true,
+              "volume": 0.5
+            },
             {
               "name": "Pas dans un escalier",
               "filename": "escalier_course.mp3",
@@ -408,11 +520,19 @@
             {
               "type": "1d100",
               "characteristic": ["Ecouter"],
-              "onSuccess": { "type": "text", "value": "Son : des bruits de pas dans un escalier" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Son : des bruits de pas dans un escalier"
+              }
             }
           ],
           "audios": [
-            { "name": "Ambiance angoisse", "filename": "ambiance-horreur-angoisse.mp3", "loop": true, "volume": 0.5 },
+            {
+              "name": "Ambiance angoisse",
+              "filename": "ambiance-horreur-angoisse.mp3",
+              "loop": true,
+              "volume": 0.5
+            },
             {
               "name": "Pas en dessous",
               "filename": "pas_parquet_03.mp3",
@@ -431,7 +551,10 @@
             {
               "type": "1d100",
               "characteristic": ["Trouver objet caché"],
-              "onSuccess": { "type": "clue", "value": "Indices sur Red Jake" }
+              "onSuccess": {
+                "type": "clue",
+                "value": "Indices sur Red Jake"
+              }
             }
           ],
           "clues": [
@@ -456,15 +579,24 @@
               "type": "1d100",
               "characteristic": ["Dextérité"],
               "condition": "Red Jake aussi, si 2 OK il arrive à fuir",
-              "onSuccess": { "type": "text", "value": "Interroger Red Jake" },
+              "onSuccess": {
+                "type": "text",
+                "value": "Interroger Red Jake"
+              },
               "onFail": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
                   "characteristic": ["Dextérité"],
                   "condition": "Red Jake aussi, si 2 OK il arrive à fuir",
-                  "onSuccess": { "type": "text", "value": "Interroger Red Jake" },
-                  "onFail": { "type": "text", "value": "Il fuit" }
+                  "onSuccess": {
+                    "type": "text",
+                    "value": "Interroger Red Jake"
+                  },
+                  "onFail": {
+                    "type": "text",
+                    "value": "Il fuit"
+                  }
                 }
               }
             }
@@ -485,7 +617,10 @@
                 "value": {
                   "type": "1d100",
                   "characteristic": ["Psychoanalyse"],
-                  "onSuccess": { "type": "clue", "value": "Histoire de Red Jake" }
+                  "onSuccess": {
+                    "type": "clue",
+                    "value": "Histoire de Red Jake"
+                  }
                 }
               }
             }
@@ -513,7 +648,13 @@
               "volume": 0.5
             }
           ],
-          "lights": [{ "intensity": 3, "color": "🟡", "helper": "Lampe torche" }],
+          "lights": [
+            {
+              "intensity": 3,
+              "color": "🟡",
+              "helper": "Lampe torche"
+            }
+          ],
           "nextStepsIds": ["7-2"]
         },
         {
@@ -525,7 +666,10 @@
             {
               "type": "1d100",
               "characteristic": ["Corps à corps"],
-              "onSuccess": { "type": "text", "value": "Degats Red Jake page 39 + escape (DEX si contest)" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Degats Red Jake page 39 + escape (DEX si contest)"
+              }
             }
           ],
           "nextStepsIds": ["7-3"]
@@ -571,7 +715,10 @@
             {
               "type": "1d100",
               "characteristic": ["Sciences", "Pharmacie", "Chimie"],
-              "onSuccess": { "type": "text", "value": "Poudre argentée = mélange de souffre et d'oxyde de cuivre" }
+              "onSuccess": {
+                "type": "text",
+                "value": "Poudre argentée = mélange de souffre et d'oxyde de cuivre"
+              }
             }
           ]
         },
@@ -590,7 +737,10 @@
             {
               "type": "1d100",
               "characteristic": ["Langue (latin)"],
-              "onSuccess": { "type": "clue", "value": "📜 Indice 7" }
+              "onSuccess": {
+                "type": "clue",
+                "value": "📜 Indice 7"
+              }
             }
           ]
         }
@@ -615,15 +765,28 @@
               "autoplay": true,
               "volume": 0.5
             },
-            { "name": "Grognement du monstre", "filename": "FDT/monstre.mp3" },
-            { "name": "Chute", "filename": "chute_corps_1.mp3", "volume": 0.1 }
+            {
+              "name": "Grognement du monstre",
+              "filename": "FDT/monstre.mp3"
+            },
+            {
+              "name": "Chute",
+              "filename": "chute_corps_1.mp3",
+              "volume": 0.1
+            }
           ],
           "diceRolls": [
             {
               "type": "1d100 difficulté 2",
               "characteristic": ["Esquive"],
-              "onSuccess": { "type": "text", "value": "- 1d3 PV pour la victime, - 1/1D2 SAN tout le monde" },
-              "onFail": { "type": "text", "value": "- 1D10 PV & -1d3 PV pour chute, - 1/1D3 SAN tout le monde" }
+              "onSuccess": {
+                "type": "text",
+                "value": "- 1d3 PV pour la victime, - 1/1D2 SAN tout le monde"
+              },
+              "onFail": {
+                "type": "text",
+                "value": "- 1D10 PV & -1d3 PV pour chute, - 1/1D3 SAN tout le monde"
+              }
             }
           ],
           "nextStepsIds": ["8-2"]
@@ -634,14 +797,43 @@
           "level": 2,
           "description": "La cérémonie",
           "audios": [
-            { "name": "Messe noire (ambiance)", "filename": "messe-noire.mp3", "volume": 0.5, "loop": true },
-            { "name": "Grognement du monstre", "filename": "FDT/monstre.mp3" },
-            { "name": "Chant enfant", "filename": "chant-enfant-indien.mp3" },
-            { "name": "Cri de femme", "filename": "cri_peur_femme_02.mp3" },
-            { "name": "Cri de femme 2", "filename": "SF-femme.mp3" },
-            { "name": "Cri de Jack", "filename": "cri_homme_peur_delay_01.mp3", "helper": "Couper au milieu" },
-            { "name": "Rires de lutin", "filename": "lutin_rire_01.mp3", "helper": "Couper au milieu" },
-            { "name": "Rires d'enfants", "filename": "SF-kids.mp3", "helper": "Couper au milieu" }
+            {
+              "name": "Messe noire (ambiance)",
+              "filename": "messe-noire.mp3",
+              "volume": 0.5,
+              "loop": true
+            },
+            {
+              "name": "Grognement du monstre",
+              "filename": "FDT/monstre.mp3"
+            },
+            {
+              "name": "Chant enfant",
+              "filename": "chant-enfant-indien.mp3"
+            },
+            {
+              "name": "Cri de femme",
+              "filename": "cri_peur_femme_02.mp3"
+            },
+            {
+              "name": "Cri de femme 2",
+              "filename": "SF-femme.mp3"
+            },
+            {
+              "name": "Cri de Jack",
+              "filename": "cri_homme_peur_delay_01.mp3",
+              "helper": "Couper au milieu"
+            },
+            {
+              "name": "Rires de lutin",
+              "filename": "lutin_rire_01.mp3",
+              "helper": "Couper au milieu"
+            },
+            {
+              "name": "Rires d'enfants",
+              "filename": "SF-kids.mp3",
+              "helper": "Couper au milieu"
+            }
           ]
         }
       ]
@@ -658,5 +850,43 @@
     "Mettre lettre de Merriweather dans une envelope",
     "Mettre les 2 envelopes + le journal dans la boîte",
     "Remplir la section \"Personnes importantes\" pour Merriweather : rencontre & sentiments"
+  ],
+  "storyArcs": [],
+  "slug": "a-la-frontiere-des-tenebres",
+  "equipment": [
+    {
+      "name": "Boîte d'archivage/Boîte à souvenirs",
+      "isReady": false
+    },
+    {
+      "name": "Lettre de Merriweather + envelope",
+      "isReady": false
+    },
+    {
+      "name": "Acte de propriété + clé dans envelope en craft",
+      "isReady": false
+    },
+    {
+      "name": "Craie",
+      "isReady": false
+    }
+  ],
+  "todos": [
+    {
+      "name": "Mettre acte de propriété + clé dans une envelope",
+      "isReady": false
+    },
+    {
+      "name": "Mettre lettre de Merriweather dans une envelope",
+      "isReady": false
+    },
+    {
+      "name": "Mettre les 2 envelopes + le journal dans la boîte",
+      "isReady": false
+    },
+    {
+      "name": "Remplir la section \"Personnes importantes\" pour Merriweather : rencontre & sentiments",
+      "isReady": false
+    }
   ]
 }

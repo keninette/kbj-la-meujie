@@ -3,18 +3,19 @@
 import React, { useEffect, useState } from 'react';
 import { getChapterRoute } from '@/app/routes';
 import Header from '@/components/header/Header';
-import { AdventureType } from '@/model/adventure.type';
+// @ts-ignore
+import { Adventure } from '@/model/Adventure.class';
 
 export default function Adventure({ params }: { params: { slug: string } }) {
-  const [adventure, setAdventure] = useState<AdventureType>();
-  /*const onClick = async () => {
+  const [adventure, setAdventure] = useState<Adventure>();
+  const onClick = async () => {
     await fetch(`/adventure/api?slug=${params.slug}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
     });
-  };*/
+  };
   useEffect(() => {
     (async function () {
       const response = await fetch(`/adventure/api?slug=${params.slug}`, {
@@ -22,11 +23,10 @@ export default function Adventure({ params }: { params: { slug: string } }) {
           'Content-Type': 'application/json',
         },
       });
-      const adventure = await response.json();
+      const adventure: Adventure = await response.json();
       setAdventure(adventure);
     })();
   }, [params.slug]);
-
   return (
     <main className='flex min-h-screen flex-col text-white'>
       <Header></Header>
@@ -34,15 +34,16 @@ export default function Adventure({ params }: { params: { slug: string } }) {
         {adventure && (
           <>
             <h2 className='flex justify-center w-full text-3xl m-4'>{adventure.name}</h2>
+            <button onClick={onClick}>click here</button>
             <div className='flex mt-10 mx-6'>
               <div className='flex flex-col w-1/3 mx-6'>
                 <h3 className='text-2xl mb-4'>📦 Matériel</h3>
                 <ul className='ml-2'>
-                  {adventure.stuff &&
-                    adventure.stuff.map((item) => (
-                      <div key={item}>
-                        <input type='checkbox' key={item} className='mr-2' />
-                        <label>{item}</label>
+                  {adventure.equipment &&
+                    adventure.equipment.map((item) => (
+                      <div key={item.name}>
+                        <input type='checkbox' key={item.name} className='mr-2' />
+                        <label>{item.name}</label>
                       </div>
                     ))}
                 </ul>
@@ -50,33 +51,52 @@ export default function Adventure({ params }: { params: { slug: string } }) {
               <div className='flex flex-col w-1/3 mx-6'>
                 <h3 className='text-2xl mb-4'>🚦 Préparation</h3>
                 <ul className='ml-2'>
-                  {adventure.preparation &&
-                    adventure.preparation.map((item) => (
-                      <div key={item}>
-                        <input type='checkbox' key={item} className='mr-2' />
-                        <label>{item}</label>
+                  {adventure.todos &&
+                    adventure.todos.map((todo) => (
+                      <div key={todo.name}>
+                        <input type='checkbox' key={todo.name} className='mr-2' />
+                        <label>{todo.name}</label>
                       </div>
                     ))}
                 </ul>
               </div>
-              <div className='flex flex-col w-1/3 mx-6'>
-                <h3 className='text-2xl mb-4'>📚 Chapitres</h3>
-                <ul className='ml-2'>
-                  {adventure.chapters.map((chapter) => {
-                    return (
-                      <li key={chapter.id}>
-                        {chapter.steps ? (
-                          <a href={getChapterRoute(chapter).path} className='text-lg'>
-                            {chapter.name}
+              {adventure.storyArcs !== undefined && adventure.storyArcs.length > 0 && (
+                <div className='flex flex-col w-1/3 mx-6'>
+                  <h3 className='text-2xl mb-4'>📚 Arcs</h3>
+                  <ul className='ml-2'>
+                    {adventure.storyArcs.map((arc) => {
+                      return (
+                        <li key={arc.slug}>
+                          <a href='' className='text-lg'>
+                            {arc.name}
                           </a>
-                        ) : (
-                          <span className='text-lg'>{chapter.name}</span>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+              {!adventure.storyArcs?.length && adventure.chapters?.length && (
+                <div className='flex flex-col w-1/3 mx-6'>
+                  <h3 className='text-2xl mb-4'>📚 Chapitres</h3>
+                  <ul className='ml-2'>
+                    {adventure.chapters &&
+                      adventure.chapters.map((chapter) => {
+                        return (
+                          <li key={chapter.id}>
+                            {chapter.steps ? (
+                              <a href={getChapterRoute(chapter, params.slug).path} className='text-lg'>
+                                {chapter.name}
+                              </a>
+                            ) : (
+                              <span className='text-lg'>{chapter.name}</span>
+                            )}
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </div>
+              )}
             </div>
           </>
         )}

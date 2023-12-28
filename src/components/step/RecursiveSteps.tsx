@@ -1,19 +1,20 @@
 'use client';
-import { getChapterStepById } from '@/lib/adventures/steps/frontiere-des-tenebres.steps.lib';
 import Step from '@/components/step/Step';
 import React from 'react';
 import Xarrow from 'react-xarrows';
 import { ArrowCoordinatesType } from '@/app/adventure/[slug]/chapter/[id]/page';
+import { Chapter } from '@/model/Chapter.class';
 
 type RecursiveStepPropsType = {
   stepIds: string[];
+  chapter: Chapter;
 };
 
-export default function RecursiveSteps({ stepIds }: RecursiveStepPropsType) {
+export default function RecursiveSteps({ stepIds, chapter }: RecursiveStepPropsType) {
   const arrows: ArrowCoordinatesType[] = [];
 
   const renderSteps = (currentStepIds: string[], parentKey?: string) => {
-    const steps = currentStepIds.map((stepId) => getChapterStepById(stepId));
+    const steps = chapter.steps?.filter((thisStep) => currentStepIds.includes(thisStep.id));
     const domElements: React.JSX.Element[] = [];
 
     steps.forEach((step) => {
@@ -23,7 +24,7 @@ export default function RecursiveSteps({ stepIds }: RecursiveStepPropsType) {
       }
       domElements.push(
         <div key={step.id} className='flex flex-col w-full'>
-          <Step stepData={step} uniqueStepKey={uniqueStepKey} />
+          <Step step={step} uniqueStepKey={uniqueStepKey} />
           {step.nextStepsIds && <div className='flex'>{renderSteps(step?.nextStepsIds, uniqueStepKey)}</div>}
         </div>,
       );
