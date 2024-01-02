@@ -17,7 +17,8 @@ type SidenavPropsType = {
 // todo style
 export default function Sidenav({ adventureSlug, chapters, onStepSelection }: SidenavPropsType) {
   return (
-    <div className='h-screen sticky top-0'>
+    <div className='h-screen sticky min-w-[300px] max-w-[400px] w-auto top-0'>
+      <h3 className='m-4 text-xl'>Sommaire</h3>
       <TreeView
         aria-label='multi-select'
         defaultCollapseIcon={<FontAwesomeIcon icon={faChevronDown} />}
@@ -30,7 +31,7 @@ export default function Sidenav({ adventureSlug, chapters, onStepSelection }: Si
               <StepTreeItem
                 key={step.id}
                 nodeId={step.id}
-                label={step.description}
+                label={`${step.description} (lvl. ${step.level})`}
                 onClick={() => onStepSelection(step)}
               />
             ))}

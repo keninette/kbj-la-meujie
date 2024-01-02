@@ -8,8 +8,13 @@ export default function Header() {
       <h1 className='text-3xl ml-4'>kbj la meujie</h1>
       <nav>
         <ul className='absolute flex bottom-0 left-0 bg-[#1a1a1a] bg-opacity-50 h-8 w-full justify-between items-center px-6'>
-          <li className='opacity-50 hover:opacity-100'>
-            <a href='/'>🏡 Home</a>
+          <li>
+            <a className='opacity-50 hover:opacity-100' href='/'>
+              🏡 Home
+            </a>
+            <a className='opacity-50 hover:opacity-100 ml-4' href='/edit'>
+              🖊️ Édition
+            </a>
           </li>
         </ul>
       </nav>

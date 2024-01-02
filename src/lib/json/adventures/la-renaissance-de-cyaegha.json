@@ -1,0 +1,9 @@
+{
+  "slug": "la-renaissance-de-cyaegha",
+  "prefix": "RDC",
+  "name": "La renaissance de Cyaegha",
+  "chapters": [{ "id": "RDC-0", "name": "La rencontre", "steps": [] }],
+  "storyArcs": [],
+  "universe": "chtulhu",
+  "players": { "min": 3, "max": 5 }
+}

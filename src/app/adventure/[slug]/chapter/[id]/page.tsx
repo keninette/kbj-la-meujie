@@ -80,7 +80,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
       <main className='flex min-h-screen flex-col text-white min-w-full'>
         <Header></Header>
         <div className='flex'>
-          <section className='flex w-1/5'>
+          <section className='flex'>
             <Sidenav
               adventureSlug={adventure.slug}
               chapters={adventure.chapters || []}

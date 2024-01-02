@@ -2,6 +2,7 @@ import { NextRequest } from 'next/server';
 import path from 'path';
 import * as fs from 'fs';
 import { Adventure } from '@/model/Adventure.class';
+import { constants } from 'node:http2';
 
 export async function GET(request: NextRequest) {
   const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/json/adventures');
@@ -10,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   // Fetching a single adventure or one of its chapter
   if (adventureSlug) {
-    const adventure = new Adventure(fs.readFileSync(`${adventuresDirPath}/${adventureSlug}.json`, 'utf-8'));
+    const adventure = Adventure.createFromJson(fs.readFileSync(`${adventuresDirPath}/${adventureSlug}.json`, 'utf-8'));
 
     if (chapterId) {
       const chapters = adventure.chapters?.filter((thisChapter) => thisChapter.id === chapterId);
@@ -34,22 +35,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const adventureSlug = request.nextUrl.searchParams.get('slug') || '';
-  /*const adventure = getAdventureById(adventureSlug);
+  const adventure: Adventure = await request.json();
+  console.log(adventure);
+  const filePath = path.join(process.cwd(), `/src/lib/json/adventures/${adventure.slug}.json`);
+  fs.writeFileSync(filePath, JSON.stringify(adventure), { flag: 'w+' });
 
-  if (adventure) {
-    const filePath = path.join(process.cwd(), `/src/lib/json/adventures/${adventure.id}.json`);
-    const adventureAsClass = new Adventure(JSON.stringify(adventure));
-    adventureAsClass.slug = adventure.id;
-    adventureAsClass.equipment = adventure.stuff?.map((thisStuff) => {
-      return { name: thisStuff, isReady: false };
-    });
-    adventureAsClass.todos = adventure.preparation?.map((prep) => {
-      return { name: prep, isReady: false };
-    });
-    fs.writeFileSync(filePath, JSON.stringify(adventureAsClass), { flag: 'w+' });
-  }*/
-
-  // todo return 201
-  return Response.json('ok');
+  return Response.json(adventure, { status: constants.HTTP_STATUS_CREATED });
 }

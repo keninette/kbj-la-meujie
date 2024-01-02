@@ -8,14 +8,7 @@ import { Adventure } from '@/model/Adventure.class';
 
 export default function Adventure({ params }: { params: { slug: string } }) {
   const [adventure, setAdventure] = useState<Adventure>();
-  const onClick = async () => {
-    await fetch(`/adventure/api?slug=${params.slug}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  };
+
   useEffect(() => {
     (async function () {
       const response = await fetch(`/adventure/api?slug=${params.slug}`, {
@@ -34,7 +27,6 @@ export default function Adventure({ params }: { params: { slug: string } }) {
         {adventure && (
           <>
             <h2 className='flex justify-center w-full text-3xl m-4'>{adventure.name}</h2>
-            <button onClick={onClick}>click here</button>
             <div className='flex mt-10 mx-6'>
               <div className='flex flex-col w-1/3 mx-6'>
                 <h3 className='text-2xl mb-4'>📦 Matériel</h3>
@@ -76,7 +68,7 @@ export default function Adventure({ params }: { params: { slug: string } }) {
                   </ul>
                 </div>
               )}
-              {!adventure.storyArcs?.length && adventure.chapters?.length && (
+              {!adventure.storyArcs?.length && (
                 <div className='flex flex-col w-1/3 mx-6'>
                   <h3 className='text-2xl mb-4'>📚 Chapitres</h3>
                   <ul className='ml-2'>

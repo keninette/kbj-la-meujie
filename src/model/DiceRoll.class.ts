@@ -13,12 +13,20 @@ type DiceRollCallbackType = {
 export class DiceRoll {
   characteristic: CharacteristicEnum[];
   type: string;
-  onSuccess?: DiceRollCallbackType;
-  onFail?: DiceRollCallbackType;
+  onSuccess: DiceRollCallbackType;
+  onFail: DiceRollCallbackType;
   condition?: string;
 
   constructor(type: string, characteristic: CharacteristicEnum[]) {
     this.characteristic = characteristic;
     this.type = type;
+    this.onSuccess = {
+      type: DiceRollCallbackTypeEnum.TEXT,
+      value: '',
+    };
+    this.onFail = {
+      type: DiceRollCallbackTypeEnum.TEXT,
+      value: '',
+    };
   }
 }
