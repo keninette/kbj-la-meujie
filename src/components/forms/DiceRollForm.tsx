@@ -2,15 +2,13 @@ import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import { Step } from '@/model/Step.class';
 import { DiceRoll, DiceRollCallbackTypeEnum } from '@/model/DiceRoll.class';
 import { CharacteristicEnum } from '@/model/characteristic.enum';
+import { StepSubFormProps } from '@/components/forms/StepForm';
 
-type StepFormProps = {
-  step: Step;
-  setStep: Dispatch<SetStateAction<Step>>;
-};
-export default function DiceRollForm({ step, setStep }: StepFormProps) {
+export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
+  // todo recursive dice roll
   const [diceRoll, setDiceRoll] = useState<DiceRoll>(new DiceRoll('1d100', []));
-  const [onSuccessDiceRoll, setOnSuccessDiceRoll] = useState<DiceRoll>(new DiceRoll('', []));
-  const [onFailDiceRoll, setOnFailDiceRoll] = useState<DiceRoll>(new DiceRoll('', []));
+  const [onSuccessDiceRoll, setOnSuccessDiceRoll] = useState<DiceRoll>(new DiceRoll('1d100', []));
+  const [onFailDiceRoll, setOnFailDiceRoll] = useState<DiceRoll>(new DiceRoll('1d100', []));
 
   const onChange = (fieldName: string, value: string | CharacteristicEnum) => {
     const updatedDiceRoll: DiceRoll = { ...diceRoll };
@@ -26,20 +24,26 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
         };
         break;
       case 'onSuccessType':
+        updatedDiceRoll.onSuccess = {
+          type: DiceRollCallbackTypeEnum.DICE_ROLL,
+          value: onSuccessDiceRoll,
+        };
+        break;
+      case 'onSuccessDicerollType':
         onSuccessDiceRoll.type = value;
         updatedDiceRoll.onSuccess = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
           value: onSuccessDiceRoll,
         };
         break;
-      case 'onSuccessCharacteristics':
+      case 'onSuccessDicerollCharacteristics':
         onSuccessDiceRoll.characteristic.push(value as CharacteristicEnum);
         updatedDiceRoll.onSuccess = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
           value: onSuccessDiceRoll,
         };
         break;
-      case 'onSuccessCondition':
+      case 'onSuccessDicerollCondition':
         onSuccessDiceRoll.condition = value;
         updatedDiceRoll.onSuccess = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
@@ -53,20 +57,26 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
         };
         break;
       case 'onFailType':
+        updatedDiceRoll.onFail = {
+          type: DiceRollCallbackTypeEnum.DICE_ROLL,
+          value: onFailDiceRoll,
+        };
+        break;
+      case 'onFailDicerollType':
         onFailDiceRoll.type = value;
         updatedDiceRoll.onFail = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
           value: onFailDiceRoll,
         };
         break;
-      case 'onFailCharacteristics':
+      case 'onFailDicerollCharacteristics':
         onFailDiceRoll.characteristic.push(value as CharacteristicEnum);
         updatedDiceRoll.onFail = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
           value: onFailDiceRoll,
         };
         break;
-      case 'onFailCondition':
+      case 'onFailDicerollCondition':
         onFailDiceRoll.condition = value;
         updatedDiceRoll.onFail = {
           type: DiceRollCallbackTypeEnum.DICE_ROLL,
@@ -81,8 +91,6 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
 
     setDiceRoll(updatedDiceRoll);
   };
-
-  console.log(diceRoll);
 
   const typeInput = (value: string, onChangeFunction: (arg0: FormEvent) => void) => (
     <div className='flex flex-col w-full mt-3'>
@@ -150,12 +158,13 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
     updatedStep.diceRolls.push(diceRoll);
 
     setStep(updatedStep);
+    setDiceRoll(new DiceRoll('1d100', []));
   };
 
   return (
     <form className='flex w-full ml-4' onSubmit={(e) => onSubmit(e)}>
       <div className='flex flex-col h-full w-full'>
-        <h3>Ajouter un jet de dé</h3>
+        <h4>Ajouter un jet de dé</h4>
         {typeInput(diceRoll.type, (e) => {
           onChange('type', e.target.value);
         })}
@@ -189,11 +198,13 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
           )}
           {diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.DICE_ROLL && (
             <>
-              {typeInput(diceRoll.onSuccess.type, (e) => onChange('onSuccessType', e.target.value))}
+              {typeInput(diceRoll.onSuccess.value?.type, (e) => onChange('onSuccessDicerollType', e.target.value))}
               {characteristicsInput(diceRoll.onSuccess.value?.characteristic || [], (e) =>
-                onChange('onSuccessCharacteristics', e.target.value),
+                onChange('onSuccessDicerollCharacteristics', e.target.value),
               )}
-              {conditionInput(diceRoll.onSuccess.value?.condition || '', (e) => onChange('condition', e.target.value))}
+              {conditionInput(diceRoll.onSuccess.value?.condition || '', (e) =>
+                onChange('onSuccessDicerollCondition', e.target.value),
+              )}
             </>
           )}
         </div>
@@ -217,23 +228,27 @@ export default function DiceRollForm({ step, setStep }: StepFormProps) {
               type='text'
               name='onFail'
               placeholder='On success'
-              value={diceRoll.onFail || ''}
+              value={diceRoll.onFail.value || ''}
               onChange={(e) => onChange('onFailText', e.target.value)}
               className='flex text-black'
               required
             />
           )}
-          {onFailType === 'diceRoll' && (
+          {diceRoll.onFail.type === DiceRollCallbackTypeEnum.DICE_ROLL && (
             <>
-              {typeInput(diceRoll.onFail?.type, (e) => onChange('onFailType', e.target.value))}
-              {characteristicsInput(diceRoll.onFail.value.characteristic, (e) =>
-                onChange('onFailCharacteritics', e.target.value),
+              {typeInput(diceRoll.onFail.value?.type, (e) => onChange('onFailDicerollType', e.target.value))}
+              {characteristicsInput(diceRoll.onFail.value?.characteristic, (e) =>
+                onChange('onFailDicerollCharacteristics', e.target.value),
               )}
-              {conditionInput(diceRoll.onFail?.value.condition, (e) => onChange('onFailCondition', e.target.value))}
+              {conditionInput(diceRoll.onFail?.value.condition || '', (e) =>
+                onChange('onFailDicerollCondition', e.target.value),
+              )}
             </>
           )}
         </div>
-        <button type='submit'>Ajouter</button>
+        <button className='mt-2 mb-4' type='submit'>
+          Ajouter
+        </button>
       </div>
     </form>
   );

@@ -68,18 +68,29 @@ export class Adventure {
     this.chapters.push({ ...chapter, id: computeNextChapterId() });
   }
 
-  addStep(step: Step, targetChapter: Chapter) {
-    const computeNextStepId = (increment: number = 0) => {
-      const supposedNextId = `${targetChapter.id}-${(targetChapter.steps?.length || 0) + increment}`;
-      console.log(supposedNextId);
-      const existingStepsWithId = targetChapter.steps?.filter((step) => step.id === supposedNextId);
-      if (existingStepsWithId.length) {
-        computeNextStepId(increment++);
-      }
-      return supposedNextId;
-    };
+  computeNextStepId(targetChapter: Chapter, increment: number = 0) {
+    const supposedNextId = `${targetChapter.id}-${(targetChapter.steps?.length || 0) + increment}`;
+    const existingStepsWithId = targetChapter.steps?.filter((step) => step.id === supposedNextId);
+    if (existingStepsWithId.length) {
+      this.computeNextStepId(targetChapter, increment++);
+    }
+    return supposedNextId;
+  }
 
-    const chapterIndex = this.chapters.findIndex((chapter) => chapter.id === targetChapter.id);
-    this.chapters[chapterIndex].steps.push({ ...step, id: computeNextStepId() });
+  addStep(step: Step, targetChapter: Chapter) {
+    const chapterIndex = this.findChapterIndexById(targetChapter.id);
+    this.chapters[chapterIndex].steps.push({ ...step, id: this.computeNextStepId(targetChapter) });
+  }
+
+  findChapterById(id: string) {
+    const chapterIndex = this.findChapterIndexById(id);
+    if (chapterIndex > -1) {
+      return this.chapters[chapterIndex];
+    }
+    return undefined;
+  }
+
+  findChapterIndexById(id: string) {
+    return this.chapters.findIndex((chapter) => chapter.id === id);
   }
 }

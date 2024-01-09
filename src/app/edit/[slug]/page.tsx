@@ -39,7 +39,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
       <Header></Header>
       <div className='flex'>
         <Sidenav adventureSlug={params.slug} chapters={adventure?.chapters || []} onStepSelection={() => {}} />
-        <section className='flex flex-col items-center text-white h-full'>
+        <section className='flex flex-col items-center text-white h-full w-full'>
           <h2>{adventure?.name}</h2>
           <div className='flex w-full justify-evenly mt-8'>
             <button
@@ -78,7 +78,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
             <ChapterForm adventure={adventure} chapter={chapter} setChapter={setChapter} />
           )}
           {adventure && displayStepForm && (
-            <StepForm adventure={adventure} chapter={chapter} step={step} setStep={setStep} />
+            <StepForm adventure={adventure} chapter={chapter} setChapter={setChapter} step={step} setStep={setStep} />
           )}
         </section>
       </div>

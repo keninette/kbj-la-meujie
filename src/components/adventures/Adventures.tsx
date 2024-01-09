@@ -4,7 +4,6 @@ import { Adventure } from '@/model/Adventure.class';
 
 export default function Adventures() {
   const [adventures, setAdventures] = useState<Adventure[]>([]);
-  console.log(adventures);
   useEffect(() => {
     (async function () {
       const response = await fetch(`/adventure/api`, {

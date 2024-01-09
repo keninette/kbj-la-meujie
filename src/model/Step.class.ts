@@ -1,6 +1,7 @@
 import { Light } from '@/model/Light.class';
 import { DiceRoll } from '@/model/DiceRoll.class';
 import { Audio } from '@/model/Audio.class';
+import { Image } from '@/model/Image.class';
 
 export class Step {
   id: string;
@@ -8,6 +9,7 @@ export class Step {
   description?: string;
   clues?: string[];
   audios?: Audio[];
+  images?: Image[];
   lights?: Light[];
   diceRolls?: DiceRoll[];
   doNotForget?: string[];

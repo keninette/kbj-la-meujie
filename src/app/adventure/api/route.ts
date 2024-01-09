@@ -36,7 +36,6 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const adventure: Adventure = await request.json();
-  console.log(adventure);
   const filePath = path.join(process.cwd(), `/src/lib/json/adventures/${adventure.slug}.json`);
   fs.writeFileSync(filePath, JSON.stringify(adventure), { flag: 'w+' });
 
