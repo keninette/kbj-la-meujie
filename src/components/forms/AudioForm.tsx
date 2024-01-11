@@ -70,7 +70,6 @@ export default function AudioForm({ step, setStep }: StepSubFormProps) {
           value={audio.helper || ''}
           onChange={(e) => onChange('helper', e.target.value)}
           className='flex text-black'
-          required
         />
         <div className='flex'>
           <label htmlFor='options' className='text-white'>

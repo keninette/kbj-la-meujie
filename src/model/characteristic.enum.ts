@@ -23,4 +23,12 @@ export enum CharacteristicEnum {
   SCIENCE = 'Sciences',
   CHEM = 'Chimie',
   PHARMA = 'Pharmacie',
+  INT = 'Intelligence',
+  STRENGTH = 'Force',
+  EDU = 'Éducation',
+  CON = 'Constitution',
+  CHUTLHU = 'Mythe de Chtulhu',
+  DAMAGE = 'Dégat',
+  LOCK_PICK = 'Crochetage',
+  PERCEPTION = 'Perception',
 }

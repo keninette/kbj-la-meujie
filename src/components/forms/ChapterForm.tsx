@@ -25,10 +25,12 @@ export default function ChapterForm({ adventure, chapter, setChapter }: ChapterF
       console.error(response);
       alert('Erreur');
     }
+    setChapter(new Chapter('', '', []));
   };
 
   return (
     <form className='flex flex-col mt-8' onSubmit={(e) => onSubmit(e)}>
+      <h3 className='my-4'>Ajouter un châpitre ({adventure && adventure.computeNextChapterId()})</h3>
       <div className='flex flex-col w-full'>
         <label htmlFor='name' className='text-white'>
           Nom
@@ -41,6 +43,19 @@ export default function ChapterForm({ adventure, chapter, setChapter }: ChapterF
           onChange={(e) => onChange('name', e.target.value)}
           className='flex text-black w-full'
           required
+        />
+      </div>
+      <div className='flex flex-col w-full mt-2'>
+        <label htmlFor='nextChapterId' className='text-white'>
+          ID du prochain châpitre
+        </label>
+        <input
+          type='text'
+          name='nextChapterId'
+          placeholder='ID du prochain châpitre'
+          value={chapter.nextChapterId || ''}
+          onChange={(e) => onChange('nextChapterId', e.target.value)}
+          className='flex text-black w-full'
         />
       </div>
       <button type='submit'>Enregistrer</button>

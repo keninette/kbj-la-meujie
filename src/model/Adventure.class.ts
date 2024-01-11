@@ -55,17 +55,17 @@ export class Adventure {
     };
   };
 
-  addChapter(chapter: Chapter) {
-    const computeNextChapterId = (increment: number = 0) => {
-      const supposedNextId = `${this.prefix}-${(this.chapters?.length || 0) + increment}`;
-      const existingChaptersWithId = this.chapters.filter((chapter) => chapter.id === supposedNextId);
-      if (existingChaptersWithId.length) {
-        computeNextChapterId(increment++);
-      }
-      return supposedNextId;
-    };
+  computeNextChapterId(increment: number = 0) {
+    const supposedNextId = `${this.prefix}-${(this.chapters?.length || 0) + increment}`;
+    const existingChaptersWithId = this.chapters.filter((chapter) => chapter.id === supposedNextId);
+    if (existingChaptersWithId.length) {
+      this.computeNextChapterId(increment++);
+    }
+    return supposedNextId;
+  }
 
-    this.chapters.push({ ...chapter, id: computeNextChapterId() });
+  addChapter(chapter: Chapter) {
+    this.chapters.push({ ...chapter, id: this.computeNextChapterId() });
   }
 
   computeNextStepId(targetChapter: Chapter, increment: number = 0) {

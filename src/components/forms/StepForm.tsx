@@ -23,6 +23,7 @@ type StepFormProps = {
 };
 export default function StepForm({ adventure, chapter, setChapter, step, setStep }: StepFormProps) {
   console.log(step);
+  // todo empty step when submit, it doesn't work
 
   const onChapterSelect = (chapterId: string) => {
     const selectedChapter = adventure.findChapterById(chapterId);
@@ -40,11 +41,13 @@ export default function StepForm({ adventure, chapter, setChapter, step, setStep
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     adventure.addStep(step, chapter);
+    console.log(adventure);
     const response = await saveAdventure(adventure);
     if (response.status !== 201) {
       console.error(response);
       alert('Erreur');
     }
+    setStep(new Step('', 1));
   };
 
   return (
@@ -93,7 +96,7 @@ export default function StepForm({ adventure, chapter, setChapter, step, setStep
                 name='level'
                 placeholder='Level'
                 value={step.level}
-                min={0}
+                min={1}
                 onChange={(e) => onChange('level', e.target.valueAsNumber)}
                 className='flex text-black'
               />
@@ -102,6 +105,7 @@ export default function StepForm({ adventure, chapter, setChapter, step, setStep
           </div>
         </form>
         <div className='flex flex-col w-1/3 border-l-2 h-full mx-4 border-white'>
+          {/* todo recursive diceroll form */}
           <DiceRollForm step={step} setStep={setStep} />
         </div>
         <div className='flex flex-col w-1/3 border-l-2 h-full mx-4 border-white'>

@@ -1,6 +1,7 @@
 import React from 'react';
 // @ts-ignore
 import { DiceRoll, DiceRollCallbackTypeEnum } from '@/model/DiceRoll.class';
+import { CharacteristicEnum } from '@/model/characteristic.enum';
 
 type DiceRollPropsType = {
   diceRoll: DiceRoll;
@@ -8,10 +9,11 @@ type DiceRollPropsType = {
 
 export default function DiceRoll({ diceRoll }: DiceRollPropsType) {
   const displayDiceRoll = (diceRoll: DiceRoll) => {
+    const characteristicsLabels = diceRoll.characteristic.map((key) => CharacteristicEnum[key]);
     return (
       <>
         <span>
-          🎲 {diceRoll.condition} {diceRoll.type} {diceRoll.characteristic.join(' | ')}
+          🎲 {diceRoll.condition} {diceRoll.type} {characteristicsLabels.join(' | ')}
         </span>
         {diceRoll.onSuccess && diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.DICE_ROLL && (
           <div className='ml-7'>🟢 {displayDiceRoll(diceRoll.onSuccess.value as DiceRoll)}</div>

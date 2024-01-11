@@ -15,7 +15,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
   const [displayChapterForm, setDisplayChapterForm] = useState<boolean>(false);
   const [displayStepForm, setDisplayStepForm] = useState<boolean>(false);
   const [chapter, setChapter] = useState<Chapter>(new Chapter('', '', []));
-  const [step, setStep] = useState<Step>(new Step('', 0));
+  const [step, setStep] = useState<Step>(new Step('', 1));
 
   // todo handle story arcs
   useEffect(() => {

@@ -59,12 +59,12 @@
           "clues": ["Boîte fermée (boîte d'archivage)"],
           "diceRolls": [
             {
-              "characteristic": ["Psychologie"],
+              "characteristic": ["PSY"],
               "type": "1d100",
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
-                  "characteristic": ["Santé mentale (SAN)"],
+                  "characteristic": ["SAN"],
                   "type": "1d100",
                   "condition": "Si relation amicale 0/1 SAN"
                 }
@@ -88,7 +88,7 @@
           ],
           "diceRolls": [
             {
-              "characteristic": ["Santé mentale (SAN)"],
+              "characteristic": ["SAN"],
               "onFail": {
                 "type": "text",
                 "value": "1 SAN"
@@ -142,12 +142,12 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Archéologie", "Histoire"],
+              "characteristic": ["ARCHEO", "HIST"],
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Occultisme"]
+                  "characteristic": ["OCC"]
                 }
               }
             }
@@ -161,7 +161,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Santé mentale (SAN)"],
+              "characteristic": ["SAN"],
               "onFail": {
                 "type": "text",
                 "value": "1d2 SAN pour le lecteur"
@@ -192,7 +192,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Bibliothèque"],
+              "characteristic": ["LIBRARY"],
               "condition": "Tous les joueurs présents"
             }
           ],
@@ -220,12 +220,12 @@
             {
               "condition": "Si OK, perte de 2/1d4 jours",
               "type": "1d100",
-              "characteristic": ["Archéologie", "Langue (hieroglyphes égyptiens)"],
+              "characteristic": ["ARCHEO", "LANG_EGYPT"],
               "onFail": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Baratin", "Charme"],
+                  "characteristic": ["BS", "CHARM"],
                   "condition": "Si demande d'aide à Warren Rice"
                 }
               }
@@ -263,12 +263,12 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Psychologie"],
+              "characteristic": ["PSY"],
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Charme", "Baratin"]
+                  "characteristic": ["CHARM", "BS"]
                 }
               }
             }
@@ -304,7 +304,7 @@
             {
               "condition": "Si mauvais jet auparavent",
               "type": "1d100",
-              "characteristic": ["Charme"],
+              "characteristic": ["CHARM"],
               "onSuccess": {
                 "type": "clue",
                 "value": "Ma' leur parle de Maggie McPhirter"
@@ -351,12 +351,12 @@
           "diceRolls": [
             {
               "type": "1/1d4 1d100",
-              "characteristic": ["Santé mentale (SAN)"],
+              "characteristic": ["SAN"],
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Premiers soins", "Médecine"]
+                  "characteristic": ["URGENT_CARE", "MED"]
                 }
               }
             }
@@ -371,7 +371,7 @@
           "diceRolls": [
             {
               "type": "1/1d4 1d100",
-              "characteristic": ["Dextérité"],
+              "characteristic": ["DEX"],
               "onFail": {
                 "type": "text",
                 "value": "- 1d4 PV"
@@ -388,7 +388,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Trouver objet caché"],
+              "characteristic": ["FHO"],
               "onSuccess": {
                 "type": "text",
                 "value": "Présence de légumes bien mûrs"
@@ -405,12 +405,12 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Trouver objet caché"],
+              "characteristic": ["FHO"],
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Sciences (Biologie)", "Médecine", "Naturalisme"]
+                  "characteristic": ["BIO", "MED", "NAT"]
                 }
               }
             }
@@ -465,7 +465,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Occultisme"],
+              "characteristic": ["OCC"],
               "onSuccess": {
                 "type": "text",
                 "value": "Sceaux pour refouler les esprits malfaisants"
@@ -489,7 +489,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Ecouter"],
+              "characteristic": ["LISTEN"],
               "onSuccess": {
                 "type": "text",
                 "value": "Son : des bruits de pas dans un escalier"
@@ -519,7 +519,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Ecouter"],
+              "characteristic": ["LISTEN"],
               "onSuccess": {
                 "type": "text",
                 "value": "Son : des bruits de pas dans un escalier"
@@ -550,7 +550,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Trouver objet caché"],
+              "characteristic": ["FHO"],
               "onSuccess": {
                 "type": "clue",
                 "value": "Indices sur Red Jake"
@@ -577,7 +577,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Dextérité"],
+              "characteristic": ["DEX"],
               "condition": "Red Jake aussi, si 2 OK il arrive à fuir",
               "onSuccess": {
                 "type": "text",
@@ -587,7 +587,7 @@
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Dextérité"],
+                  "characteristic": ["DEX"],
                   "condition": "Red Jake aussi, si 2 OK il arrive à fuir",
                   "onSuccess": {
                     "type": "text",
@@ -611,15 +611,15 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Psychologie"],
+              "characteristic": ["PSY"],
               "onSuccess": {
                 "type": "dice roll",
                 "value": {
                   "type": "1d100",
-                  "characteristic": ["Psychoanalyse"],
+                  "characteristic": ["PSY_ANA"],
                   "onSuccess": {
                     "type": "clue",
-                    "value": "Histoire de Red Jake"
+                    "value": "HIST de Red Jake"
                   }
                 }
               }
@@ -665,7 +665,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Corps à corps"],
+              "characteristic": ["MELEE"],
               "onSuccess": {
                 "type": "text",
                 "value": "Degats Red Jake page 39 + escape (DEX si contest)"
@@ -714,7 +714,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Sciences", "Pharmacie", "Chimie"],
+              "characteristic": ["SCIENCE", "PHARMA", "CHEM"],
               "onSuccess": {
                 "type": "text",
                 "value": "Poudre argentée = mélange de souffre et d'oxyde de cuivre"
@@ -736,7 +736,7 @@
           "diceRolls": [
             {
               "type": "1d100",
-              "characteristic": ["Langue (latin)"],
+              "characteristic": ["LANG_LATIN"],
               "onSuccess": {
                 "type": "clue",
                 "value": "📜 Indice 7"
@@ -778,7 +778,7 @@
           "diceRolls": [
             {
               "type": "1d100 difficulté 2",
-              "characteristic": ["Esquive"],
+              "characteristic": ["ESCAPE"],
               "onSuccess": {
                 "type": "text",
                 "value": "- 1d3 PV pour la victime, - 1/1D2 SAN tout le monde"

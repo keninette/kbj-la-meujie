@@ -29,6 +29,18 @@ export default function Step({ step, uniqueStepKey }: StepProps) {
           return <AudioPlayer audio={sound} id={index} stepId={step.id} key={`audio-player_${index}`} />;
         })}
       <ul>
+        {step.images &&
+          step.images.map((img, index) => {
+            return (
+              <div key={`img_${step.id}_${index}`}>
+                <a href={`../../../assets/img/adventures/${img.filename}`} target='_blank'>
+                  📸 Image : {img.name}
+                </a>
+              </div>
+            );
+          })}
+      </ul>
+      <ul>
         {step.clues &&
           step.clues.map((clue, index) => {
             return (

@@ -23,10 +23,16 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
           value: value,
         };
         break;
+      case 'onSuccessClue':
+        updatedDiceRoll.onSuccess = {
+          type: DiceRollCallbackTypeEnum.CLUE,
+          value: value,
+        };
+        break;
       case 'onSuccessType':
         updatedDiceRoll.onSuccess = {
-          type: DiceRollCallbackTypeEnum.DICE_ROLL,
-          value: onSuccessDiceRoll,
+          type: value as DiceRollCallbackTypeEnum,
+          value: DiceRollCallbackTypeEnum.DICE_ROLL === value ? onSuccessDiceRoll : '',
         };
         break;
       case 'onSuccessDicerollType':
@@ -56,10 +62,16 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
           value: value,
         };
         break;
+      case 'onFailClue':
+        updatedDiceRoll.onFail = {
+          type: DiceRollCallbackTypeEnum.CLUE,
+          value: value,
+        };
+        break;
       case 'onFailType':
         updatedDiceRoll.onFail = {
-          type: DiceRollCallbackTypeEnum.DICE_ROLL,
-          value: onFailDiceRoll,
+          type: value as DiceRollCallbackTypeEnum,
+          value: DiceRollCallbackTypeEnum.DICE_ROLL === value ? onFailDiceRoll : '',
         };
         break;
       case 'onFailDicerollType':
@@ -182,8 +194,9 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
             className='flex text-black w-full'
             required
           >
-            <option value='string'>Entrer un texte</option>
-            <option value='diceRoll'>Ajouter un jet de dé</option>
+            <option value={DiceRollCallbackTypeEnum.TEXT}>Entrer un texte</option>
+            <option value={DiceRollCallbackTypeEnum.DICE_ROLL}>Ajouter un jet de dé</option>
+            <option value={DiceRollCallbackTypeEnum.CLUE}>Donner un indice</option>
           </select>
           {diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.TEXT && (
             <input
@@ -192,6 +205,17 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
               placeholder='On success'
               value={diceRoll.onSuccess?.value || ''}
               onChange={(e) => onChange('onSuccessText', e.target.value)}
+              className='flex text-black'
+              required
+            />
+          )}
+          {diceRoll.onSuccess.type === DiceRollCallbackTypeEnum.CLUE && (
+            <input
+              type='text'
+              name='onSuccess'
+              placeholder='On success'
+              value={diceRoll.onSuccess?.value || ''}
+              onChange={(e) => onChange('onSuccessClue', e.target.value)}
               className='flex text-black'
               required
             />
@@ -220,8 +244,9 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
             className='flex text-black w-full'
             required
           >
-            <option value='string'>Entrer un texte</option>
-            <option value='diceRoll'>Ajouter un jet de dé</option>
+            <option value={DiceRollCallbackTypeEnum.TEXT}>Entrer un texte</option>
+            <option value={DiceRollCallbackTypeEnum.DICE_ROLL}>Ajouter un jet de dé</option>
+            <option value={DiceRollCallbackTypeEnum.CLUE}>Donner un indice</option>
           </select>
           {diceRoll.onFail.type === DiceRollCallbackTypeEnum.TEXT && (
             <input
@@ -230,6 +255,17 @@ export default function DiceRollForm({ step, setStep }: StepSubFormProps) {
               placeholder='On success'
               value={diceRoll.onFail.value || ''}
               onChange={(e) => onChange('onFailText', e.target.value)}
+              className='flex text-black'
+              required
+            />
+          )}
+          {diceRoll.onFail.type === DiceRollCallbackTypeEnum.CLUE && (
+            <input
+              type='text'
+              name='onFail'
+              placeholder='On success'
+              value={diceRoll.onFail.value || ''}
+              onChange={(e) => onChange('onFailClue', e.target.value)}
               className='flex text-black'
               required
             />
