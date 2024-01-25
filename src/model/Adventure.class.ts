@@ -2,6 +2,7 @@ import { StoryArc } from '@/model/StoryArc.class';
 import { UniverseEnum } from '@/model/universe.enum';
 import { Chapter } from '@/model/Chapter.class';
 import { Step } from '@/model/Step.class';
+import { Audio } from '@/model/Audio.class';
 
 export class Adventure {
   slug: string;
@@ -64,8 +65,31 @@ export class Adventure {
     return supposedNextId;
   }
 
-  addChapter(chapter: Chapter) {
-    this.chapters.push({ ...chapter, id: this.computeNextChapterId() });
+  saveChapter(chapter: Chapter) {
+    const existingChapterIndex = this.findChapterIndexById(chapter.id);
+    if (existingChapterIndex > -1) {
+      this.chapters[existingChapterIndex] = chapter;
+    } else {
+      chapter.id = this.computeNextChapterId();
+      this.chapters.push(chapter);
+    }
+  }
+
+  saveStep(chapter: Chapter, step: Step): Step | null {
+    const chapterIndex = this.findChapterIndexById(chapter.id);
+    if (chapterIndex === -1) {
+      return null;
+    }
+
+    const stepIndex = chapter.steps.findIndex((thisStep) => thisStep.id === step.id);
+    if (stepIndex === -1) {
+      step.id = this.computeNextStepId(chapter);
+      this.chapters[chapterIndex].steps.push(step);
+    } else {
+      this.chapters[chapterIndex].steps[stepIndex] = step;
+    }
+
+    return step;
   }
 
   computeNextStepId(targetChapter: Chapter, increment: number = 0) {
@@ -75,11 +99,6 @@ export class Adventure {
       this.computeNextStepId(targetChapter, increment++);
     }
     return supposedNextId;
-  }
-
-  addStep(step: Step, targetChapter: Chapter) {
-    const chapterIndex = this.findChapterIndexById(targetChapter.id);
-    this.chapters[chapterIndex].steps.push({ ...step, id: this.computeNextStepId(targetChapter) });
   }
 
   findChapterById(id: string) {

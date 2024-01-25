@@ -23,8 +23,6 @@ export default function Chapter({ params }: { params: { slug: string; id: string
   const [chapter, setChapter] = useState<Chapter>();
   const [nextChapter, setNextChapter] = useState<Chapter>();
 
-  console.log(adventure);
-  console.log(chapter);
   useEffect(() => {
     setIsClient(true);
   }, []);

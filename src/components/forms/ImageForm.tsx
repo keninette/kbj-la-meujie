@@ -1,10 +1,12 @@
-import { StepSubFormProps } from '@/components/forms/StepForm';
 import { FormEvent, useState } from 'react';
 import { Image } from '@/model/Image.class';
-import { Step } from '@/model/Step.class';
-import { Audio } from '@/model/Audio.class';
 
-export default function ImageForm({ step, setStep }: StepSubFormProps) {
+export type ImageFormProps = {
+  onSubmitCallback: (image: Image) => void;
+  requestedImage?: Image;
+};
+
+export default function ImageForm({ onSubmitCallback, requestedImage }: ImageFormProps) {
   const [image, setImage] = useState<Image>(new Image('', ''));
 
   const onChange = (fieldName: string, value: string | number) => {
@@ -15,18 +17,11 @@ export default function ImageForm({ step, setStep }: StepSubFormProps) {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const updatedStep: Step = { ...step };
-    if (!updatedStep.images) {
-      updatedStep.images = [];
-    }
-    updatedStep.images.push(image);
-
-    setStep(updatedStep);
-    setImage(new Image('', ''));
+    onSubmitCallback(image);
   };
 
   return (
-    <form className='flex w-full mx-4' onSubmit={(e) => onSubmit(e)}>
+    <form className='flex w-full mx-4' onSubmit={onSubmit}>
       <div className='flex flex-col h-full w-full'>
         <h4>Ajouter une image</h4>
         <label htmlFor='name' className='text-white'>

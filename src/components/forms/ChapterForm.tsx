@@ -1,16 +1,14 @@
 import { Chapter } from '@/model/Chapter.class';
-import { Dispatch, FormEvent, SetStateAction } from 'react';
-import { Adventure } from '@/model/Adventure.class';
-import { saveAdventure } from '@/app/data-provider';
+import { FormEvent, useEffect, useState } from 'react';
 
 type ChapterFormProps = {
-  adventure: Adventure;
-  chapter: Chapter;
-  setChapter: Dispatch<SetStateAction<Chapter>>;
+  onSubmitCallback: (updatedChapter: Chapter) => void;
+  nextChapterId: string;
+  requestedChapter?: Chapter;
 };
-export default function ChapterForm({ adventure, chapter, setChapter }: ChapterFormProps) {
-  // todo refactor this, it's always the same
-  const onChange = (fieldName: string, value: string) => {
+export default function ChapterForm({ onSubmitCallback, nextChapterId, requestedChapter }: ChapterFormProps) {
+  const [chapter, setChapter] = useState<Chapter>(Chapter.getEmptyChapter());
+  const onFormChange = (fieldName: string, value: string) => {
     const updatedChapter: Chapter = { ...chapter };
     // @ts-ignore
     updatedChapter[fieldName] = value;
@@ -19,18 +17,20 @@ export default function ChapterForm({ adventure, chapter, setChapter }: ChapterF
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    adventure.addChapter(chapter);
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      console.error(response);
-      alert('Erreur');
-    }
-    setChapter(new Chapter('', '', []));
+    onSubmitCallback(chapter);
   };
 
+  // Init chapter with the one passed as props if it exists
+  useEffect(() => {
+    if (requestedChapter) {
+      setChapter(requestedChapter);
+    }
+  }, [requestedChapter]);
+
+  // Display form
   return (
-    <form className='flex flex-col mt-8' onSubmit={(e) => onSubmit(e)}>
-      <h3 className='my-4'>Ajouter un châpitre ({adventure && adventure.computeNextChapterId()})</h3>
+    <form className='flex flex-col mt-8' onSubmit={onSubmit}>
+      <h3 className='my-4'>Ajouter un châpitre ({nextChapterId})</h3>
       <div className='flex flex-col w-full'>
         <label htmlFor='name' className='text-white'>
           Nom
@@ -40,7 +40,7 @@ export default function ChapterForm({ adventure, chapter, setChapter }: ChapterF
           name='name'
           placeholder='Nom'
           value={chapter.name}
-          onChange={(e) => onChange('name', e.target.value)}
+          onChange={(e) => onFormChange('name', e.target.value)}
           className='flex text-black w-full'
           required
         />
@@ -54,7 +54,7 @@ export default function ChapterForm({ adventure, chapter, setChapter }: ChapterF
           name='nextChapterId'
           placeholder='ID du prochain châpitre'
           value={chapter.nextChapterId || ''}
-          onChange={(e) => onChange('nextChapterId', e.target.value)}
+          onChange={(e) => onFormChange('nextChapterId', e.target.value)}
           className='flex text-black w-full'
         />
       </div>

@@ -19,6 +19,10 @@ const routes = {
     name: '{chapterName}',
     path: '/adventure/{slug}/chapter/{id}',
   } as RouteType,
+  editAdventure: {
+    name: 'Edit {adventureName}',
+    path: '/edit/{slug}',
+  },
 };
 
 const getAdventureRoute = (adventure: Adventure): RouteType => {
@@ -26,6 +30,14 @@ const getAdventureRoute = (adventure: Adventure): RouteType => {
   return {
     name: routes.adventure.name.replace('{adventureName}', adventure.name || ''),
     path: routes.adventure.path.replace('{slug}', adventure.slug || ''),
+  };
+};
+
+const getEditAdventureRoute = (adventure: Adventure): RouteType => {
+  // todo handle empty
+  return {
+    name: routes.editAdventure.name.replace('{adventureName}', adventure.name || ''),
+    path: routes.editAdventure.path.replace('{slug}', adventure.slug || ''),
   };
 };
 
@@ -37,4 +49,4 @@ const getChapterRoute = (chapter: Chapter, adventureSlug: string): RouteType => 
 };
 
 export default routes;
-export { getAdventureRoute, getChapterRoute };
+export { getAdventureRoute, getEditAdventureRoute, getChapterRoute };

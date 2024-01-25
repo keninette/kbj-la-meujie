@@ -35,7 +35,7 @@ export default function ChapterNavItem({ chapterUid }: ChapterNavItemPropsType) 
       <>
         <FontAwesomeIcon icon={faBookmark} size='xs' className='mx-2' />
         {route.name}
-        {chapter.steps.length > 0 && route && (
+        {chapter.steps?.length > 0 && route && (
           <a href={route.path} className='ml-2'>
             <FontAwesomeIcon icon={faLink} size='xs' />
           </a>

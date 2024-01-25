@@ -1,4 +1,4 @@
-import { StepSubFormProps } from '@/components/forms/StepForm';
+import { StepSubFormProps } from '@/components/forms/StepFormOld';
 import { FormEvent, useState } from 'react';
 import { Step } from '@/model/Step.class';
 

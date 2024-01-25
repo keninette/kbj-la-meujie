@@ -1,18 +1,21 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Audio } from '@/model/Audio.class';
-import { StepSubFormProps } from '@/components/forms/StepForm';
-import { Step } from '@/model/Step.class';
 
-export default function AudioForm({ step, setStep }: StepSubFormProps) {
+export type AudioFormProps = {
+  onSubmitCallback: (audio: Audio) => void;
+  requestedAudio?: Audio;
+};
+
+export default function AudioForm({ onSubmitCallback, requestedAudio }: AudioFormProps) {
   const [audio, setAudio] = useState<Audio>(new Audio('', ''));
 
-  const onChange = (fieldName: string, value: string | number) => {
-    const updatedAudio = { ...audio };
+  const onChange = (fieldName: string, value: string | number | boolean) => {
+    const updatedAudio: Audio = { ...audio };
 
     switch (fieldName) {
       case 'autoplay':
       case 'loop':
-        updatedAudio[fieldName] = +value as boolean;
+        updatedAudio[fieldName] = value as boolean;
       default:
         updatedAudio[fieldName] = value;
         break;
@@ -22,15 +25,14 @@ export default function AudioForm({ step, setStep }: StepSubFormProps) {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const updatedStep: Step = { ...step };
-    if (!updatedStep.audios) {
-      updatedStep.audios = [];
-    }
-    updatedStep.audios.push(audio);
-
-    setStep(updatedStep);
-    setAudio(new Audio('', ''));
+    onSubmitCallback(audio);
   };
+
+  useEffect(() => {
+    if (requestedAudio) {
+      setAudio(requestedAudio);
+    }
+  }, [requestedAudio]);
 
   return (
     <form className='flex w-full mx-4' onSubmit={(e) => onSubmit(e)}>
@@ -103,7 +105,7 @@ export default function AudioForm({ step, setStep }: StepSubFormProps) {
             placeholder='Volume'
             value={audio.volume}
             onChange={(e) => onChange('volume', e.target.valueAsNumber)}
-            className='flex text-black mx-2'
+            className='flex text-black mx-2 w-12'
             min={0}
             max={1}
             step={0.1}

@@ -19,4 +19,8 @@ export class Step {
     this.id = id;
     this.level = level;
   }
+
+  static getEmptyStep = () => {
+    return new this('', 1);
+  };
 }
