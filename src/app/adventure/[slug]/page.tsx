@@ -59,33 +59,26 @@ export default function Adventure({ params }: { params: { slug: string } }) {
                     {adventure.storyArcs.map((arc) => {
                       return (
                         <li key={arc.slug}>
-                          <a href='' className='text-lg'>
-                            {arc.name}
-                          </a>
+                          {arc.name}
+                          <ul>
+                            {arc.chapters &&
+                              arc.chapters.map((chapter) => {
+                                return (
+                                  <li className='ml-4' key={chapter.id}>
+                                    {chapter.steps ? (
+                                      <a href={getChapterRoute(chapter, params.slug).path} className='text-lg'>
+                                        {chapter.name}
+                                      </a>
+                                    ) : (
+                                      <span className='text-lg'>{chapter.name}</span>
+                                    )}
+                                  </li>
+                                );
+                              })}
+                          </ul>
                         </li>
                       );
                     })}
-                  </ul>
-                </div>
-              )}
-              {!adventure.storyArcs?.length && (
-                <div className='flex flex-col w-1/3 mx-6'>
-                  <h3 className='text-2xl mb-4'>📚 Chapitres</h3>
-                  <ul className='ml-2'>
-                    {adventure.chapters &&
-                      adventure.chapters.map((chapter) => {
-                        return (
-                          <li key={chapter.id}>
-                            {chapter.steps ? (
-                              <a href={getChapterRoute(chapter, params.slug).path} className='text-lg'>
-                                {chapter.name}
-                              </a>
-                            ) : (
-                              <span className='text-lg'>{chapter.name}</span>
-                            )}
-                          </li>
-                        );
-                      })}
                   </ul>
                 </div>
               )}

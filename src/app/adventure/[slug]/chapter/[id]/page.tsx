@@ -38,11 +38,27 @@ export default function Chapter({ params }: { params: { slug: string; id: string
       let eligibleChapters: Chapter[];
       let chapter: Chapter;
       if (activeStep) {
-        eligibleChapters = (adventure.chapters || []).filter((thisChapter) => {
+        // todo improve this (in params)
+        const storyArc = adventure.storyArcs.find((storyArc) =>
+          storyArc.chapters.find((thisChapter) => {
+            return thisChapter.steps.find((thisStep) => thisStep.id === activeStep.id);
+          }),
+        );
+        if (!storyArc) {
+          console.error("Pas d'arc trouvé pour ce châpitre");
+        }
+        eligibleChapters = (storyArc.chapters || []).filter((thisChapter) => {
           return thisChapter.steps.filter((thisStep) => thisStep.id === activeStep.id).length > 0;
         });
       } else {
-        eligibleChapters = (adventure.chapters || []).filter((thisChapter) => {
+        // todo improve this (in params)
+        const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
+          storyArc.chapters.find((thisChapter) => thisChapter.id === params.id),
+        );
+        if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
+          console.error("Pas d'arc trouvé pour ce châpitre");
+        }
+        eligibleChapters = (eligibleStoryArcs[0].chapters || []).filter((thisChapter) => {
           return thisChapter.id === params.id;
         });
       }
@@ -75,6 +91,17 @@ export default function Chapter({ params }: { params: { slug: string; id: string
     ? [(activeStep as Step).id]
     : chapter?.steps?.filter((step) => step.level === 1).map((step) => step.id);
 
+  const storyArcChapters = () => {
+    // todo improve this (in params)
+    const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
+      storyArc.chapters.find((thisChapter) => thisChapter.id === params.id),
+    );
+    if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
+      console.error("Pas d'arc trouvé pour ce châpitre");
+    }
+    return eligibleStoryArcs[0].chapters;
+  };
+
   return (
     adventure && (
       <main className='flex min-h-screen flex-col text-white min-w-full'>
@@ -83,7 +110,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
           <section className='flex'>
             <Sidenav
               adventureSlug={adventure.slug}
-              chapters={adventure.chapters || []}
+              chapters={storyArcChapters() || []}
               onStepSelection={onStepSelection}
             ></Sidenav>
           </section>

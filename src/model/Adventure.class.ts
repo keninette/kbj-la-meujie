@@ -10,8 +10,7 @@ export class Adventure {
   name: string;
   universe?: UniverseEnum;
   players?: { min: number; max: number };
-  storyArcs?: StoryArc[];
-  chapters: Chapter[];
+  storyArcs: StoryArc[];
   // todo classes
   equipment?: { name: string; isReady: boolean }[];
   todos?: { name: string; isReady: boolean }[];
@@ -36,11 +35,7 @@ export class Adventure {
     instance.chapters = data.chapters;
     instance.equipment = data.equipment;
     instance.todos = data.todos;
-
-    // @ts-ignore
-    instance.storyArcs = (this.chapters || [])
-      .filter((chapter) => chapter.storyArc !== undefined)
-      .map((chapter) => chapter.storyArc);
+    instance.storyArcs = data.storyArcs;
 
     return instance;
   };
@@ -65,13 +60,29 @@ export class Adventure {
     return supposedNextId;
   }
 
-  saveChapter(chapter: Chapter) {
-    const existingChapterIndex = this.findChapterIndexById(chapter.id);
+  saveStoryArc(storyArc: StoryArc) {
+    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    if (existingStoryArcIndex && existingStoryArcIndex > -1) {
+      this.storyArcs[existingStoryArcIndex] = storyArc;
+    } else {
+      this.storyArcs.push(storyArc);
+    }
+  }
+
+  saveChapter(storyArc: StoryArc, chapter: Chapter) {
+    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    if (existingStoryArcIndex === undefined || existingStoryArcIndex === -1) {
+      console.error('Arc non trouvé');
+      return;
+    }
+    const existingChapterIndex = this.storyArcs[existingStoryArcIndex].chapters.findIndex(
+      (thisChapter) => thisChapter.id === chapter.id,
+    );
     if (existingChapterIndex > -1) {
-      this.chapters[existingChapterIndex] = chapter;
+      this.storyArcs[existingStoryArcIndex].chapters[existingChapterIndex] = chapter;
     } else {
       chapter.id = this.computeNextChapterId();
-      this.chapters.push(chapter);
+      this.storyArcs[existingStoryArcIndex].chapters.push(chapter);
     }
   }
 

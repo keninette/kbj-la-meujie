@@ -19,23 +19,30 @@ import { Image } from '@/model/Image.class';
 import ClueForm from '@/components/forms/ClueForm';
 import RecursiveDiceRollForm from '@/components/forms/RecursiveDiceRollForm';
 import { DiceRoll } from '@/model/DiceRoll.class';
+import { StoryArc } from '@/model/StoryArc.class';
+import StoryArcForm from '@/components/forms/StoryArcForm';
 
 enum FormEnum {
-  ARCH = 'Arch',
-  CHAPTER = 'Chapter',
-  STEP = 'Step',
-  AUDIO = 'Audio',
-  IMAGE = 'Image',
-  CLUE = 'Clue',
-  DICEROLL = 'Diceroll',
+  STORY_ARC = 'STORY_ARC',
+  CHAPTER = 'CHAPTER',
+  STEP = 'STEP',
+  AUDIO = 'AUDIO',
+  IMAGE = 'IMAGE',
+  CLUE = 'CLUE',
+  DICE_ROLL = 'DICE_ROLL',
 }
 
 export default function EditAdventure({ params }: { params: { slug: string } }) {
+  const [storyArc, setStoryArc] = useState<StoryArc>();
   const [adventure, setAdventure] = useState<Adventure>();
-  const [formToDisplay, setFormToDisplay] = useState<FormEnum>();
   const [chapter, setChapter] = useState<Chapter>();
   const [step, setStep] = useState<Step>();
+  const [formToDisplay, setFormToDisplay] = useState<FormEnum>();
   const [feedback, setFeedback] = useState<FeedbackBannerProps>();
+  const onArcEditClick = (arc?: StoryArc) => {
+    setStoryArc(arc);
+    setFormToDisplay(FormEnum.STORY_ARC);
+  };
   const onChapterEditClick = (chapter?: Chapter) => {
     setChapter(chapter);
     setFormToDisplay(FormEnum.CHAPTER);
@@ -44,9 +51,36 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     setStep(step);
     setFormToDisplay(FormEnum.STEP);
   };
-  const onChapterFormSubmit = async (updatedChapter: Chapter) => {
+  // todo revoir tous les messages d'erreur
+  const onStoryArcFormSubmit = async (updatedStoryArc: StoryArc) => {
     // todo setFeedback useful in object ?
     if (!adventure) {
+      setFeedback({
+        type: FeedbackTypeEnum.ERROR,
+        message: "Aventure manquante, impossible de sauvegarder l'arc",
+        setFeedback,
+      });
+      return;
+    }
+    setFeedback({ type: FeedbackTypeEnum.LOADING, message: 'Sauvegarde en cours', setFeedback });
+    // todo find out why this doesn't work
+    /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventure));
+    updatedAdventure.saveChapter(updatedChapter);
+    setAdventure(updatedAdventure);*/
+    adventure.saveStoryArc(updatedStoryArc);
+
+    const response = await saveAdventure(adventure);
+    if (response.status !== 201) {
+      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du chapitre', setFeedback });
+      console.error(response);
+    } else {
+      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde réussie', setFeedback });
+      setFormToDisplay(undefined);
+    }
+  };
+  const onChapterFormSubmit = async (updatedChapter: Chapter) => {
+    // todo setFeedback useful in object ?
+    if (!adventure || !storyArc) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: 'Aventure manquante, impossible de sauvegarder le chapitre',
@@ -59,7 +93,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventure));
     updatedAdventure.saveChapter(updatedChapter);
     setAdventure(updatedAdventure);*/
-    adventure.saveChapter(updatedChapter);
+    adventure.saveChapter(storyArc, updatedChapter);
 
     const response = await saveAdventure(adventure);
     if (response.status !== 201) {
@@ -237,7 +271,6 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
 
-  // todo handle story arcs
   useEffect(() => {
     (async function () {
       const response = await fetch(`/adventure/api?slug=${params.slug}`, {
@@ -264,43 +297,83 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
             <div className='flex w-full px-4'>
               <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-r-2 border-white'>
                 <h3 className='underline my-4'>Liste des chapitres</h3>
-                <button
-                  className='w-48 border-2 border-white opacity-80 mx-4 mb-4 hover:opacity-100'
-                  onClick={() => {
-                    onChapterEditClick();
-                  }}
-                >
-                  Ajouter un chapitre
-                </button>
+                <div className='flex'>
+                  <button
+                    className='w-48 border-2 border-white opacity-80 mx-4 mb-4 hover:opacity-100'
+                    onClick={() => {
+                      onArcEditClick();
+                    }}
+                  >
+                    Ajouter un arc
+                  </button>
+                  <button
+                    className='w-48 border-2 border-white opacity-80 mx-4 mb-4 hover:opacity-100'
+                    onClick={() => {
+                      onChapterEditClick();
+                    }}
+                  >
+                    Ajouter un chapitre
+                  </button>
+                </div>
                 <ul className='flex flex-col w-[95%]'>
                   {adventure &&
-                    adventure.chapters.map((thisChapter) => (
-                      <li
-                        className={
-                          chapter?.id === thisChapter.id
-                            ? 'flex w-full justify-between bg-white bg-opacity-50'
-                            : 'flex w-full justify-between'
-                        }
-                        key={thisChapter.id}
-                      >
-                        <button
-                          onClick={() => {
-                            setChapter(thisChapter);
-                            setStep(undefined);
-                          }}
-                          className='flex flex-grow'
-                        >
-                          {thisChapter.id} - <span className='font-bold'>{thisChapter.name}</span>
-                          {thisChapter.nextChapterId && <> ➡ {thisChapter.nextChapterId}</>}
-                        </button>
-                        <button onClick={() => onChapterEditClick(thisChapter)}>
-                          <FontAwesomeIcon icon={faPenToSquare} />
-                        </button>
+                    adventure.storyArcs?.map((thisArc) => (
+                      <li className={'flex flex-col w-full justify-between'} key={thisArc.slug}>
+                        <div className='flex w-full'>
+                          <button
+                            onClick={() => {
+                              setStoryArc(thisArc);
+                              setChapter(undefined);
+                              setStep(undefined);
+                            }}
+                            className={
+                              storyArc && !chapter && thisArc.slug === storyArc.slug
+                                ? 'flex flex-grow bg-white bg-opacity-50'
+                                : 'flex flex-grow hover:bg-white hover:bg-opacity-50'
+                            }
+                          >
+                            {thisArc.slug} - <span className='font-bold'>{thisArc.name.toUpperCase()}</span>
+                          </button>
+                          <button onClick={() => onArcEditClick(thisArc)}>
+                            <FontAwesomeIcon icon={faPenToSquare} />
+                          </button>
+                        </div>
+                        <ul className='flex flex-col w-full ml-4 pr-4'>
+                          {thisArc.chapters.map((thisChapter) => (
+                            <li
+                              className={
+                                chapter?.id === thisChapter.id
+                                  ? 'flex w-full justify-between bg-white bg-opacity-50'
+                                  : 'flex w-full justify-between hover:bg-white hover:bg-opacity-50'
+                              }
+                              key={thisChapter.id}
+                            >
+                              <button
+                                onClick={() => {
+                                  setChapter(thisChapter);
+                                  setStep(undefined);
+                                }}
+                                className='flex flex-grow'
+                              >
+                                {thisChapter.id} - <span className='font-bold'>{thisChapter.name}</span>
+                                {thisChapter.nextChapterId && <> ➡ {thisChapter.nextChapterId}</>}
+                              </button>
+                              <button onClick={() => onChapterEditClick(thisChapter)}>
+                                <FontAwesomeIcon icon={faPenToSquare} />
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
                       </li>
                     ))}
                 </ul>
               </div>
-              {formToDisplay === FormEnum.CHAPTER && (
+              {formToDisplay === FormEnum.STORY_ARC && (
+                <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-r-2 border-white'>
+                  <StoryArcForm requestedStoryArc={storyArc} onSubmitCallback={onStoryArcFormSubmit} />
+                </div>
+              )}
+              {formToDisplay === FormEnum.CHAPTER && adventure && storyArc && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-r-2 border-white'>
                   <ChapterForm
                     onSubmitCallback={onChapterFormSubmit}
@@ -339,7 +412,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                     ))}
                 </ul>
               </div>
-              {formToDisplay === FormEnum.STEP && adventure && chapter && (
+              {formToDisplay === FormEnum.STEP && adventure && storyArc && chapter && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-r-2 border-white'>
                   <StepForm
                     requestedStep={step}
@@ -374,7 +447,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                   </button>
                   <button
                     className='border-2 border-white opacity-80 px-2 mx-4 mb-4 hover:opacity-100 disabled:opacity-50'
-                    onClick={() => setFormToDisplay(FormEnum.DICEROLL)}
+                    onClick={() => setFormToDisplay(FormEnum.DICE_ROLL)}
                     disabled={!step}
                   >
                     + 🎲 Jet de dé
@@ -382,22 +455,22 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                 </div>
                 {step && <StepComponent step={step} uniqueStepKey={step.id}></StepComponent>}
               </div>
-              {formToDisplay === FormEnum.AUDIO && adventure && chapter && step && (
+              {formToDisplay === FormEnum.AUDIO && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
                   <AudioForm onSubmitCallback={onAudioFormSubmit} requestedAudio={undefined} />
                 </div>
               )}
-              {formToDisplay === FormEnum.IMAGE && adventure && chapter && step && (
+              {formToDisplay === FormEnum.IMAGE && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
                   <ImageForm onSubmitCallback={onImageFormSubmit} requestedImage={undefined} />
                 </div>
               )}
-              {formToDisplay === FormEnum.CLUE && adventure && chapter && step && (
+              {formToDisplay === FormEnum.CLUE && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
                   <ClueForm onSubmitCallback={onClueFormSubmit} requestedClue={undefined} />
                 </div>
               )}
-              {formToDisplay === FormEnum.DICEROLL && adventure && chapter && step && (
+              {formToDisplay === FormEnum.DICE_ROLL && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
                   <RecursiveDiceRollForm onSubmitCallback={onDiceRollSubmit} requestedDiceRoll={undefined} />
                 </div>

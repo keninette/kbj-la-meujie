@@ -9,10 +9,10 @@ type HeaderPropsType = {
 export default function Header({ feedbackBannerProps }: HeaderPropsType) {
   return (
     <header className='relative mb-8'>
-      <div className='flex items-center px-6 py-8 mb-8'>
+      <a className='flex items-center px-6 py-8 mb-8' href='/'>
         <Image className='flex w-20 h-20 rounded-full' src={kbjImg} alt='avatar' />
         <h1 className='text-3xl ml-4'>kbj la meujie</h1>
-      </div>
+      </a>
       {feedbackBannerProps && <FeedbackBanner {...feedbackBannerProps} />}
     </header>
   );

@@ -14,7 +14,13 @@ export async function GET(request: NextRequest) {
     const adventure = Adventure.createFromJson(fs.readFileSync(`${adventuresDirPath}/${adventureSlug}.json`, 'utf-8'));
 
     if (chapterId) {
-      const chapters = adventure.chapters?.filter((thisChapter) => thisChapter.id === chapterId);
+      const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
+        storyArc.chapters.find((thisChapter) => thisChapter.id === chapterId),
+      );
+      if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
+        console.error("Pas d'arc trouvé pour ce châpitre");
+      }
+      const chapters = eligibleStoryArcs[0].chapters?.filter((thisChapter) => thisChapter.id === chapterId);
       if (!chapters || !chapters.length) {
         console.error('whoopsie daisy');
       } else {
