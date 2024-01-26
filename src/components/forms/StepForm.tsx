@@ -6,13 +6,19 @@ type StepFormProps = {
   nextStepId: string;
   onSubmitCallback: (updatedStep: Step) => void;
 };
+// todo multiple nextSteps
 export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }: StepFormProps) {
   const [step, setStep] = useState<Step>(Step.getEmptyStep());
   const onChange = (fieldName: string, value: string | number | string[]) => {
     const updatedStep: Step = { ...step };
-    // todo remove tsignore
+    if (fieldName === 'nextStepsIds') {
+      // todo remove tsignore
+      updatedStep[fieldName] = (value as string).split(',');
+    } else {
+      // todo remove tsignore
+      updatedStep[fieldName] = value;
+    }
     // @ts-ignore
-    updatedStep[fieldName] = value;
     setStep(updatedStep);
   };
 
@@ -39,7 +45,7 @@ export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }
             <textarea
               name='description'
               placeholder='Description'
-              value={step.description}
+              value={step.description || ''}
               onChange={(e) => onChange('description', e.target.value)}
               className='flex text-black w-full h-24 w-full'
               required
@@ -61,16 +67,15 @@ export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }
           </div>
           <div className='flex flex-col w-full'>
             <label htmlFor='name' className='text-white'>
-              Description
+              Prochaine étape
             </label>
             <input
               type='text'
               name='nextStepsIds'
               placeholder='nextStepsIds'
-              value={step.nextStepsIds?.length ? step.nextStepsIds[0] : ''}
-              onChange={(e) => onChange('nextStepsIds', [e.target.value])}
+              value={step.nextStepsIds?.length ? step.nextStepsIds.join(',') : ''}
+              onChange={(e) => onChange('nextStepsIds', e.target.value)}
               className='flex text-black w-full'
-              required
             />
           </div>
           <button type='submit'>Enregistrer</button>

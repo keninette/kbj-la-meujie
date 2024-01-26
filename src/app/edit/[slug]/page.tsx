@@ -105,7 +105,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
   const onStepFormSubmit = async (updatedStep: Step) => {
-    if (!adventure || !chapter) {
+    if (!adventure || !storyArc || !chapter) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: "Aventure ou chapitre manquant, impossible de sauvegarder l'étape",
@@ -114,7 +114,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
       return;
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'étape en cours", setFeedback });
-    adventure.saveStep(chapter, updatedStep);
+    adventure.saveStep(storyArc, chapter, updatedStep);
 
     // todo duplicate
     const response = await saveAdventure(adventure);
@@ -127,7 +127,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
   const onAudioFormSubmit = async (audio: Audio) => {
-    if (!adventure || !chapter || !step) {
+    if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: "Élément manquant, impossible de sauvegarder l'étape",
@@ -137,7 +137,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'audio en cours", setFeedback });
     // todo fix this whole thing
-    const targetChapter = adventure.findChapterById(chapter.id);
+    const targetChapter = adventure.findChapterById(storyArc, chapter.id);
     if (!targetChapter) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Chapitre non trouvé', setFeedback });
       return;
@@ -163,7 +163,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
   const onImageFormSubmit = async (image: Image) => {
-    if (!adventure || !chapter || !step) {
+    if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: "Élément manquant, impossible de sauvegarder l'étape",
@@ -173,7 +173,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'audio en cours", setFeedback });
     // todo fix this whole thing
-    const targetChapter = adventure.findChapterById(chapter.id);
+    const targetChapter = adventure.findChapterById(storyArc, chapter.id);
     if (!targetChapter) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Chapitre non trouvé', setFeedback });
       return;
@@ -199,7 +199,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
   const onClueFormSubmit = async (clue: string) => {
-    if (!adventure || !chapter || !step) {
+    if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: "Élément manquant, impossible de sauvegarder l'étape",
@@ -209,7 +209,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'audio en cours", setFeedback });
     // todo fix this whole thing
-    const targetChapter = adventure.findChapterById(chapter.id);
+    const targetChapter = adventure.findChapterById(storyArc, chapter.id);
     if (!targetChapter) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Chapitre non trouvé', setFeedback });
       return;
@@ -235,7 +235,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
   };
   const onDiceRollSubmit = async (diceRoll: DiceRoll) => {
-    if (!adventure || !chapter || !step) {
+    if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
         message: "Élément manquant, impossible de sauvegarder l'étape",
@@ -245,7 +245,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'audio en cours", setFeedback });
     // todo fix this whole thing
-    const targetChapter = adventure.findChapterById(chapter.id);
+    const targetChapter = adventure.findChapterById(storyArc, chapter.id);
     if (!targetChapter) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Chapitre non trouvé', setFeedback });
       return;
@@ -350,6 +350,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                             >
                               <button
                                 onClick={() => {
+                                  setStoryArc(thisArc);
                                   setChapter(thisChapter);
                                   setStep(undefined);
                                 }}
@@ -377,7 +378,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-r-2 border-white'>
                   <ChapterForm
                     onSubmitCallback={onChapterFormSubmit}
-                    nextChapterId={adventure.computeNextChapterId()}
+                    nextChapterId={adventure.computeNextChapterId(storyArc)}
                     requestedChapter={chapter}
                   />
                 </div>
@@ -386,7 +387,10 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                 <h3 className='underline my-4'>Liste des étapes</h3>
                 <button
                   className='w-48 border-2 border-white opacity-80 mx-4 mb-4 hover:opacity-100 disabled:opacity-50'
-                  onClick={() => setFormToDisplay(FormEnum.STEP)}
+                  onClick={() => {
+                    setStep(undefined);
+                    setFormToDisplay(FormEnum.STEP);
+                  }}
                   disabled={!chapter}
                 >
                   Ajouter une étape

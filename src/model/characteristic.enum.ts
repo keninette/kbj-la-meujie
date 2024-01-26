@@ -31,4 +31,7 @@ export enum CharacteristicEnum {
   DAMAGE = 'Dégat',
   LOCK_PICK = 'Crochetage',
   PERCEPTION = 'Perception',
+  IDEA = 'Idée',
+  POWER = 'Pouvoir',
+  BULLY = 'Intimidation',
 }

@@ -19,7 +19,6 @@ export class Adventure {
     this.slug = '';
     this.prefix = '';
     this.name = '';
-    this.chapters = [];
     this.storyArcs = [];
   }
 
@@ -32,7 +31,6 @@ export class Adventure {
     instance.name = data.name;
     instance.universe = data.universe;
     instance.players = data.players;
-    instance.chapters = data.chapters;
     instance.equipment = data.equipment;
     instance.todos = data.todos;
     instance.storyArcs = data.storyArcs;
@@ -51,11 +49,13 @@ export class Adventure {
     };
   };
 
-  computeNextChapterId(increment: number = 0) {
-    const supposedNextId = `${this.prefix}-${(this.chapters?.length || 0) + increment}`;
-    const existingChaptersWithId = this.chapters.filter((chapter) => chapter.id === supposedNextId);
+  computeNextChapterId(storyArc: StoryArc, increment: number = 0) {
+    // todo fix that, but it will do for now
+    const storyArcIndex = this.storyArcs.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    const supposedNextId = `${this.prefix}-${storyArcIndex}-${(storyArc.chapters?.length || 0) + increment}`;
+    const existingChaptersWithId = storyArc.chapters.filter((chapter) => chapter.id === supposedNextId);
     if (existingChaptersWithId.length) {
-      this.computeNextChapterId(increment++);
+      this.computeNextChapterId(storyArc, increment++);
     }
     return supposedNextId;
   }
@@ -81,13 +81,18 @@ export class Adventure {
     if (existingChapterIndex > -1) {
       this.storyArcs[existingStoryArcIndex].chapters[existingChapterIndex] = chapter;
     } else {
-      chapter.id = this.computeNextChapterId();
+      chapter.id = this.computeNextChapterId(storyArc);
       this.storyArcs[existingStoryArcIndex].chapters.push(chapter);
     }
   }
 
-  saveStep(chapter: Chapter, step: Step): Step | null {
-    const chapterIndex = this.findChapterIndexById(chapter.id);
+  saveStep(storyArc: StoryArc, chapter: Chapter, step: Step): Step | null {
+    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    if (existingStoryArcIndex === undefined || existingStoryArcIndex === -1) {
+      console.error('Arc non trouvé');
+      return null;
+    }
+    const chapterIndex = this.findChapterIndexById(storyArc, chapter.id);
     if (chapterIndex === -1) {
       return null;
     }
@@ -95,9 +100,9 @@ export class Adventure {
     const stepIndex = chapter.steps.findIndex((thisStep) => thisStep.id === step.id);
     if (stepIndex === -1) {
       step.id = this.computeNextStepId(chapter);
-      this.chapters[chapterIndex].steps.push(step);
+      this.storyArcs[existingStoryArcIndex].chapters[chapterIndex].steps.push(step);
     } else {
-      this.chapters[chapterIndex].steps[stepIndex] = step;
+      this.storyArcs[existingStoryArcIndex].chapters[chapterIndex].steps[stepIndex] = step;
     }
 
     return step;
@@ -112,15 +117,15 @@ export class Adventure {
     return supposedNextId;
   }
 
-  findChapterById(id: string) {
-    const chapterIndex = this.findChapterIndexById(id);
+  findChapterById(storyArc: StoryArc, id: string) {
+    const chapterIndex = this.findChapterIndexById(storyArc, id);
     if (chapterIndex > -1) {
-      return this.chapters[chapterIndex];
+      return storyArc.chapters[chapterIndex];
     }
     return undefined;
   }
 
-  findChapterIndexById(id: string) {
-    return this.chapters.findIndex((chapter) => chapter.id === id);
+  findChapterIndexById(storyArc: StoryArc, id: string) {
+    return storyArc.chapters.findIndex((chapter) => chapter.id === id);
   }
 }
