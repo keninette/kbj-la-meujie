@@ -34,4 +34,5 @@ export enum CharacteristicEnum {
   IDEA = 'Idée',
   POWER = 'Pouvoir',
   BULLY = 'Intimidation',
+  PERSUASION = 'Persuasion',
 }
