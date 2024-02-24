@@ -21,6 +21,7 @@ import RecursiveDiceRollForm from '@/components/forms/RecursiveDiceRollForm';
 import { DiceRoll } from '@/model/DiceRoll.class';
 import { StoryArc } from '@/model/StoryArc.class';
 import StoryArcForm from '@/components/forms/StoryArcForm';
+import { Clue } from '@/model/Clue.class';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -198,7 +199,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
       setFormToDisplay(undefined);
     }
   };
-  const onClueFormSubmit = async (clue: string) => {
+  const onClueFormSubmit = async (clue: Clue) => {
     if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,

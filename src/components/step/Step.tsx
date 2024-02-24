@@ -44,9 +44,19 @@ export default function Step({ step, uniqueStepKey }: StepProps) {
         {step.clues &&
           step.clues.map((clue, index) => {
             return (
-              <div key={`clue_${step.id}_${index}`}>
-                <input type='checkbox' className='mr-2' />
-                <label>🕵️‍♀️ Indice : {clue}</label>
+              <div className='flex flex-col' key={`clue_${step.id}_${index}`}>
+                <div className='flex'>
+                  <input type='checkbox' className='mr-2' />
+                  <label className='flex'>
+                    🕵️‍♀️ Indice : {clue.title}{' '}
+                    {clue.privateDescription && (
+                      <div className='cursor-pointer' title={clue.privateDescription}>
+                        ℹ
+                      </div>
+                    )}
+                  </label>
+                </div>
+                {clue.publicDescription && <div className='my-4'>{clue.publicDescription}</div>}
               </div>
             );
           })}
