@@ -274,7 +274,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/adventure/api?slug=${params.slug}`, {
+      const response = await fetch(`/api?slug=${params.slug}`, {
         headers: {
           'Content-Type': 'application/json',
         },

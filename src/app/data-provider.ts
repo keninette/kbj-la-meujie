@@ -1,7 +1,7 @@
 import { Adventure } from '@/model/Adventure.class';
 
 const saveAdventure = async (adventure?: Adventure, isNewAdventure: boolean = false) => {
-  return await fetch(`/adventure/api`, {
+  return await fetch(`/api`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

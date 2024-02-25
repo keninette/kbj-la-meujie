@@ -6,7 +6,7 @@ export default function Adventures() {
   const [adventures, setAdventures] = useState<Adventure[]>([]);
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/adventure/api`, {
+      const response = await fetch(`/api`, {
         headers: {
           'Content-Type': 'application/json',
         },

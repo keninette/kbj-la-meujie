@@ -29,7 +29,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/adventure/api?slug=${params.slug}`, {
+      const response = await fetch(`/api?slug=${params.slug}`, {
         headers: {
           'Content-Type': 'application/json',
         },

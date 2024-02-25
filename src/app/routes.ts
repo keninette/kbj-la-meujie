@@ -13,15 +13,15 @@ const routes = {
   } as RouteType,
   adventure: {
     name: '{adventureName}',
-    path: '/adventure/{slug}',
+    path: '/game-master/adventure/{slug}',
   } as RouteType,
   chapter: {
     name: '{chapterName}',
-    path: '/adventure/{slug}/chapter/{id}',
+    path: '/game-master/adventure/{slug}/chapter/{id}',
   } as RouteType,
   editAdventure: {
     name: 'Edit {adventureName}',
-    path: '/edit/{slug}',
+    path: '/game-master/edit/{slug}',
   },
 };
 
