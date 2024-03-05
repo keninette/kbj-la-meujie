@@ -1,10 +1,12 @@
 {
-  "slug": "la-renaissance-de-cyaegha",
+  "adventureUuid": "6e0a7f9c-4318-4f05-b468-7e38da97f102",
+  "adventureSlug": "la-renaissance-de-cyaegha",
   "prefix": "RDC",
   "name": "La renaissance de Cyaegha",
   "storyArcs": [
     {
-      "slug": "RDC-la-rencontre",
+      "storyArcUuid": "d40a6776-2a65-4f38-97bf-bc0f73809209",
+      "storyArcSlug": "RDC-la-rencontre",
       "name": "La rencontre",
       "chapters": [
         {
@@ -1149,7 +1151,8 @@
       ]
     },
     {
-      "slug": "RDC-le-sauvetage",
+      "storyArcUuid": "b46b5404-e089-4541-b9be-c12118fd9a02",
+      "storyArcSlug": "RDC-le-sauvetage",
       "name": "Le sauvetage",
       "chapters": [
         {
@@ -1882,7 +1885,8 @@
       ]
     },
     {
-      "slug": "RDC-les-sorcieres-de-salem",
+      "storyArcUuid": "9fd113cf-d355-4dba-8b84-a35d605908a6",
+      "storyArcSlug": "RDC-les-sorcieres-de-salem",
       "name": "Les sorcières de Salem",
       "chapters": [
         {

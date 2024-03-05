@@ -16,7 +16,7 @@ export default function ChapterNavItem({ chapterUid }: ChapterNavItemPropsType) 
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/api?slug=${adventureSlug}&chapterId=${chapterId}`, {
+      const response = await fetch(`/api?adventureSlug=${adventureSlug}&chapterId=${chapterId}`, {
         headers: {
           'Content-Type': 'application/json',
         },

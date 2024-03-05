@@ -3,9 +3,11 @@ import { UniverseEnum } from '@/model/universe.enum';
 import { Chapter } from '@/model/Chapter.class';
 import { Step } from '@/model/Step.class';
 import { Audio } from '@/model/Audio.class';
+import { v4 } from 'uuid';
 
 export class Adventure {
-  slug: string;
+  adventureUuid: string;
+  adventureSlug: string;
   prefix: string;
   name: string;
   universe?: UniverseEnum;
@@ -16,7 +18,8 @@ export class Adventure {
   todos?: { name: string; isReady: boolean }[];
 
   constructor() {
-    this.slug = '';
+    this.adventureUuid = v4();
+    this.adventureSlug = '';
     this.prefix = '';
     this.name = '';
     this.storyArcs = [];
@@ -26,7 +29,7 @@ export class Adventure {
     const instance = new this();
 
     const data = JSON.parse(json);
-    instance.slug = data.slug;
+    instance.adventureSlug = data.adventureSlug;
     instance.prefix = data.prefix;
     instance.name = data.name;
     instance.universe = data.universe;
@@ -42,7 +45,7 @@ export class Adventure {
     const instance = Adventure.createFromJson(json);
 
     return {
-      slug: instance.slug,
+      adventureSlug: instance.adventureSlug,
       name: instance.name,
       universe: instance.universe,
       players: instance.players,
@@ -51,7 +54,9 @@ export class Adventure {
 
   computeNextChapterId(storyArc: StoryArc, increment: number = 0) {
     // todo fix that, but it will do for now
-    const storyArcIndex = this.storyArcs.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    const storyArcIndex = this.storyArcs.findIndex(
+      (thisStoryArc) => thisStoryArc.storyArcSlug === storyArc.storyArcSlug,
+    );
     const supposedNextId = `${this.prefix}-${storyArcIndex}-${(storyArc.chapters?.length || 0) + increment}`;
     const existingChaptersWithId = storyArc.chapters.filter((chapter) => chapter.id === supposedNextId);
     if (existingChaptersWithId.length) {
@@ -61,7 +66,9 @@ export class Adventure {
   }
 
   saveStoryArc(storyArc: StoryArc) {
-    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    const existingStoryArcIndex = this.storyArcs?.findIndex(
+      (thisStoryArc) => thisStoryArc.storyArcSlug === storyArc.storyArcSlug,
+    );
     if (existingStoryArcIndex && existingStoryArcIndex > -1) {
       this.storyArcs[existingStoryArcIndex] = storyArc;
     } else {
@@ -70,7 +77,9 @@ export class Adventure {
   }
 
   saveChapter(storyArc: StoryArc, chapter: Chapter) {
-    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    const existingStoryArcIndex = this.storyArcs?.findIndex(
+      (thisStoryArc) => thisStoryArc.storyArcSlug === storyArc.storyArcSlug,
+    );
     if (existingStoryArcIndex === undefined || existingStoryArcIndex === -1) {
       console.error('Arc non trouvé');
       return;
@@ -87,7 +96,9 @@ export class Adventure {
   }
 
   saveStep(storyArc: StoryArc, chapter: Chapter, step: Step): Step | null {
-    const existingStoryArcIndex = this.storyArcs?.findIndex((thisStoryArc) => thisStoryArc.slug === storyArc.slug);
+    const existingStoryArcIndex = this.storyArcs?.findIndex(
+      (thisStoryArc) => thisStoryArc.storyArcSlug === storyArc.storyArcSlug,
+    );
     if (existingStoryArcIndex === undefined || existingStoryArcIndex === -1) {
       console.error('Arc non trouvé');
       return null;

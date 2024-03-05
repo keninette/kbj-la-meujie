@@ -23,10 +23,12 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/material": "^5.14.19",
     "@mui/x-tree-view": "^6.17.0",
+    "@types/uuid": "^9.0.8",
     "next": "14.0.2",
     "react": "^18",
     "react-dom": "^18",
-    "react-xarrows": "^2.0.2"
+    "react-xarrows": "^2.0.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20",

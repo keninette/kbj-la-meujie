@@ -34,10 +34,10 @@ export default function StoryArcForm({ requestedStoryArc, onSubmitCallback }: St
         </label>
         <input
           type='text'
-          name='slug'
+          name='storyArcSlug'
           placeholder='Slug'
-          value={storyArc.slug}
-          onChange={(e) => onChange('slug', e.target.value)}
+          value={storyArc.storyArcSlug}
+          onChange={(e) => onChange('storyArcSlug', e.target.value)}
           className='flex text-black w-full'
           required
         />

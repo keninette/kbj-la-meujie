@@ -20,7 +20,7 @@ export default function Adventures() {
     <>
       {adventures &&
         adventures.map((adventure) => (
-          <li key={adventure.slug} className='ml-6'>
+          <li key={adventure.adventureSlug} className='ml-6'>
             <AdventureCard adventure={adventure} />
           </li>
         ))}

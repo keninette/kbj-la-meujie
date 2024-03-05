@@ -2,7 +2,7 @@
 import Step from '@/components/step/Step';
 import React from 'react';
 import Xarrow from 'react-xarrows';
-import { ArrowCoordinatesType } from '@/app/adventure/[slug]/chapter/[id]/page';
+import { ArrowCoordinatesType } from '@/app/adventure/[adventureSlug]/chapter/[id]/page';
 import { Chapter } from '@/model/Chapter.class';
 
 type RecursiveStepPropsType = {

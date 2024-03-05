@@ -6,7 +6,7 @@ import { constants } from 'node:http2';
 
 export async function GET(request: NextRequest) {
   const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/json/adventures');
-  const adventureSlug = request.nextUrl.searchParams.get('slug');
+  const adventureSlug = request.nextUrl.searchParams.get('adventureSlug');
   const chapterId = request.nextUrl.searchParams.get('chapterId');
 
   // Fetching a single adventure or one of its chapter
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const adventure: Adventure = await request.json();
-  const filePath = path.join(process.cwd(), `/src/lib/json/adventures/${adventure.slug}.json`);
+  const filePath = path.join(process.cwd(), `/src/lib/json/adventures/${adventure.adventureSlug}.json`);
   fs.writeFileSync(filePath, JSON.stringify(adventure), { flag: 'w+' });
 
   return Response.json(adventure, { status: constants.HTTP_STATUS_CREATED });

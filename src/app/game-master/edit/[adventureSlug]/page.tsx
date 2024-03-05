@@ -22,6 +22,8 @@ import { DiceRoll } from '@/model/DiceRoll.class';
 import { StoryArc } from '@/model/StoryArc.class';
 import StoryArcForm from '@/components/forms/StoryArcForm';
 import { Clue } from '@/model/Clue.class';
+import { isUserLoggedIn, logOutUser } from '@/security/login';
+import LoginForm from '@/components/forms/LoginForm';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -33,7 +35,8 @@ enum FormEnum {
   DICE_ROLL = 'DICE_ROLL',
 }
 
-export default function EditAdventure({ params }: { params: { slug: string } }) {
+export default function EditAdventure({ params }: { params: { adventureSlug: string } }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
   const [storyArc, setStoryArc] = useState<StoryArc>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
@@ -274,7 +277,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/api?slug=${params.slug}`, {
+      const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -284,14 +287,15 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
       const adventure = Adventure.createFromJson(JSON.stringify(data));
       setAdventure(adventure);
     })();
-  }, [params.slug]);
+  }, [params.adventureSlug, isLoggedIn]);
 
   // todo gérer les todos des aventures
   return (
     <main className='flex h-screen flex-col text-white'>
       <Header feedbackBannerProps={feedback ? { ...feedback, setFeedback: setFeedback } : undefined}></Header>
-      {!adventure && <>Loading</>}
-      {adventure && (
+      {!isLoggedIn && <LoginForm loginCallback={setIsLoggedIn} />}
+      {isLoggedIn && !adventure && <>Loading</>}
+      {isLoggedIn && adventure && (
         <div className='flex'>
           <section className='flex flex-col items-center text-white h-full w-full'>
             <h2>{adventure?.name}</h2>
@@ -319,7 +323,7 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                 <ul className='flex flex-col w-[95%]'>
                   {adventure &&
                     adventure.storyArcs?.map((thisArc) => (
-                      <li className={'flex flex-col w-full justify-between'} key={thisArc.slug}>
+                      <li className={'flex flex-col w-full justify-between'} key={thisArc.storyArcSlug}>
                         <div className='flex w-full'>
                           <button
                             onClick={() => {
@@ -328,12 +332,12 @@ export default function EditAdventure({ params }: { params: { slug: string } }) 
                               setStep(undefined);
                             }}
                             className={
-                              storyArc && !chapter && thisArc.slug === storyArc.slug
+                              storyArc && !chapter && thisArc.storyArcSlug === storyArc.storyArcSlug
                                 ? 'flex flex-grow bg-white bg-opacity-50'
                                 : 'flex flex-grow hover:bg-white hover:bg-opacity-50'
                             }
                           >
-                            {thisArc.slug} - <span className='font-bold'>{thisArc.name.toUpperCase()}</span>
+                            {thisArc.storyArcSlug} - <span className='font-bold'>{thisArc.name.toUpperCase()}</span>
                           </button>
                           <button onClick={() => onArcEditClick(thisArc)}>
                             <FontAwesomeIcon icon={faPenToSquare} />

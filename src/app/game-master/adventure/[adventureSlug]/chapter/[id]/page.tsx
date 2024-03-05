@@ -9,6 +9,8 @@ import { Adventure } from '@/model/Adventure.class';
 // @ts-ignore
 import { Chapter } from '@/model/Chapter.class';
 import { Step } from '@/model/Step.class';
+import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
+import LoginForm from '@/components/forms/LoginForm';
 
 export type ArrowCoordinatesType = {
   id: string;
@@ -16,8 +18,9 @@ export type ArrowCoordinatesType = {
   end: string;
 };
 
-export default function Chapter({ params }: { params: { slug: string; id: string } }) {
+export default function Chapter({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
   const [activeStep, setActiveStep] = useState<Step>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
@@ -29,7 +32,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/api?slug=${params.slug}`, {
+      const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -47,7 +50,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
         if (!storyArc) {
           console.error("Pas d'arc trouvé pour ce châpitre");
         }
-        eligibleChapters = (storyArc.chapters || []).filter((thisChapter) => {
+        eligibleChapters = (storyArc?.chapters || []).filter((thisChapter) => {
           return thisChapter.steps.filter((thisStep) => thisStep.id === activeStep.id).length > 0;
         });
       } else {
@@ -71,7 +74,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
 
       setChapter(chapter);
       if (chapter && chapter.nextChapterId) {
-        const nextChapter = adventure.chapters?.filter((thisChapter) => {
+        const nextChapter = adventure?.chapters?.filter((thisChapter) => {
           return thisChapter.id === chapter.nextChapterId;
         })[0];
         if (nextChapter) {
@@ -80,7 +83,7 @@ export default function Chapter({ params }: { params: { slug: string; id: string
       }
       setAdventure(adventure);
     })();
-  }, [params, params.slug, params.id, activeStep]);
+  }, [params, params.adventureSlug, params.id, activeStep, isLoggedIn]);
 
   const onStepSelection = (step: Step) => {
     // @ts-ignore
@@ -93,6 +96,9 @@ export default function Chapter({ params }: { params: { slug: string; id: string
 
   const storyArcChapters = () => {
     // todo improve this (in params)
+    if (!adventure) {
+      return;
+    }
     const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
       storyArc.chapters.find((thisChapter) => thisChapter.id === params.id),
     );
@@ -103,46 +109,52 @@ export default function Chapter({ params }: { params: { slug: string; id: string
   };
 
   return (
-    adventure && (
+    <>
       <main className='flex min-h-screen flex-col text-white min-w-full'>
         <Header></Header>
-        <div className='flex'>
-          <section className='flex'>
-            <Sidenav
-              adventureSlug={adventure.slug}
-              chapters={storyArcChapters() || []}
-              onStepSelection={onStepSelection}
-            ></Sidenav>
-          </section>
-          <section className='flex flex-col w-4/5'>
-            {isClient && chapter && adventure && (
-              <>
-                <section className='flex h-full w-full flex-grow'>
-                  <div className='flex flex-col h-full w-full m-4'>
-                    <h2 className='flex justify-center w-full text-3xl'>{chapter.name}</h2>
-                    {
-                      <div className='flex'>
-                        {isClient &&
-                          activeSteps?.map((stepId) => (
-                            <RecursiveSteps key={stepId} stepIds={[stepId]} chapter={chapter} />
-                          ))}
-                      </div>
-                    }
-                  </div>
-                </section>
-              </>
-            )}
-            {nextChapter && (
-              <div
-                id='next-chapter'
-                className='flex w-[94%] p-4 text-xl justify-center m-auto mt-10 border-solid border-2 flex-grow z-10 border-gradient border-gradient--red--to-right opacity-25'
-              >
-                <a href={getChapterRoute(nextChapter, params.slug).path}>Prochain chapitre : {nextChapter.name}</a>
-              </div>
-            )}
-          </section>
-        </div>
+        {!isLoggedIn && <LoginForm loginCallback={setIsLoggedIn} />}
+        {isLoggedIn && adventure && (
+          <div className='flex'>
+            <section className='flex'>
+              <Sidenav
+                adventureSlug={adventure.adventureSlug}
+                chapters={storyArcChapters() || []}
+                onStepSelection={onStepSelection}
+              ></Sidenav>
+            </section>
+            <section className='flex flex-col w-4/5'>
+              {isClient && chapter && adventure && (
+                <>
+                  <section className='flex h-full w-full flex-grow'>
+                    <div className='flex flex-col h-full w-full m-4'>
+                      <h2 className='flex justify-center w-full text-3xl'>{chapter.name}</h2>
+                      {
+                        <div className='flex'>
+                          {isClient &&
+                            activeSteps?.map((stepId) => (
+                              <RecursiveSteps key={stepId} stepIds={[stepId]} chapter={chapter} />
+                            ))}
+                        </div>
+                      }
+                    </div>
+                  </section>
+                </>
+              )}
+              {nextChapter && (
+                <div
+                  id='next-chapter'
+                  className='flex w-[94%] p-4 text-xl justify-center m-auto mt-10 border-solid border-2 flex-grow z-10 border-gradient border-gradient--red--to-right opacity-25'
+                >
+                  <a href={getChapterRoute(nextChapter, params.adventureSlug).path}>
+                    Prochain chapitre : {nextChapter.name}
+                  </a>
+                </div>
+              )}
+            </section>
+          </div>
+        )}
       </main>
-    )
+      )
+    </>
   );
 }

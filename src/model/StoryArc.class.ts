@@ -1,12 +1,16 @@
 import { Chapter } from '@/model/Chapter.class';
+import { v4 } from 'uuid';
 
 export class StoryArc {
-  slug: string;
+  // public id so they don't get spoiled on players page
+  storyArcUuid: string;
+  storyArcSlug: string;
   name: string;
   chapters: Chapter[];
 
   constructor() {
-    this.slug = '';
+    this.storyArcUuid = v4();
+    this.storyArcSlug = '';
     this.name = '';
     this.chapters = [];
   }

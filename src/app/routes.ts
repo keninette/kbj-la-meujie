@@ -13,38 +13,43 @@ const routes = {
   } as RouteType,
   adventure: {
     name: '{adventureName}',
-    path: '/game-master/adventure/{slug}',
+    path: '/game-master/adventure/{adventureSlug}',
   } as RouteType,
   chapter: {
     name: '{chapterName}',
-    path: '/game-master/adventure/{slug}/chapter/{id}',
+    path: '/game-master/adventure/{adventureSlug}/chapter/{id}',
   } as RouteType,
   editAdventure: {
     name: 'Edit {adventureName}',
-    path: '/game-master/edit/{slug}',
-  },
+    path: '/game-master/edit/{adventureSlug}',
+  } as RouteType,
+  newAdventure: {
+    name: 'Nouvelle aventure',
+    path: '/game-master/edit/new',
+  } as RouteType,
 };
 
 const getAdventureRoute = (adventure: Adventure): RouteType => {
   // todo handle empty
   return {
     name: routes.adventure.name.replace('{adventureName}', adventure.name || ''),
-    path: routes.adventure.path.replace('{slug}', adventure.slug || ''),
+    path: routes.adventure.path.replace('{adventureSlug}', adventure.adventureSlug || ''),
   };
 };
 
 const getEditAdventureRoute = (adventure: Adventure): RouteType => {
+  console.log(adventure);
   // todo handle empty
   return {
     name: routes.editAdventure.name.replace('{adventureName}', adventure.name || ''),
-    path: routes.editAdventure.path.replace('{slug}', adventure.slug || ''),
+    path: routes.editAdventure.path.replace('{adventureSlug}', adventure.adventureSlug || ''),
   };
 };
 
 const getChapterRoute = (chapter: Chapter, adventureSlug: string): RouteType => {
   return {
     name: routes.chapter.name.replace('{chapterName}', chapter.name || ''),
-    path: routes.chapter.path.replace('{slug}', adventureSlug).replace('{id}', chapter.id || ''),
+    path: routes.chapter.path.replace('{adventureSlug}', adventureSlug).replace('{id}', chapter.id || ''),
   };
 };
 
