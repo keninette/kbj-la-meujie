@@ -24,7 +24,7 @@ export default function RecursiveSteps({ stepIds, chapter }: RecursiveStepPropsT
       }
       domElements.push(
         <div key={step.id} className='flex flex-col w-full'>
-          <Step step={step} uniqueStepKey={uniqueStepKey} />
+          <Step step={step} uniqueStepKey={uniqueStepKey} referer={'adventure'} />
           {step.nextStepsIds && <div className='flex'>{renderSteps(step?.nextStepsIds, uniqueStepKey)}</div>}
         </div>,
       );

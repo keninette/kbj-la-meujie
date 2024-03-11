@@ -558,7 +558,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                     + 🗺 Lieu
                   </button>
                 </div>
-                {step && <StepComponent step={step} uniqueStepKey={step.id}></StepComponent>}
+                {step && <StepComponent step={step} uniqueStepKey={step.id} referer={'edit'}></StepComponent>}
               </div>
               {formToDisplay === FormEnum.AUDIO && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>

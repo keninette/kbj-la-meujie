@@ -76,6 +76,15 @@ export default function PlaceForm({ onSubmitCallback, adventurePlaces }: PlaceFo
           disabled={isAdventurePlace}
           required
         />
+        <input
+          type='text'
+          name='pinId'
+          placeholder='Point sur la carte'
+          value={place.pinId}
+          onChange={(e) => onFormChange('pinId', e.target.value)}
+          className='flex text-black my-2'
+          disabled={isAdventurePlace}
+        />
         <textarea
           name='publicDescription'
           placeholder='Description publique'

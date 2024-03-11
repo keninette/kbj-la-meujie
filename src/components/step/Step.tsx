@@ -10,15 +10,17 @@ import PlaceBlock from '@/components/step/PlaceBlock';
 type StepProps = {
   step: Step;
   uniqueStepKey: string;
+  referer: string;
 };
 
-export default function Step({ step, uniqueStepKey }: StepProps) {
+export default function Step({ step, uniqueStepKey, referer }: StepProps) {
   return (
     <div
       className='flex flex-col border-solid border-2 p-4 m-10 flex-grow z-10 border-gradient border-gradient--blue--to-left'
       id={uniqueStepKey}
     >
       <h3 className='flex justify-center text-xl mb-4'>{step.description}</h3>
+      {step.date && <p>📆 {step.date}</p>}
       {step.lights &&
         step.lights.map((light, index) => {
           return (
@@ -27,12 +29,12 @@ export default function Step({ step, uniqueStepKey }: StepProps) {
             </div>
           );
         })}
-      {step.place && <PlaceBlock place={step.place} />}
+      {step.place && <PlaceBlock place={step.place} referer={referer} />}
       {step.nonPlayerCharacters && (
         <ul className='flex'>
           {step.nonPlayerCharacters.map((npc) => {
             const uniqId = `npc_${step.id}_${npc.name.toLowerCase().replaceAll(' ', '')}`;
-            return <NonPlayerCharacterBlock key={uniqId} npc={npc} npcUniqId={uniqId} />;
+            return <NonPlayerCharacterBlock key={uniqId} npc={npc} npcUniqId={uniqId} referer={referer} />;
           })}
         </ul>
       )}

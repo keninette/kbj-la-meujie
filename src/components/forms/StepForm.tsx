@@ -39,6 +39,19 @@ export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }
       <div className='flex w-full mt-8'>
         <form className='flex flex-col w-full' onSubmit={onSubmit}>
           <div className='flex flex-col w-full'>
+            <label htmlFor='date' className='text-white'>
+              Date
+            </label>
+            <input
+              type='text'
+              name='date'
+              placeholder='date'
+              value={step.date || ''}
+              onChange={(e) => onChange('date', e.target.value)}
+              className='flex text-black w-full'
+            />
+          </div>
+          <div className='flex flex-col w-full'>
             <label htmlFor='name' className='text-white'>
               Description
             </label>

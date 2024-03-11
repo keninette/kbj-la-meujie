@@ -10,6 +10,7 @@ export class Step {
   id: string;
   level: number;
   description?: string;
+  date?: string;
   clues?: Clue[];
   audios?: Audio[];
   images?: Image[];
