@@ -57,7 +57,7 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
           <option value=''>-</option>
           {adventureNpcs?.map((thisNpc) => {
             return (
-              <option key={thisNpc.name.toLowerCase().replaceAll(' ', '')} value={thisNpc.id}>
+              <option key={thisNpc.id} value={thisNpc.id}>
                 {thisNpc.name}
               </option>
             );
@@ -120,7 +120,6 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
             disabled={isAdventureNpc}
           />
         </div>
-        {/* todo fix warning on form inside form */}
         <input
           type='text'
           name='filename'

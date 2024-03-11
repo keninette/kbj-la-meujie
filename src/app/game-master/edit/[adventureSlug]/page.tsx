@@ -24,8 +24,10 @@ import StoryArcForm from '@/components/forms/StoryArcForm';
 import { Clue } from '@/model/Clue.class';
 import { isUserLoggedIn, logOutUser } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
-import NonPlayerCharacterForm from '@/components/NonPlayerCharacterForm';
+import NonPlayerCharacterForm from '@/components/forms/NonPlayerCharacterForm';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
+import { Place } from '@/model/Place.class';
+import PlaceForm from '@/components/forms/PlaceForm';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -36,6 +38,7 @@ enum FormEnum {
   CLUE = 'CLUE',
   DICE_ROLL = 'DICE_ROLL',
   NPC = 'NON_PLAYER_CHARACTER',
+  PLACE = 'PLACE',
 }
 
 export default function EditAdventure({ params }: { params: { adventureSlug: string } }) {
@@ -314,6 +317,42 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
   };
 
+  const onPlaceFormSubmit = async (place: Place) => {
+    if (!adventure || !storyArc || !chapter || !step) {
+      setFeedback({
+        type: FeedbackTypeEnum.ERROR,
+        message: 'Élément manquant, impossible de sauvegarder le lieu',
+        setFeedback,
+      });
+      return;
+    }
+    setFeedback({ type: FeedbackTypeEnum.LOADING, message: 'Sauvegarde du lieu en cours', setFeedback });
+
+    /*setStep((prevState) => {
+      return {
+        ...prevState,
+        place: place,
+      };
+    });*/
+    // todo fix this, it's awful
+    step.place = place;
+    adventure.saveStep(storyArc, chapter, step);
+    // todo duplicate
+    const response = await saveAdventure(adventure);
+    // todo use constante here
+    if (response.status !== 201) {
+      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du lieu', setFeedback });
+      console.error(response);
+    } else {
+      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du lieu réussie', setFeedback });
+      const data = await response.json();
+      // Re-build adventure otherwise we don't have access to methods in class
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
+      setFormToDisplay(undefined);
+    }
+  };
+
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
 
@@ -511,6 +550,13 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                   >
                     + 👨‍👦‍👦 PNJ
                   </button>
+                  <button
+                    className='border-2 border-white opacity-80 px-2 mx-4 mb-4 hover:opacity-100 disabled:opacity-50'
+                    onClick={() => setFormToDisplay(FormEnum.PLACE)}
+                    disabled={!step}
+                  >
+                    + 🗺 Lieu
+                  </button>
                 </div>
                 {step && <StepComponent step={step} uniqueStepKey={step.id}></StepComponent>}
               </div>
@@ -540,6 +586,15 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                     onSubmitCallback={onNpcFormSubmit}
                     adventureNpcs={adventure.nonPlayerCharacters}
                     requestedNpc={undefined}
+                  />
+                </div>
+              )}
+              {formToDisplay === FormEnum.PLACE && adventure && storyArc && chapter && step && (
+                <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
+                  <PlaceForm
+                    onSubmitCallback={onPlaceFormSubmit}
+                    adventurePlaces={adventure.places}
+                    requestedPlace={undefined}
                   />
                 </div>
               )}

@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 // @ts-ignore
 import { Step } from '@/model/Step.class';
 import NonPlayerCharacterBlock from '@/components/step/NonPlayerCharacterBlock';
+import PlaceBlock from '@/components/step/PlaceBlock';
 
 type StepProps = {
   step: Step;
@@ -26,11 +27,12 @@ export default function Step({ step, uniqueStepKey }: StepProps) {
             </div>
           );
         })}
+      {step.place && <PlaceBlock place={step.place} />}
       {step.nonPlayerCharacters && (
-        <ul className='flex justify-evenly'>
+        <ul className='flex'>
           {step.nonPlayerCharacters.map((npc) => {
             const uniqId = `npc_${step.id}_${npc.name.toLowerCase().replaceAll(' ', '')}`;
-            return <NonPlayerCharacterBlock key={uniqId} npc={npc} displayPrivateInfo={true} npcUniqId={uniqId} />;
+            return <NonPlayerCharacterBlock key={uniqId} npc={npc} npcUniqId={uniqId} />;
           })}
         </ul>
       )}

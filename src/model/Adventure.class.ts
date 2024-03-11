@@ -5,6 +5,7 @@ import { Step } from '@/model/Step.class';
 import { Audio } from '@/model/Audio.class';
 import { v4 } from 'uuid';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
+import { Place } from '@/model/Place.class';
 
 export class Adventure {
   adventureUuid: string;
@@ -18,6 +19,7 @@ export class Adventure {
   equipment?: { name: string; isReady: boolean }[];
   todos?: { name: string; isReady: boolean }[];
   nonPlayerCharacters: NonPlayerCharacter[];
+  places: Place[];
 
   constructor() {
     this.adventureUuid = v4();
@@ -26,6 +28,7 @@ export class Adventure {
     this.name = '';
     this.storyArcs = [];
     this.nonPlayerCharacters = [];
+    this.places = [];
   }
 
   static createFromJson = (json: string) => {
@@ -42,6 +45,7 @@ export class Adventure {
     instance.storyArcs = data.storyArcs;
 
     Adventure.fetchAllNonPlayerCharacters(instance);
+    Adventure.fetchAllPlaces(instance);
 
     return instance;
   };
@@ -122,6 +126,8 @@ export class Adventure {
     }
 
     Adventure.fetchAllNonPlayerCharacters(this);
+    Adventure.fetchAllPlaces(this);
+
     return step;
   }
 
@@ -161,5 +167,17 @@ export class Adventure {
 
     // Make it unique
     adventure.nonPlayerCharacters = [...new Map(adventure.nonPlayerCharacters.map((npc) => [npc.id, npc])).values()];
+  }
+  static fetchAllPlaces(adventure: Adventure) {
+    // todo find a more elegant way to do it but I wanted it to work real fast
+    adventure.storyArcs.forEach((storyArc: StoryArc) => {
+      storyArc.chapters.forEach((chapter: Chapter) => {
+        chapter.steps.forEach((step: Step) => {
+          if (step.place && step.place.isStepBound && !adventure.places.find((place) => place.id === step.place?.id)) {
+            adventure.places.push(step.place);
+          }
+        });
+      });
+    });
   }
 }

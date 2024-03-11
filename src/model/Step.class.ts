@@ -4,6 +4,7 @@ import { Audio } from '@/model/Audio.class';
 import { Image } from '@/model/Image.class';
 import { Clue } from '@/model/Clue.class';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
+import { Place } from '@/model/Place.class';
 
 export class Step {
   id: string;
@@ -17,6 +18,7 @@ export class Step {
   doNotForget?: string[];
   nextStepsIds?: string[];
   nonPlayerCharacters?: NonPlayerCharacter[];
+  place?: Place;
 
   constructor(id: string, level: number) {
     this.id = id;
