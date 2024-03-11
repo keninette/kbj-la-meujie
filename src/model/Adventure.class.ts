@@ -4,6 +4,7 @@ import { Chapter } from '@/model/Chapter.class';
 import { Step } from '@/model/Step.class';
 import { Audio } from '@/model/Audio.class';
 import { v4 } from 'uuid';
+import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 
 export class Adventure {
   adventureUuid: string;
@@ -16,6 +17,7 @@ export class Adventure {
   // todo classes
   equipment?: { name: string; isReady: boolean }[];
   todos?: { name: string; isReady: boolean }[];
+  nonPlayerCharacters: NonPlayerCharacter[];
 
   constructor() {
     this.adventureUuid = v4();
@@ -23,6 +25,7 @@ export class Adventure {
     this.prefix = '';
     this.name = '';
     this.storyArcs = [];
+    this.nonPlayerCharacters = [];
   }
 
   static createFromJson = (json: string) => {
@@ -37,6 +40,8 @@ export class Adventure {
     instance.equipment = data.equipment;
     instance.todos = data.todos;
     instance.storyArcs = data.storyArcs;
+
+    Adventure.fetchAllNonPlayerCharacters(instance);
 
     return instance;
   };
@@ -116,6 +121,7 @@ export class Adventure {
       this.storyArcs[existingStoryArcIndex].chapters[chapterIndex].steps[stepIndex] = step;
     }
 
+    Adventure.fetchAllNonPlayerCharacters(this);
     return step;
   }
 
@@ -138,5 +144,22 @@ export class Adventure {
 
   findChapterIndexById(storyArc: StoryArc, id: string) {
     return storyArc.chapters.findIndex((chapter) => chapter.id === id);
+  }
+
+  static fetchAllNonPlayerCharacters(adventure: Adventure) {
+    // todo find a more elegant way to do it but I wanted it to work real fast
+    adventure.storyArcs.forEach((storyArc: StoryArc) => {
+      storyArc.chapters.forEach((chapter: Chapter) => {
+        chapter.steps.forEach((step: Step) => {
+          adventure.nonPlayerCharacters = [
+            ...adventure.nonPlayerCharacters,
+            ...(step.nonPlayerCharacters || []).filter((npc: NonPlayerCharacter) => !npc.isStepBound),
+          ];
+        });
+      });
+    });
+
+    // Make it unique
+    adventure.nonPlayerCharacters = [...new Map(adventure.nonPlayerCharacters.map((npc) => [npc.id, npc])).values()];
   }
 }

@@ -17,6 +17,7 @@ export default function ImageForm({ onSubmitCallback, requestedImage }: ImageFor
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log('here');
     onSubmitCallback(image);
   };
 
@@ -44,7 +45,7 @@ export default function ImageForm({ onSubmitCallback, requestedImage }: ImageFor
           name='filename'
           placeholder='Nom du fichier'
           value={image.filename}
-          onChange={(e) => onChange('filename', e.target.value)}
+          onChange={(e) => onChange('profilename', e.target.value)}
           className='flex text-black'
           required
         />

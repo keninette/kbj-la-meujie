@@ -24,6 +24,8 @@ import StoryArcForm from '@/components/forms/StoryArcForm';
 import { Clue } from '@/model/Clue.class';
 import { isUserLoggedIn, logOutUser } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
+import NonPlayerCharacterForm from '@/components/NonPlayerCharacterForm';
+import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -33,10 +35,11 @@ enum FormEnum {
   IMAGE = 'IMAGE',
   CLUE = 'CLUE',
   DICE_ROLL = 'DICE_ROLL',
+  NPC = 'NON_PLAYER_CHARACTER',
 }
 
 export default function EditAdventure({ params }: { params: { adventureSlug: string } }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [storyArc, setStoryArc] = useState<StoryArc>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
@@ -134,7 +137,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     if (!adventure || !storyArc || !chapter || !step) {
       setFeedback({
         type: FeedbackTypeEnum.ERROR,
-        message: "Élément manquant, impossible de sauvegarder l'étape",
+        message: "Élément manquant, impossible de sauvegarder l'audio",
         setFeedback,
       });
       return;
@@ -275,18 +278,58 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
   };
 
-  useEffect(() => {
-    (async function () {
-      const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  const onNpcFormSubmit = async (npc: NonPlayerCharacter) => {
+    if (!adventure || !storyArc || !chapter || !step) {
+      setFeedback({
+        type: FeedbackTypeEnum.ERROR,
+        message: 'Élément manquant, impossible de sauvegarder le PNJ',
+        setFeedback,
       });
+      return;
+    }
+    setFeedback({ type: FeedbackTypeEnum.LOADING, message: 'Sauvegarde du PNJ en cours', setFeedback });
+
+    /*setStep((prevState) => {
+      return {
+        ...prevState,
+        nonPlayerCharacters: [...(prevState?.nonPlayerCharacters || []), npc],
+      };
+    });*/
+    // todo fix this, it's awful
+    step.nonPlayerCharacters = [...(step.nonPlayerCharacters || []), npc];
+    adventure.saveStep(storyArc, chapter, step);
+    // todo duplicate
+    const response = await saveAdventure(adventure);
+    // todo use constante here
+    if (response.status !== 201) {
+      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du PNJ', setFeedback });
+      console.error(response);
+    } else {
+      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du PNJ réussie', setFeedback });
       const data = await response.json();
       // Re-build adventure otherwise we don't have access to methods in class
       const adventure = Adventure.createFromJson(JSON.stringify(data));
       setAdventure(adventure);
-    })();
+      setFormToDisplay(undefined);
+    }
+  };
+
+  useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+
+    if (isLoggedIn) {
+      (async function () {
+        const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await response.json();
+        // Re-build adventure otherwise we don't have access to methods in class
+        const adventure = Adventure.createFromJson(JSON.stringify(data));
+        setAdventure(adventure);
+      })();
+    }
   }, [params.adventureSlug, isLoggedIn]);
 
   // todo gérer les todos des aventures
@@ -461,6 +504,13 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                   >
                     + 🎲 Jet de dé
                   </button>
+                  <button
+                    className='border-2 border-white opacity-80 px-2 mx-4 mb-4 hover:opacity-100 disabled:opacity-50'
+                    onClick={() => setFormToDisplay(FormEnum.NPC)}
+                    disabled={!step}
+                  >
+                    + 👨‍👦‍👦 PNJ
+                  </button>
                 </div>
                 {step && <StepComponent step={step} uniqueStepKey={step.id}></StepComponent>}
               </div>
@@ -482,6 +532,15 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
               {formToDisplay === FormEnum.DICE_ROLL && adventure && storyArc && chapter && step && (
                 <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
                   <RecursiveDiceRollForm onSubmitCallback={onDiceRollSubmit} requestedDiceRoll={undefined} />
+                </div>
+              )}
+              {formToDisplay === FormEnum.NPC && adventure && storyArc && chapter && step && (
+                <div className='flex flex-col w-1/4 flex-grow px-4 mt-8 items-center border-l-2 border-white'>
+                  <NonPlayerCharacterForm
+                    onSubmitCallback={onNpcFormSubmit}
+                    adventureNpcs={adventure.nonPlayerCharacters}
+                    requestedNpc={undefined}
+                  />
                 </div>
               )}
             </div>

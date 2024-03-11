@@ -1,8 +1,10 @@
 import React from 'react';
 import DiceRoll from '@/components/step/DiceRoll';
 import AudioPlayer from '@/components/step/AudioPlayer';
+import { Tooltip } from 'react-tooltip';
 // @ts-ignore
 import { Step } from '@/model/Step.class';
+import NonPlayerCharacterBlock from '@/components/step/NonPlayerCharacterBlock';
 
 type StepProps = {
   step: Step;
@@ -24,6 +26,14 @@ export default function Step({ step, uniqueStepKey }: StepProps) {
             </div>
           );
         })}
+      {step.nonPlayerCharacters && (
+        <ul className='flex justify-evenly'>
+          {step.nonPlayerCharacters.map((npc) => {
+            const uniqId = `npc_${step.id}_${npc.name.toLowerCase().replaceAll(' ', '')}`;
+            return <NonPlayerCharacterBlock key={uniqId} npc={npc} displayPrivateInfo={true} npcUniqId={uniqId} />;
+          })}
+        </ul>
+      )}
       {step.audios &&
         step.audios.map((sound, index) => {
           return <AudioPlayer audio={sound} id={index} stepId={step.id} key={`audio-player_${index}`} />;
