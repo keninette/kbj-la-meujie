@@ -12,13 +12,19 @@ export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: Non
   const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
   return (
     <>
-      <li className='flex flex-col my-4 mr-4' key={npcUniqId} data-tooltip-id={`tooltip_${npcUniqId}`}>
+      <li className='flex flex-col my-4 mr-4 cursor-pointer' key={npcUniqId} data-tooltip-id={`tooltip_${npcUniqId}`}>
         👩‍👦‍👦 {npc.name}
       </li>
-      <Tooltip id={`tooltip_${npcUniqId}`} openOnClick={true} opacity={0.975} className='max-w-3xl' clickable={true}>
+      <Tooltip
+        id={`tooltip_${npcUniqId}`}
+        openOnClick={true}
+        opacity={0.975}
+        className='max-w-3xl z-50'
+        clickable={true}
+      >
         <div className='flex border-solid border-2 border-gradient border-gradient--red--to-right p-4'>
           {npc.portrait && (
-            <img className='w-48' src={`${assetsDir}/img/adventures/${npc.portrait.filename}`} alt='Portrait' />
+            <img className='w-48 h-full' src={`${assetsDir}/img/adventures/${npc.portrait.filename}`} alt='Portrait' />
           )}
           <div className='flex flex-col px-4'>
             <p className='text-lg font-bold'>

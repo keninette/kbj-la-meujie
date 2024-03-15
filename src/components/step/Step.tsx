@@ -14,9 +14,11 @@ type StepProps = {
 };
 
 export default function Step({ step, uniqueStepKey, referer }: StepProps) {
+  const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
+
   return (
     <div
-      className='flex flex-col border-solid border-2 p-4 m-10 flex-grow z-10 border-gradient border-gradient--blue--to-left'
+      className='flex flex-col w-[450px] border-solid border-2 h-fit p-4 m-10 z-10 border-gradient border-gradient--blue--to-left'
       id={uniqueStepKey}
     >
       <h3 className='flex justify-center text-xl mb-4'>{step.description}</h3>
@@ -40,14 +42,22 @@ export default function Step({ step, uniqueStepKey, referer }: StepProps) {
       )}
       {step.audios &&
         step.audios.map((sound, index) => {
-          return <AudioPlayer audio={sound} id={index} stepId={step.id} key={`audio-player_${index}`} />;
+          return (
+            <AudioPlayer
+              audio={sound}
+              id={index}
+              stepId={step.id}
+              key={`audio-player_${index}`}
+              assetsDir={assetsDir}
+            />
+          );
         })}
       <ul>
         {step.images &&
           step.images.map((img, index) => {
             return (
               <div key={`img_${step.id}_${index}`}>
-                <a href={`../../../assets/img/adventures/${img.filename}`} target='_blank'>
+                <a href={`${assetsDir}/img/adventures/${img.filename}`} target='_blank'>
                   📸 Image : {img.name}
                 </a>
               </div>

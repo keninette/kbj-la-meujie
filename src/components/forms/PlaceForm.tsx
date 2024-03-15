@@ -118,7 +118,6 @@ export default function PlaceForm({ onSubmitCallback, adventurePlaces }: PlaceFo
           value={place.picture.filename}
           onChange={(e) => onFormChange('picture', e.target.value)}
           className='flex text-black'
-          required
           disabled={isAdventurePlace}
         />
         <button className='mt-2 mb-4' type='submit'>

@@ -62,6 +62,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     setFormToDisplay(FormEnum.STEP);
   };
   // todo revoir tous les messages d'erreur
+  // todo fix erreurs console
+  // todo fix erreur login
+  // todo bug au save d'un indice
   const onStoryArcFormSubmit = async (updatedStoryArc: StoryArc) => {
     // todo setFeedback useful in object ?
     if (!adventure) {
@@ -85,6 +88,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde réussie', setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -111,6 +117,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du chapitre réussie', setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -133,6 +142,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'étape réussie", setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -169,6 +181,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -205,6 +220,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -241,6 +259,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -277,6 +298,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       console.error(response);
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
+      const data = await response.json();
+      const adventure = Adventure.createFromJson(JSON.stringify(data));
+      setAdventure(adventure);
       setFormToDisplay(undefined);
     }
   };
@@ -346,7 +370,6 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     } else {
       setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du lieu réussie', setFeedback });
       const data = await response.json();
-      // Re-build adventure otherwise we don't have access to methods in class
       const adventure = Adventure.createFromJson(JSON.stringify(data));
       setAdventure(adventure);
       setFormToDisplay(undefined);

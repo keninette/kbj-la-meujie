@@ -5,9 +5,10 @@ type AudioPlayerProps = {
   audio: Audio;
   stepId: string;
   id: number;
+  assetsDir: string;
 };
 
-export default function AudioPlayer({ audio, id, stepId }: AudioPlayerProps) {
+export default function AudioPlayer({ audio, id, stepId, assetsDir }: AudioPlayerProps) {
   const audioRef = useRef(null);
 
   // Automatically set volume to what's expected
@@ -34,7 +35,7 @@ export default function AudioPlayer({ audio, id, stepId }: AudioPlayerProps) {
         /*autoPlay={audio.autoplay} todo*/
         className='w-96 bg-white mt-2 mb-4 bg-opacity-50 rounded-lg'
       >
-        <source src={`../../../assets/audio/${audio.filename}`} type='audio/mp3' />
+        <source src={`${assetsDir}/audio/${audio.filename}`} type='audio/mp3' />
       </audio>
     </div>
   );
