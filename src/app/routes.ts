@@ -38,7 +38,6 @@ const getAdventureRoute = (adventure: Adventure): RouteType => {
 };
 
 const getEditAdventureRoute = (adventure: Adventure): RouteType => {
-  console.log(adventure);
   // todo handle empty
   return {
     name: routes.editAdventure.name.replace('{adventureName}', adventure.name || ''),
