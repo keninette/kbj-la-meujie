@@ -20,7 +20,7 @@ export type ArrowCoordinatesType = {
 
 export default function Chapter({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStep, setActiveStep] = useState<Step>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
@@ -28,6 +28,7 @@ export default function Chapter({ params }: { params: { adventureSlug: string; i
 
   useEffect(() => {
     setIsClient(true);
+    setIsLoggedIn(isUserLoggedIn());
   }, []);
 
   useEffect(() => {

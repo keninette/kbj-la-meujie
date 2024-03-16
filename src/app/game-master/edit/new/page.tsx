@@ -9,7 +9,7 @@ import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 
 export default function NewAdventure() {
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adventure, setAdventure] = useState<Adventure>(new Adventure());
   const universeTranslationsMapping = {
     [UniverseEnum.CHTULHU]: '🐙 Chtulhu',
@@ -36,6 +36,10 @@ export default function NewAdventure() {
       location.href = `/edit/${adventure.adventureSlug}`;
     }
   };
+
+  useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+  }, []);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>

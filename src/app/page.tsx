@@ -10,7 +10,11 @@ import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
 import Routes from '@/app/routes';
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+  }, []);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>

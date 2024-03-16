@@ -9,9 +9,11 @@ import LoginForm from '@/components/forms/LoginForm';
 import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
 
 export default function Adventure({ params }: { params: { adventureSlug: string } }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(isUserLoggedIn());
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adventure, setAdventure] = useState<Adventure>();
   useEffect(() => {
+    setIsLoggedIn(isUserLoggedIn());
+    // todo do not fetch if not logged in
     (async function () {
       const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
         headers: {
