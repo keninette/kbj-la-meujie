@@ -1,5 +1,6 @@
 import { Adventure } from '@/model/Adventure.class';
 import { Session } from '@/model/session/session.class';
+import { Player } from '@/model/session/player.class';
 
 const getAdventures = async () => {
   return await fetch(`/api/adventures`, {
@@ -16,8 +17,8 @@ const getAdventure = async (slug: string) => {
     },
   });
 };
-const getChapter = async (slug: string, id: string) => {
-  return await fetch(`/api/adventures/${slug}/chapters/${id}`, {
+const getChapter = async (adventureSlug: string, chapterId: string) => {
+  return await fetch(`/api/adventures/${adventureSlug}/chapters/${chapterId}`, {
     headers: {
       'Content-Type': 'application/json',
     },
@@ -32,10 +33,24 @@ const getSessions = async () => {
   });
 };
 
-// todo create getAdventure
+const getSession = async (adventureSlug: string, uuid: string) => {
+  return await fetch(`/api/sessions/${adventureSlug}/${uuid}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
-const saveAdventure = async (adventure?: Adventure) => {
-  return await fetch(`/api/adventures`, {
+const getPLayers = async () => {
+  return await fetch('/api/players/', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+const saveAdventure = async (adventure: Adventure) => {
+  return await fetch(`/api/adventures/${adventure.adventureSlug}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -54,4 +69,24 @@ const saveSession = async (session: Session) => {
   });
 };
 
-export { getAdventures, getAdventure, getChapter, saveAdventure, getSessions, saveSession };
+const savePlayers = async (players: Player[]) => {
+  return await fetch(`/api/players`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(players),
+  });
+};
+
+export {
+  getAdventures,
+  getAdventure,
+  getChapter,
+  saveAdventure,
+  getSessions,
+  getSession,
+  getPLayers,
+  saveSession,
+  savePlayers,
+};

@@ -4,7 +4,7 @@ import { Adventure } from '@/model/Adventure.class';
 import { getAdventures, getSessions } from '@/app/data-provider';
 import { Session } from '@/model/session/session.class';
 
-export default function Adventures() {
+export default function AdventuresDisplay() {
   const [adventures, setAdventures] = useState<Adventure[]>([]);
   const [sessions, setSessions] = useState<Session[]>([]);
 
@@ -16,8 +16,6 @@ export default function Adventures() {
       setSessions(await sessionsResponse.json());
     })();
   }, []);
-
-  console.table(sessions);
 
   return (
     <>

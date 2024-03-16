@@ -9,13 +9,14 @@ import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 type SidenavPropsType = {
   adventureSlug: string;
+  storyArcSlug: string;
   chapters: Chapter[];
   onStepSelection: (activeStep: Step) => void;
 };
 
 // todo pre-selected chapter
 // todo style
-export default function Sidenav({ adventureSlug, chapters, onStepSelection }: SidenavPropsType) {
+export default function Sidenav({ adventureSlug, storyArcSlug, chapters, onStepSelection }: SidenavPropsType) {
   return (
     <div className='h-screen sticky min-w-[300px] max-w-[400px] w-auto top-0'>
       <h3 className='m-4 text-xl'>Sommaire</h3>
@@ -26,14 +27,18 @@ export default function Sidenav({ adventureSlug, chapters, onStepSelection }: Si
         multiSelect
       >
         {chapters.map((chapter: Chapter) => (
-          <ChapterTreeItem key={chapter.id} nodeId={`${adventureSlug}|${chapter.id}`} label={chapter.name}>
+          <ChapterTreeItem
+            key={chapter.id}
+            nodeId={`${adventureSlug}|${storyArcSlug}|${chapter.id}`}
+            label={chapter.name}
+          >
             {chapter.steps
               .filter((step: Step) => step.level === 1)
               .map((step: Step) => (
                 <StepTreeItem
                   key={step.id}
                   nodeId={step.id}
-                  label={`${step.title || ''} (lvl. ${step.level})`}
+                  label={`📘 ${step.title}`}
                   onClick={() => onStepSelection(step)}
                 />
               ))}

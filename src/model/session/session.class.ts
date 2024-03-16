@@ -1,26 +1,22 @@
 import { Player } from '@/model/session/player.class';
 import { Adventure } from '@/model/Adventure.class';
-import { Place } from '@/model/Place.class';
-import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 import { v4 } from 'uuid';
-import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
+import { Seance } from '@/model/session/seance.class';
 
+// todo refactor this into groups
+// Groups will have sessions, that will bear progression data
 export class Session {
   uuid: string;
   name: string;
   players: Player[];
   adventure: Partial<Adventure>;
-  currentStoryArc: StoryArc;
-  knownPlaces: Place[];
-  knownNonPlayerCharacters: NonPlayerCharacter[];
+  seances: Seance[];
 
-  constructor(adventure: Partial<Adventure>, players: Player[], currentStoryArc: StoryArc) {
+  constructor(adventure: Partial<Adventure>, players: Player[]) {
     this.uuid = v4();
     this.name = '';
     this.players = players;
     this.adventure = adventure;
-    this.currentStoryArc = currentStoryArc;
-    this.knownPlaces = [];
-    this.knownNonPlayerCharacters = [];
+    this.seances = [];
   }
 }

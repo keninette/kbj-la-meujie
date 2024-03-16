@@ -6,7 +6,7 @@ import { Adventure } from '@/model/Adventure.class';
 import ChapterForm from '@/components/forms/ChapterForm';
 import { default as StepComponent } from '@/components/step/step-display/StepDisplay';
 import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/FeedbackBanner';
-import { saveAdventure } from '@/app/data-provider';
+import { getAdventure, saveAdventure } from '@/app/data-provider';
 import StepForm from '@/components/forms/StepForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -327,7 +327,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     adventure.saveStep(storyArc, chapter, step);
     // todo duplicate
     const response = await saveAdventure(adventure);
-    // todo use constante here
+    // todo use constant here
     if (response.status !== 201) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du PNJ', setFeedback });
       console.error(response);
@@ -381,11 +381,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
 
     if (isLoggedIn) {
       (async function () {
-        const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await getAdventure(params.adventureSlug);
         const data = await response.json();
         // Re-build adventure otherwise we don't have access to methods in class
         const adventure = Adventure.createFromJson(JSON.stringify(data));

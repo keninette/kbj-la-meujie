@@ -27,7 +27,6 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
     const session: Session = new Session(
       { adventureSlug: adventure.adventureSlug, name: adventure.name, adventureUuid: adventure.adventureUuid },
       [],
-      adventure.storyArcs[0],
     );
     await saveSession(session);
     window.open(getEditSessionRoute(session).path, '_self');
@@ -39,7 +38,7 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
 
   return (
     <>
-      <div className='relative flex w-[300px] h-[300px] mt-8 bg-black bg-opacity-30 border-gradient border-gradient--red--to-right  p-2'>
+      <div className='relative flex max-w-[300px] w-[300px] h-[300px] mt-8 bg-black bg-opacity-30 border-gradient border-gradient--red--to-right  p-2'>
         <a className='ml-2  no-underline' href={getEditAdventureRoute(adventure).path}>
           🖊
         </a>
@@ -64,12 +63,18 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
               <button className='hover:underline' onClick={addSession}>
                 ➕ Ajouter une session
               </button>
-              <ul className='flex my-2'>
+              <ul className='flex flex-col my-2'>
                 {sessions.map((session) => (
-                  <li key={session.uuid} className='flex w-full justify-between'>
-                    {/*todo session route*/}
-                    <a href=''>{session.name || session.uuid}</a>
-                    <a href={getEditSessionRoute(session).path}>🖊</a>
+                  <li key={session.uuid} className='flex justify-between w-[250px]'>
+                    <a
+                      className='flex w-[230px] text-ellipsis overflow-hidden'
+                      href={getAdventureRoute(adventure, session).path}
+                    >
+                      {session.name || session.uuid}
+                    </a>
+                    <a className='flex-none' href={getEditSessionRoute(session).path}>
+                      🖊
+                    </a>
                   </li>
                 ))}
               </ul>

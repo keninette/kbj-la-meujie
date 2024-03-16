@@ -32,7 +32,7 @@ const fetchAdventureChapter = (adventure: Adventure, chapterId: string): Chapter
  */
 async function GET(request: NextRequest, { params }: { params: { slug: string; id: string } }) {
   const adventure = Adventure.createFromJson(fs.readFileSync(`${adventuresDirPath}/${params.slug}.json`, 'utf-8'));
-  return Response.json(fetchAdventureChapter(adventure, params.id));
+  return Response.json(fetchAdventureChapter(adventure, params.id) || {});
 }
 
 export { GET };

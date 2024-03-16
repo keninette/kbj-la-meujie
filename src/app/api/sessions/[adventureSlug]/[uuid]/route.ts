@@ -10,22 +10,14 @@ const sessionsDirPath: string = path.join(process.cwd(), '/src/lib/sessions');
 /**
  * Get data from JSON
  * @param request
+ * @param params
  * @constructor
  */
-async function GET(request: NextRequest) {
+async function GET(request: NextRequest, { params }: { params: { adventureSlug: string; uuid: string } }) {
   const mapper = new SessionMapper();
-  const sessionFiles: string[] = fs.readdirSync(sessionsDirPath, { encoding: 'utf-8', recursive: true });
+  const content = fs.readFileSync(`${sessionsDirPath}/${params.adventureSlug}/${params.uuid}.json`, 'utf-8');
 
-  const sessions = sessionFiles
-    .map((sessionFile) => {
-      if (fs.lstatSync(sessionsDirPath + '/' + sessionFile).isFile()) {
-        const content = fs.readFileSync(`${sessionsDirPath}/${sessionFile}`, 'utf-8');
-        return mapper.mapFromJson(content);
-      }
-    })
-    .filter((session) => session !== undefined);
-
-  return Response.json(sessions);
+  return Response.json(mapper.mapFromJson(content));
 }
 
 /**

@@ -1,10 +1,10 @@
-import { StoryArc } from '@/model/StoryArc.class';
 import { UniverseEnum } from '@/model/enums/universe.enum';
-import { Chapter } from '@/model/Chapter.class';
-import { Step } from '@/model/Step.class';
 import { v4 } from 'uuid';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 import { Place } from '@/model/Place.class';
+import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 export class Adventure {
   adventureUuid: string;

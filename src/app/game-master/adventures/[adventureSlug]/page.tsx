@@ -9,10 +9,13 @@ import LoginForm from '@/components/forms/LoginForm';
 import { isUserLoggedIn } from '@/security/login';
 import { getAdventure } from '@/app/data-provider';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import { useSearchParams } from 'next/navigation';
 
 export default function Adventure({ params }: { params: { adventureSlug: string } }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [adventure, setAdventure] = useState<Adventure>();
+  const sessionUuid = useSearchParams().get('sessionUuid');
+
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
     // todo do not fetch if not logged in
@@ -69,7 +72,17 @@ export default function Adventure({ params }: { params: { adventureSlug: string 
                                 return (
                                   <li className='ml-4' key={chapter.id}>
                                     {chapter.steps ? (
-                                      <a href={getChapterRoute(chapter, params.adventureSlug).path} className='text-lg'>
+                                      <a
+                                        href={
+                                          getChapterRoute(
+                                            chapter,
+                                            params.adventureSlug,
+                                            arc.storyArcSlug,
+                                            sessionUuid || undefined,
+                                          ).path
+                                        }
+                                        className='text-lg'
+                                      >
                                         {chapter.name}
                                       </a>
                                     ) : (
