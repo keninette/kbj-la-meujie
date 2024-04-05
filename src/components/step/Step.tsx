@@ -11,9 +11,10 @@ type StepProps = {
   step: Step;
   uniqueStepKey: string;
   referer: string;
+  stepIndex?: number;
 };
 
-export default function Step({ step, uniqueStepKey, referer }: StepProps) {
+export default function Step({ step, uniqueStepKey, referer, stepIndex }: StepProps) {
   const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
 
   return (
@@ -52,9 +53,9 @@ export default function Step({ step, uniqueStepKey, referer }: StepProps) {
             />
           );
         })}
-      <ul>
-        {step.images &&
-          step.images.map((img, index) => {
+      {step.images && (
+        <ul className='flex flex-col my-4'>
+          {step.images.map((img, index) => {
             return (
               <div key={`img_${step.id}_${index}`}>
                 <a href={`${assetsDir}/img/adventures/${img.filename}`} target='_blank'>
@@ -63,7 +64,8 @@ export default function Step({ step, uniqueStepKey, referer }: StepProps) {
               </div>
             );
           })}
-      </ul>
+        </ul>
+      )}
       <ul>
         {step.clues &&
           step.clues.map((clue, index) => {
