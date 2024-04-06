@@ -1,4 +1,4 @@
-import { CharacteristicEnum } from '@/model/characteristic.enum';
+import { CharacteristicEnum } from '@/model/enums/characteristic.enum';
 
 export enum DiceRollCallbackTypeEnum {
   TEXT = 'text',
@@ -11,13 +11,13 @@ type DiceRollCallbackType = {
   value: string | DiceRoll;
 };
 export class DiceRoll {
-  characteristic: CharacteristicEnum[];
+  characteristic: (keyof typeof CharacteristicEnum)[];
   type: string;
   onSuccess: DiceRollCallbackType;
   onFail: DiceRollCallbackType;
   condition?: string;
 
-  constructor(type: string, characteristic: CharacteristicEnum[]) {
+  constructor(type: string, characteristic: (keyof typeof CharacteristicEnum)[]) {
     this.characteristic = characteristic;
     this.type = type;
     this.onSuccess = {

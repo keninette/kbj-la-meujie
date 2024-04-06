@@ -9,8 +9,9 @@ import { Place } from '@/model/Place.class';
 export class Step {
   id: string;
   level: number;
-  description?: string;
+  title?: string;
   date?: string;
+  description?: string;
   clues?: Clue[];
   audios?: Audio[];
   images?: Image[];

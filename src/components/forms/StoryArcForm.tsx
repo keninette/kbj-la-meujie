@@ -1,5 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
-import { StoryArc } from '@/model/StoryArc.class';
+import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
 
 type StoryArcFormProps = {
   requestedStoryArc?: StoryArc;
@@ -13,9 +13,7 @@ export default function StoryArcForm({ requestedStoryArc, onSubmitCallback }: St
     onSubmitCallback(storyArc);
   };
   const onChange = (fieldName: string, value: string) => {
-    const updatedStoryArc: StoryArc = { ...storyArc };
-    updatedStoryArc[fieldName] = value;
-    setStoryArc(updatedStoryArc);
+    setStoryArc((prevState) => ({ ...prevState, [fieldName]: value }));
   };
 
   useEffect(() => {
@@ -24,7 +22,6 @@ export default function StoryArcForm({ requestedStoryArc, onSubmitCallback }: St
     }
   }, [requestedStoryArc]);
 
-  console.log(storyArc);
   return (
     <form className='flex flex-col mt-8' onSubmit={onSubmit}>
       <h3 className='my-4'>Ajouter un arc</h3>

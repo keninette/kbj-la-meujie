@@ -1,4 +1,4 @@
-import { UniverseEnum } from '@/model/universe.enum';
+import { UniverseEnum } from '@/model/enums/universe.enum';
 
 export interface AdventureCardDto {
   adventureSlug: string;

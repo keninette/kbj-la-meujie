@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Step } from '@/model/Step.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 type StepFormProps = {
   requestedStep?: Step;
@@ -9,17 +9,15 @@ type StepFormProps = {
 // todo multiple nextSteps
 export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }: StepFormProps) {
   const [step, setStep] = useState<Step>(Step.getEmptyStep());
+
   const onChange = (fieldName: string, value: string | number | string[]) => {
-    const updatedStep: Step = { ...step };
+    let valueToSave: any;
     if (fieldName === 'nextStepsIds') {
-      // todo remove tsignore
-      updatedStep[fieldName] = (value as string).split(',');
+      valueToSave = (value as string).split(',');
     } else {
-      // todo remove tsignore
-      updatedStep[fieldName] = value;
+      valueToSave = value;
     }
-    // @ts-ignore
-    setStep(updatedStep);
+    setStep((prevState) => ({ ...prevState, [fieldName]: valueToSave }));
   };
 
   const onSubmit = async (e: FormEvent) => {
@@ -48,6 +46,19 @@ export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }
               placeholder='date'
               value={step.date || ''}
               onChange={(e) => onChange('date', e.target.value)}
+              className='flex text-black w-full'
+            />
+          </div>
+          <div className='flex flex-col w-full'>
+            <label htmlFor='title' className='text-white'>
+              Date
+            </label>
+            <input
+              type='text'
+              name='title'
+              placeholder='title'
+              value={step.title || ''}
+              onChange={(e) => onChange('title', e.target.value)}
               className='flex text-black w-full'
             />
           </div>

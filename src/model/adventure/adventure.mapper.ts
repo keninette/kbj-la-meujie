@@ -1,6 +1,6 @@
 import { Adventure } from '@/model/Adventure.class';
 import { AdventureCardDto } from '@/model/adventure/dtos/adventure-card.dto';
-import { UniverseEnum } from '@/model/universe.enum';
+import { UniverseEnum } from '@/model/enums/universe.enum';
 import { getAdventureRoute } from '@/app/routes';
 
 export class AdventureMapper {

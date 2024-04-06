@@ -1,5 +1,5 @@
 import React from 'react';
-import { CharacteristicEnum } from '@/model/characteristic.enum';
+import { CharacteristicEnum } from '@/model/enums/characteristic.enum';
 import { DiceRoll, DiceRollCallbackTypeEnum } from '@/model/DiceRoll.class';
 
 type RecursiveDiceRollFormItemProps = {
@@ -18,7 +18,7 @@ export default function RecursiveDiceRollFormItem({
     const updatedDiceRoll: DiceRoll = { ...diceRoll };
     switch (fieldName) {
       case 'characteristics':
-        updatedDiceRoll.characteristic.push(value as CharacteristicEnum);
+        updatedDiceRoll.characteristic.push(value as keyof typeof CharacteristicEnum);
         break;
       case 'onSuccessType':
         updatedDiceRoll.onSuccess.type = value as DiceRollCallbackTypeEnum;

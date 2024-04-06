@@ -3,11 +3,9 @@
 import Header from '@/components/header/Header';
 import { useEffect, useState } from 'react';
 import { Adventure } from '@/model/Adventure.class';
-import { Chapter } from '@/model/Chapter.class';
 import ChapterForm from '@/components/forms/ChapterForm';
-import { default as StepComponent } from '@/components/step/Step';
+import { default as StepComponent } from '@/components/step/step-display/StepDisplay';
 import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/FeedbackBanner';
-import { Step } from '@/model/Step.class';
 import { saveAdventure } from '@/app/data-provider';
 import StepForm from '@/components/forms/StepForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,15 +17,17 @@ import { Image } from '@/model/Image.class';
 import ClueForm from '@/components/forms/ClueForm';
 import RecursiveDiceRollForm from '@/components/forms/RecursiveDiceRollForm';
 import { DiceRoll } from '@/model/DiceRoll.class';
-import { StoryArc } from '@/model/StoryArc.class';
 import StoryArcForm from '@/components/forms/StoryArcForm';
 import { Clue } from '@/model/Clue.class';
-import { isUserLoggedIn, logOutUser } from '@/security/login';
+import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 import NonPlayerCharacterForm from '@/components/forms/NonPlayerCharacterForm';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 import { Place } from '@/model/Place.class';
 import PlaceForm from '@/components/forms/PlaceForm';
+import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -449,7 +449,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                           </button>
                         </div>
                         <ul className='flex flex-col w-full ml-4 pr-4'>
-                          {thisArc.chapters.map((thisChapter) => (
+                          {thisArc.chapters.map((thisChapter: Chapter) => (
                             <li
                               className={
                                 chapter?.id === thisChapter.id
@@ -507,7 +507,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                 </button>
                 <ul className='flex flex-col w-[95%]'>
                   {chapter &&
-                    chapter.steps.map((thisStep) => (
+                    chapter.steps.map((thisStep: Step) => (
                       <li
                         className={
                           step && thisStep?.id === step.id
@@ -517,7 +517,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                         key={thisStep.id}
                       >
                         <button onClick={() => setStep(thisStep)} className='flex flex-grow'>
-                          {thisStep.id} - <span className='font-bold'>{thisStep.description}</span>
+                          {thisStep.id} - <span className='font-bold'>{thisStep.title}</span>
                         </button>
                         <button onClick={() => onStepEditClick(thisStep)}>
                           <FontAwesomeIcon icon={faPenToSquare} />

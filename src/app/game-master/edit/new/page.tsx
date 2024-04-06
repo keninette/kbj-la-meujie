@@ -3,9 +3,9 @@
 import Header from '@/components/header/Header';
 import { FormEvent, useEffect, useState } from 'react';
 import { Adventure } from '@/model/Adventure.class';
-import { UniverseEnum } from '@/model/universe.enum';
+import { UniverseEnum } from '@/model/enums/universe.enum';
 import { saveAdventure } from '@/app/data-provider';
-import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
+import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 
 export default function NewAdventure() {

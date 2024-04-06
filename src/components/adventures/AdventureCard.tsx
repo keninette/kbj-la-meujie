@@ -1,5 +1,5 @@
 import { getAdventureRoute, getEditAdventureRoute } from '@/app/routes';
-import { UniverseEnum } from '@/model/universe.enum';
+import { UniverseEnum } from '@/model/enums/universe.enum';
 import Image from 'next/image';
 import { Adventure } from '@/model/Adventure.class';
 

@@ -4,21 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { getChapterRoute } from '@/app/routes';
 import Header from '@/components/header/Header';
 import Sidenav from '@/components/sidenav/Sidenav';
-import RecursiveSteps from '@/components/step/RecursiveSteps';
+import RecursiveStepsDisplay from '@/components/step/RecursiveStepsDisplay';
 import { Adventure } from '@/model/Adventure.class';
-// @ts-ignore
-import { Chapter } from '@/model/Chapter.class';
-import { Step } from '@/model/Step.class';
-import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
+import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
-export type ArrowCoordinatesType = {
-  id: string;
-  start: string;
-  end: string;
-};
-
-export default function Chapter({ params }: { params: { adventureSlug: string; id: string } }) {
+export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStep, setActiveStep] = useState<Step>();
@@ -44,25 +37,25 @@ export default function Chapter({ params }: { params: { adventureSlug: string; i
       if (activeStep) {
         // todo improve this (in params)
         const storyArc = adventure.storyArcs.find((storyArc) =>
-          storyArc.chapters.find((thisChapter) => {
+          storyArc.chapters.find((thisChapter: Chapter) => {
             return thisChapter.steps.find((thisStep) => thisStep.id === activeStep.id);
           }),
         );
         if (!storyArc) {
           console.error("Pas d'arc trouvé pour ce châpitre");
         }
-        eligibleChapters = (storyArc?.chapters || []).filter((thisChapter) => {
+        eligibleChapters = (storyArc?.chapters || []).filter((thisChapter: Chapter) => {
           return thisChapter.steps.filter((thisStep) => thisStep.id === activeStep.id).length > 0;
         });
       } else {
         // todo improve this (in params)
         const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
-          storyArc.chapters.find((thisChapter) => thisChapter.id === params.id),
+          storyArc.chapters.find((thisChapter: Chapter) => thisChapter.id === params.id),
         );
         if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
           console.error("Pas d'arc trouvé pour ce châpitre");
         }
-        eligibleChapters = (eligibleStoryArcs[0].chapters || []).filter((thisChapter) => {
+        eligibleChapters = (eligibleStoryArcs[0].chapters || []).filter((thisChapter: Chapter) => {
           return thisChapter.id === params.id;
         });
       }
@@ -74,14 +67,15 @@ export default function Chapter({ params }: { params: { adventureSlug: string; i
       }
 
       setChapter(chapter);
-      if (chapter && chapter.nextChapterId) {
-        const nextChapter = adventure?.chapters?.filter((thisChapter) => {
+      // todo fix
+      /*if (chapter && chapter.nextChapterId) {
+        const nextChapter = adventure?.chapters?.filter((thisChapter: Chapter) => {
           return thisChapter.id === chapter.nextChapterId;
         })[0];
         if (nextChapter) {
           setNextChapter(nextChapter);
         }
-      }
+      }*/
       setAdventure(adventure);
     })();
   }, [params, params.adventureSlug, params.id, activeStep, isLoggedIn]);
@@ -101,7 +95,7 @@ export default function Chapter({ params }: { params: { adventureSlug: string; i
       return;
     }
     const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>
-      storyArc.chapters.find((thisChapter) => thisChapter.id === params.id),
+      storyArc.chapters.find((thisChapter: Chapter) => thisChapter.id === params.id),
     );
     if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
       console.error("Pas d'arc trouvé pour ce châpitre");
@@ -133,7 +127,7 @@ export default function Chapter({ params }: { params: { adventureSlug: string; i
                         <div className='flex'>
                           {isClient &&
                             activeSteps?.map((stepId) => (
-                              <RecursiveSteps key={stepId} stepIds={[stepId]} chapter={chapter} />
+                              <RecursiveStepsDisplay key={stepId} stepIds={[stepId]} chapter={chapter} />
                             ))}
                         </div>
                       }

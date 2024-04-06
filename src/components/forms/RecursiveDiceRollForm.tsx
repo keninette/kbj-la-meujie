@@ -1,6 +1,5 @@
-import { DiceRoll, DiceRollCallbackTypeEnum } from '@/model/DiceRoll.class';
+import { DiceRoll } from '@/model/DiceRoll.class';
 import { FormEvent, useEffect, useState } from 'react';
-import { CharacteristicEnum } from '@/model/characteristic.enum';
 import RecursiveDiceRollFormItem from '@/components/forms/RecursiveDiceRollFormItem';
 
 export type RecursiveDiceRollProps = {
@@ -13,17 +12,6 @@ export default function RecursiveDiceRollForm({ onSubmitCallback, requestedDiceR
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     onSubmitCallback(diceRoll);
-  };
-
-  const onChange = (fieldName: string, value: string | CharacteristicEnum, thisDiceRoll: DiceRoll) => {
-    switch (fieldName) {
-      case 'characteristics':
-        thisDiceRoll.characteristic.push(value as CharacteristicEnum);
-        break;
-      default:
-        thisDiceRoll[fieldName] = value;
-        break;
-    }
   };
 
   useEffect(() => {

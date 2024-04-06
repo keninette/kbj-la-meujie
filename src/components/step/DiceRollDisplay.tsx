@@ -1,15 +1,17 @@
 import React from 'react';
 // @ts-ignore
 import { DiceRoll, DiceRollCallbackTypeEnum } from '@/model/DiceRoll.class';
-import { CharacteristicEnum } from '@/model/characteristic.enum';
+import { CharacteristicEnum } from '@/model/enums/characteristic.enum';
 
 type DiceRollPropsType = {
   diceRoll: DiceRoll;
 };
 
-export default function DiceRoll({ diceRoll }: DiceRollPropsType) {
+export default function DiceRollDisplay({ diceRoll }: DiceRollPropsType) {
   const displayDiceRoll = (diceRoll: DiceRoll) => {
-    const characteristicsLabels = diceRoll.characteristic.map((key) => CharacteristicEnum[key]);
+    const characteristicsLabels = diceRoll.characteristic.map(
+      (key: keyof typeof CharacteristicEnum) => CharacteristicEnum[key],
+    );
     return (
       <>
         <span>

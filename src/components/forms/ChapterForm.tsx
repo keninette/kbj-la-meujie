@@ -1,5 +1,5 @@
-import { Chapter } from '@/model/Chapter.class';
 import { FormEvent, useEffect, useState } from 'react';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 type ChapterFormProps = {
   onSubmitCallback: (updatedChapter: Chapter) => void;

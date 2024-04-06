@@ -1,5 +1,5 @@
 import { StoryArc } from '@/model/StoryArc.class';
-import { UniverseEnum } from '@/model/universe.enum';
+import { UniverseEnum } from '@/model/enums/universe.enum';
 import { Chapter } from '@/model/Chapter.class';
 import { Step } from '@/model/Step.class';
 import { v4 } from 'uuid';

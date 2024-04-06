@@ -1,30 +1,31 @@
 'use client';
-import Step from '@/components/step/Step';
+import StepDisplay from '@/components/step/step-display/StepDisplay';
 import React from 'react';
 import Xarrow from 'react-xarrows';
-import { ArrowCoordinatesType } from '@/app/adventure/[adventureSlug]/chapter/[id]/page';
-import { Chapter } from '@/model/Chapter.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
+import { ArrowCoordinatesType } from '@/model/types/arrow-coordinates.type';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 type RecursiveStepPropsType = {
   stepIds: string[];
   chapter: Chapter;
 };
 
-export default function RecursiveSteps({ stepIds, chapter }: RecursiveStepPropsType) {
+export default function RecursiveStepsDisplay({ stepIds, chapter }: RecursiveStepPropsType) {
   const arrows: ArrowCoordinatesType[] = [];
 
   const renderSteps = (currentStepIds: string[], parentKey?: string) => {
-    const steps = chapter.steps?.filter((thisStep) => currentStepIds.includes(thisStep.id));
+    const steps = chapter.steps?.filter((thisStep: Step) => currentStepIds.includes(thisStep.id));
     const domElements: React.JSX.Element[] = [];
 
-    steps.forEach((step) => {
+    steps.forEach((step: Step) => {
       const uniqueStepKey = `step--${parentKey || ''}__${step.id}`;
       if (parentKey) {
         arrows.push({ id: `${parentKey}_${step.id}`, start: parentKey, end: uniqueStepKey });
       }
       domElements.push(
         <div key={step.id} className='flex flex-col w-max items-center'>
-          <Step step={step} uniqueStepKey={uniqueStepKey} referer={'adventure'} />
+          <StepDisplay step={step} uniqueStepKey={uniqueStepKey} referer={'adventure'} />
           {step.nextStepsIds && <div className='flex'>{renderSteps(step?.nextStepsIds, uniqueStepKey)}</div>}
         </div>,
       );
