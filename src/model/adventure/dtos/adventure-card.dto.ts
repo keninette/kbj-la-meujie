@@ -5,6 +5,7 @@ export interface AdventureCardDto {
   name: string;
   universe: UniverseEnum;
   players?: { min: number; max: number };
+  storyArcs: { uuid: string; name: string }[];
   editLink: string;
   readLink: string;
 }

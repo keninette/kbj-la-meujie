@@ -1,8 +1,9 @@
 import { faBookmark, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getChapterRoute, RouteType } from '@/app/routes';
-import { Chapter } from '@/model/Chapter.class';
 import { useEffect, useState } from 'react';
+import { getChapter } from '@/app/data-provider';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 type ChapterNavItemPropsType = {
   chapterUid: string;
@@ -16,11 +17,7 @@ export default function ChapterNavItem({ chapterUid }: ChapterNavItemPropsType) 
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/api?adventureSlug=${adventureSlug}&chapterId=${chapterId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await getChapter(adventureSlug, chapterId);
       const chapter: Chapter = await response.json();
       if (chapter) {
         setChapter(chapter);

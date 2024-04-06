@@ -10,6 +10,7 @@ import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import { getAdventure } from '@/app/data-provider';
 
 export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
@@ -26,11 +27,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
 
   useEffect(() => {
     (async function () {
-      const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await getAdventure(params.adventureSlug);
       const adventure: Adventure = await response.json();
       let eligibleChapters: Chapter[];
       let chapter: Chapter;

@@ -1,5 +1,6 @@
 import { Adventure } from '@/model/Adventure.class';
 import { Chapter } from '@/model/Chapter.class';
+import { Session } from '@/model/session/session.class';
 
 export type RouteType = {
   name: string;
@@ -27,6 +28,10 @@ const routes = {
     name: 'Nouvelle aventure',
     path: '/game-master/edit/new',
   } as RouteType,
+  editSession: {
+    name: 'Éditer la sessions',
+    path: '/game-master/sessions/{uuid}',
+  },
 };
 
 const getAdventureRoute = (adventure: Adventure): RouteType => {
@@ -52,5 +57,12 @@ const getChapterRoute = (chapter: Chapter, adventureSlug: string): RouteType => 
   };
 };
 
+const getEditSessionRoute = (session: Session): RouteType => {
+  return {
+    name: routes.editSession.name,
+    path: routes.editSession.path.replaceAll('{uuid}', session.uuid),
+  };
+};
+
 export default routes;
-export { getAdventureRoute, getEditAdventureRoute, getChapterRoute };
+export { getAdventureRoute, getEditAdventureRoute, getChapterRoute, getEditSessionRoute };

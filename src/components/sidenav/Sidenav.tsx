@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import ChapterTreeItem from '@/components/sidenav/ChapterTreeItem';
 import StepTreeItem from '@/components/sidenav/StepTreeItem';
-import { Chapter } from '@/model/Chapter.class';
-import { Step } from '@/model/Step.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 type SidenavPropsType = {
   adventureSlug: string;
@@ -27,14 +27,16 @@ export default function Sidenav({ adventureSlug, chapters, onStepSelection }: Si
       >
         {chapters.map((chapter: Chapter) => (
           <ChapterTreeItem key={chapter.id} nodeId={`${adventureSlug}|${chapter.id}`} label={chapter.name}>
-            {chapter.steps.map((step: Step) => (
-              <StepTreeItem
-                key={step.id}
-                nodeId={step.id}
-                label={`${step.title || ''} (lvl. ${step.level})`}
-                onClick={() => onStepSelection(step)}
-              />
-            ))}
+            {chapter.steps
+              .filter((step: Step) => step.level === 1)
+              .map((step: Step) => (
+                <StepTreeItem
+                  key={step.id}
+                  nodeId={step.id}
+                  label={`${step.title || ''} (lvl. ${step.level})`}
+                  onClick={() => onStepSelection(step)}
+                />
+              ))}
           </ChapterTreeItem>
         ))}
       </TreeView>

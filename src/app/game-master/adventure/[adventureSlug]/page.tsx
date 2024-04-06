@@ -6,7 +6,9 @@ import Header from '@/components/header/Header';
 // @ts-ignore
 import { Adventure } from '@/model/Adventure.class';
 import LoginForm from '@/components/forms/LoginForm';
-import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
+import { isUserLoggedIn } from '@/security/login';
+import { getAdventure } from '@/app/data-provider';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 export default function Adventure({ params }: { params: { adventureSlug: string } }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,13 +17,8 @@ export default function Adventure({ params }: { params: { adventureSlug: string 
     setIsLoggedIn(isUserLoggedIn());
     // todo do not fetch if not logged in
     (async function () {
-      const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const adventure: Adventure = await response.json();
-      setAdventure(adventure);
+      const response = await getAdventure(params.adventureSlug);
+      setAdventure(await response.json());
     })();
   }, [params.adventureSlug]);
 
@@ -68,7 +65,7 @@ export default function Adventure({ params }: { params: { adventureSlug: string 
                           {arc.name}
                           <ul>
                             {arc.chapters &&
-                              arc.chapters.map((chapter) => {
+                              arc.chapters.map((chapter: Chapter) => {
                                 return (
                                   <li className='ml-4' key={chapter.id}>
                                     {chapter.steps ? (

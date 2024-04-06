@@ -10,6 +10,9 @@ export class AdventureMapper {
       name: adventure.name,
       universe: adventure.universe as UniverseEnum,
       players: adventure.players,
+      storyArcs: adventure.storyArcs.map((storyArc) => {
+        return { uuid: storyArc.storyArcUuid, name: storyArc.name };
+      }),
       editLink: getAdventureRoute(adventure).path,
       readLink: getAdventureRoute(adventure).path,
     };

@@ -10,7 +10,7 @@ export default function Header({ feedbackBannerProps }: HeaderPropsType) {
   return (
     <header className='relative mb-8'>
       <a className='flex items-center px-6 py-8 mb-8' href='/'>
-        <Image className='flex w-20 h-20 rounded-full' src={kbjImg} alt='avatar' />
+        <Image className='flex w-20 h-20 rounded-full' src={kbjImg} alt='avatar' priority={true} />
         <h1 className='text-3xl ml-4'>kbj la meujie</h1>
       </a>
       {feedbackBannerProps && <FeedbackBanner {...feedbackBannerProps} />}
