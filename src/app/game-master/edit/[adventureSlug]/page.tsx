@@ -425,7 +425,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
                     Ajouter un chapitre
                   </button>
                 </div>
-                <ul className='flex flex-col w-[95%]'>
+                <ul className='flex flex-col-reverse w-[95%]'>
                   {adventure &&
                     adventure.storyArcs?.map((thisArc) => (
                       <li className={'flex flex-col w-full justify-between'} key={thisArc.storyArcSlug}>

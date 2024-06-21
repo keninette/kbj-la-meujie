@@ -23,7 +23,7 @@ export default function AudioPlayer({ audio, id, stepId, assetsDir }: AudioPlaye
   }, [audio]);
 
   return (
-    <div className='flex flex-col my-4' key={`audio_container_${stepId}_${id}`}>
+    <div className='flex flex-col' key={`audio_container_${stepId}_${id}`}>
       <p>
         🔉 Son : {audio.name} 🔉 Volume : {audio.volume ? audio.volume * 100 : 100}%
       </p>

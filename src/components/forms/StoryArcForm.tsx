@@ -41,7 +41,7 @@ export default function StoryArcForm({ requestedStoryArc, onSubmitCallback }: St
       </div>
       <div className='flex flex-col w-full'>
         <label htmlFor='name' className='text-white'>
-          Slug
+          Nom
         </label>
         <input
           type='text'

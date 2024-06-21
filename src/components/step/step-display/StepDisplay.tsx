@@ -29,7 +29,7 @@ export default function StepDisplay({ step, uniqueStepKey, referer }: StepProps)
       className='flex flex-col w-[600px] border-solid border-2 h-fit p-4 m-10 z-10 border-gradient border-gradient--blue--to-left'
       id={uniqueStepKey}
     >
-      <h3 className='flex justify-center text-xl mb-4'>{step.title}</h3>
+      <h3 className='flex justify-center text-xl mb-4 underline'>{step.title}</h3>
       {step.date && <p>📆 {step.date}</p>}
       {step.place && <PlaceBlock place={step.place} referer={referer} />}
       {step.nonPlayerCharacters && (
@@ -61,7 +61,7 @@ export default function StepDisplay({ step, uniqueStepKey, referer }: StepProps)
           );
         })}
       <div className='flex'>
-        <div className='flex flex-col w-1/2'>
+        <div className='flex flex-col w-1/2 mt-4 border-r-2 border-gray-500 border-dotted'>
           {step.description && (
             <Markdown className='step-display__markdown' remarkPlugins={[remarkGfm]}>
               {step.description}

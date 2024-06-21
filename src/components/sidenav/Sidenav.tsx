@@ -31,7 +31,7 @@ export default function Sidenav({ adventureSlug, chapters, onStepSelection }: Si
               <StepTreeItem
                 key={step.id}
                 nodeId={step.id}
-                label={`${step.description} (lvl. ${step.level})`}
+                label={`${step.title || ''} (lvl. ${step.level})`}
                 onClick={() => onStepSelection(step)}
               />
             ))}

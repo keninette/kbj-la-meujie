@@ -12,7 +12,7 @@ export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: Non
   const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
   return (
     <>
-      <li className='flex flex-col my-4 mr-4 cursor-pointer' key={npcUniqId} data-tooltip-id={`tooltip_${npcUniqId}`}>
+      <li className='flex flex-col mr-4 cursor-pointer' key={npcUniqId} data-tooltip-id={`tooltip_${npcUniqId}`}>
         👩‍👦‍👦 {npc.name}
       </li>
       <Tooltip

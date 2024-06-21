@@ -51,7 +51,7 @@ export default function StepForm({ requestedStep, nextStepId, onSubmitCallback }
           </div>
           <div className='flex flex-col w-full'>
             <label htmlFor='title' className='text-white'>
-              Date
+              Titre
             </label>
             <input
               type='text'
