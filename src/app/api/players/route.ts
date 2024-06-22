@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { constants } from 'node:http2';
 import { Session } from '@/model/session/session.class';
 
-const playersFilePath: string = path.join(process.cwd(), '/src/lib/players/players.json');
+const playersFilePath: string = path.join(process.cwd(), '/src/lib/data/players/players.json');
 
 /**
  * Get data from JSON

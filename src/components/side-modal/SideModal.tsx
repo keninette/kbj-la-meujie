@@ -8,7 +8,7 @@ export enum SideModalSizeEnum {
 type SideModalProps = {
   closeSideModal: () => void;
   children?: React.JSX.Element;
-  size: SideModalSizeEnum;
+  size?: SideModalSizeEnum;
 };
 export default function SideModal({ closeSideModal, children, size = SideModalSizeEnum.SMALL }: SideModalProps) {
   const width = size === SideModalSizeEnum.SMALL ? 'w-[450px]' : 'w-[750px]';

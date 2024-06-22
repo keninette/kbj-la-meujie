@@ -1,21 +1,40 @@
-import { useEffect, useState } from 'react';
-import AdventureCard from '@/components/adventures/AdventureCard';
-import { Adventure } from '@/model/Adventure.class';
-import { getAdventures, getSessions } from '@/app/data-provider';
-import { Session } from '@/model/session/session.class';
+'use client';
+
+import { useGetAdventuresQuery } from '@/lib/services/adventures.api';
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { setAdventures } from '@/lib/store/adventures/adventures.reducer';
+import { adventuresSelector } from '@/lib/store/adventures/adventures.selector';
+import AdventureCard from './AdventureCard';
+import { sessionsSelector } from '@/lib/store/sessions/sessions.selector';
+import { setSessions } from '@/lib/store/sessions/sessions.reducer';
+import { useGetSessionsQuery } from '@/lib/services/sessions.api';
 
 export default function AdventuresDisplay() {
-  const [adventures, setAdventures] = useState<Adventure[]>([]);
-  const [sessions, setSessions] = useState<Session[]>([]);
+  const dispatch = useAppDispatch();
+  const { data: adventuresData, isSuccess: isAdventuresLoadingFulfilled } = useGetAdventuresQuery();
+  const {
+    data: sessionsData,
+    error: hasSessionsLoadingErrorOccurred,
+    isSuccess: isSessionsLoadingFulfilled,
+    isLoading: areSessionsLoading,
+  } = useGetSessionsQuery();
+  const adventures = useAppSelector(adventuresSelector);
+  const sessions = useAppSelector(sessionsSelector);
 
   useEffect(() => {
-    (async function () {
-      const adventureResponse = await getAdventures();
-      const sessionsResponse = await getSessions();
-      setAdventures(await adventureResponse.json());
-      setSessions(await sessionsResponse.json());
-    })();
-  }, []);
+    if (isAdventuresLoadingFulfilled) {
+      dispatch(setAdventures(adventuresData));
+    }
+    // todo handle errors
+    // todo fix this dispatch import
+  }, [adventuresData, isAdventuresLoadingFulfilled, dispatch]);
+
+  useEffect(() => {
+    if (isSessionsLoadingFulfilled) {
+      dispatch(setSessions(sessionsData));
+    }
+  }, [dispatch, isSessionsLoadingFulfilled, sessionsData]);
 
   return (
     <>

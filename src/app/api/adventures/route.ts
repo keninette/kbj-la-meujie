@@ -1,10 +1,10 @@
 import { NextRequest } from 'next/server';
 import path from 'path';
 import * as fs from 'fs';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { AdventureMapper } from '@/model/adventure/adventure.mapper';
 
-const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/adventures');
+const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/data/adventures');
 
 const fetchAllAdventureCards = () => {
   const mapper = new AdventureMapper();

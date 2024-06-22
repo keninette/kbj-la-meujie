@@ -3,10 +3,14 @@
 import { getAdventureRoute, getEditAdventureRoute, getEditSessionRoute } from '@/app/routes';
 import { UniverseEnum } from '@/model/enums/universe.enum';
 import Image from 'next/image';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { Session } from '@/model/session/session.class';
 import { useEffect, useState } from 'react';
 import { saveSession } from '@/app/data-provider';
+import { useAppDispatch } from '@/lib/store/hooks';
+import { setAdventure } from '@/lib/store/adventures/adventures.reducer';
+import { setSessionInPlay } from '@/lib/store/sessions/sessions.reducer';
+import Link from '@/components/Link';
 
 const headerMappings = {
   [UniverseEnum.CHTULHU]: '/assets/img/headers/chtulhu.png',
@@ -18,7 +22,9 @@ type AdventureCardPropsType = {
 };
 
 export default function AdventureCard({ adventure, sessions }: AdventureCardPropsType) {
+  const dispatch = useAppDispatch();
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  // todo do i need to fetch adventure here ?
 
   const addSession = async () => {
     if (!isPageLoaded || !window) {
@@ -45,7 +51,7 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
         <div className='flex flex-col justify-between items-center'>
           <span className='flex self-end text-sm'>{`De ${adventure.players?.min} à ${adventure.players?.max} joueurs`}</span>
           {adventure.universe && (
-            <a href={getAdventureRoute(adventure).path}>
+            <Link href={getAdventureRoute(adventure).path} onClickAction={() => dispatch(setAdventure(adventure))}>
               <Image
                 src={headerMappings[adventure.universe]}
                 width={250}
@@ -55,7 +61,7 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
                 priority={true}
                 style={{ width: '100%', height: '100%' }}
               />
-            </a>
+            </Link>
           )}
           <p className=''>{adventure.name}</p>
           {isPageLoaded && (
@@ -69,6 +75,10 @@ export default function AdventureCard({ adventure, sessions }: AdventureCardProp
                     <a
                       className='flex w-[230px] text-ellipsis overflow-hidden'
                       href={getAdventureRoute(adventure, session).path}
+                      onClick={() => {
+                        dispatch(setAdventure(adventure));
+                        dispatch(setSessionInPlay(session));
+                      }}
                     >
                       {session.name || session.uuid}
                     </a>

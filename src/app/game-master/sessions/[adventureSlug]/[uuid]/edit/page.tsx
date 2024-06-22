@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Session } from '@/model/session/session.class';
 import { getPLayers, getSession, savePlayers, saveSession } from '@/app/data-provider';
 import Header from '@/components/header/Header';
@@ -13,6 +13,10 @@ import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/Fee
 import SessionInfoForm from '@/components/forms/SessionInfoForm';
 import SeanceForm from '@/components/forms/SeanceForm.';
 import { Seance } from '@/model/session/seance.class';
+import { useGetAdventureQuery, useGetAdventuresQuery } from '@/lib/services/adventures.api';
+import { setAdventure, setAdventures } from '@/lib/store/adventures/adventures.reducer';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { adventureSelector } from '@/lib/store/adventures/adventures.selector';
 
 enum FormToDisplayEnum {
   NAME = 'NAME',
@@ -20,6 +24,8 @@ enum FormToDisplayEnum {
   SEANCE = 'SEANCE',
 }
 export default function GroupForm({ params }: { params: { adventureSlug: string; uuid: string } }) {
+  const dispatch = useAppDispatch();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [sessionNeedsSaving, setSessionNeedsSaving] = useState(false);
   const [playersNeedSaving, setPlayersNeedSaving] = useState(false);
@@ -28,6 +34,16 @@ export default function GroupForm({ params }: { params: { adventureSlug: string;
   const [displaySideModal, setDisplaySideModal] = useState(false);
   const [formToDisplay, setFormToDisplay] = useState<FormToDisplayEnum>();
   const [feedback, setFeedback] = useState<FeedbackBannerProps>();
+  const { data: adventureData, isSuccess: isAdventureLoadingFulfilled } = useGetAdventureQuery(params.adventureSlug);
+  const adventure = useAppSelector(adventureSelector);
+
+  useEffect(() => {
+    if (isAdventureLoadingFulfilled) {
+      dispatch(setAdventure(adventureData));
+    }
+    // todo handle errors
+    // todo fix this dispatch import
+  }, [adventureData, dispatch, isAdventureLoadingFulfilled]);
 
   const resetForm = () => {
     setDisplaySideModal(false);
@@ -42,12 +58,13 @@ export default function GroupForm({ params }: { params: { adventureSlug: string;
       const sessionResponse = await getSession(params.adventureSlug, params.uuid);
       if (sessionResponse.status !== 200) {
         setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Impossible de charger la session', setFeedback });
+        console.error(sessionResponse.body);
       }
-      const otherBody = await sessionResponse.json();
-      setSession(otherBody);
+      const sessionData = await sessionResponse.json();
+      setSession(sessionData);
       const playersResponse = await getPLayers();
-      const body = await playersResponse.json();
-      setPlayers(body);
+      const playersData = await playersResponse.json();
+      setPlayers(playersData);
     })();
   }, [params]);
 
@@ -170,7 +187,7 @@ export default function GroupForm({ params }: { params: { adventureSlug: string;
                 + 🍿 Séance
               </button>
               <ul className='flex w-full mt-4'>
-                {session.seances.map((seance) => (
+                {session?.seances?.map((seance) => (
                   <>
                     <li
                       key={`seance__li--${seance.uuid}`}
@@ -197,12 +214,8 @@ export default function GroupForm({ params }: { params: { adventureSlug: string;
                   {formToDisplay === FormToDisplayEnum.NAME && (
                     <SessionInfoForm session={session} setSession={setSession} onSubmitCallback={onSessionInfoSubmit} />
                   )}
-                  {formToDisplay === FormToDisplayEnum.SEANCE && (
-                    <SeanceForm
-                      onSubmitCallback={onSeanceFormSubmit}
-                      adventureSlug={params.adventureSlug}
-                      setFeedback={setFeedback}
-                    />
+                  {formToDisplay === FormToDisplayEnum.SEANCE && adventure && (
+                    <SeanceForm onSubmitCallback={onSeanceFormSubmit} adventure={adventure} setFeedback={setFeedback} />
                   )}
                 </>
               </SideModal>

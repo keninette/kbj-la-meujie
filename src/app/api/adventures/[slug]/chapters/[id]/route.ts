@@ -1,11 +1,11 @@
 import { NextRequest } from 'next/server';
 import path from 'path';
 import * as fs from 'fs';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { CHAPTER_NOT_FOUND } from '@/model/errors';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
-const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/adventures');
+const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/data/adventures');
 
 const fetchAdventureChapter = (adventure: Adventure, chapterId: string): Chapter | undefined => {
   const eligibleStoryArcs = adventure.storyArcs.filter((storyArc) =>

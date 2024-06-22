@@ -1,5 +1,5 @@
 import { Player } from '@/model/session/player.class';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { v4 } from 'uuid';
 import { Seance } from '@/model/session/seance.class';
 

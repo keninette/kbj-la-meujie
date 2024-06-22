@@ -5,9 +5,9 @@ import AdventuresDisplay from '@/components/adventures/AdventuresDisplay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import LoginForm from '@/components/forms/LoginForm';
 import { isUserLoggedIn } from '@/security/login';
 import Routes from '@/app/routes';
+import LoginForm from '@/components/forms/LoginForm';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,6 +15,8 @@ export default function Home() {
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
   }, []);
+
+  // todo state pour nouvelle aventure
 
   return (
     <main className='flex min-h-screen flex-col text-white'>

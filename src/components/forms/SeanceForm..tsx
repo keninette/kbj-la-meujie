@@ -1,6 +1,6 @@
 import { Seance } from '@/model/session/seance.class';
-import { Dispatch, FormEvent, SetStateAction, useEffect, useState } from 'react';
-import { Adventure } from '@/model/Adventure.class';
+import { Dispatch, FormEvent, SetStateAction, useCallback, useEffect, useState } from 'react';
+import { Adventure } from '@/model/AdventureManager.class';
 import { getAdventure } from '@/app/data-provider';
 import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/FeedbackBanner';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
@@ -9,7 +9,7 @@ import { Place } from '@/model/Place.class';
 
 export type SeanceFormProps = {
   adventure: Adventure;
-  storyArc: StoryArc;
+  storyArc?: StoryArc;
   requestedSeance?: Seance;
   onSubmitCallback: (seance: Seance) => void;
   setFeedback: Dispatch<SetStateAction<FeedbackBannerProps | undefined>>;
@@ -27,19 +27,24 @@ export default function SeanceForm({
   const [npcs, setNpcs] = useState<NonPlayerCharacter[]>([]);
   const [places, setPlaces] = useState<Place[]>([]);
 
-  const loadSeance = async () => {
-    if (!adventure) {
-      return;
-    }
+  console.log(adventure, storyArc);
 
-    if (!storyArc) {
-      const mostRecentStoryArc = adventure.storyArcs[adventure.storyArcs.length - 1];
-      setSeance(new Seance(mostRecentStoryArc));
-    } else {
-      const newSeance = new Seance(requestedSeance?.storyArc || storyArc);
-      setSeance({ ...newSeance, ...requestedSeance });
-    }
-  };
+  const loadSeance = useCallback(() => {
+    async () => {
+      if (!adventure) {
+        return;
+      }
+
+      if (!storyArc) {
+        const mostRecentStoryArc = adventure.storyArcs[adventure.storyArcs.length - 1];
+        console.log('storyArc', mostRecentStoryArc);
+        setSeance(new Seance(mostRecentStoryArc));
+      } else {
+        const newSeance = new Seance(requestedSeance?.storyArc || storyArc);
+        setSeance({ ...newSeance, ...requestedSeance });
+      }
+    };
+  }, [adventure]);
 
   /*
   useEffect(() => {
@@ -95,6 +100,10 @@ export default function SeanceForm({
     e.preventDefault();
     onSubmitCallback(seance);
   };
+
+  useEffect(() => {
+    loadSeance();
+  }, [adventure]);
 
   return (
     <div className='flex flex-col w-full'>

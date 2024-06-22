@@ -5,7 +5,7 @@ import { constants } from 'node:http2';
 import { Session } from '@/model/session/session.class';
 import { SessionMapper } from '@/model/session/mappers/session.mapper';
 
-const sessionsDirPath: string = path.join(process.cwd(), '/src/lib/sessions');
+const sessionsDirPath: string = path.join(process.cwd(), '/src/lib/data/sessions');
 
 /**
  * Get data from JSON

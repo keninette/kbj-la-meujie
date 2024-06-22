@@ -1,29 +1,35 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getChapterRoute } from '@/app/routes';
 import Header from '@/components/header/Header';
 // @ts-ignore
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import LoginForm from '@/components/forms/LoginForm';
 import { isUserLoggedIn } from '@/security/login';
-import { getAdventure } from '@/app/data-provider';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { adventureSelector } from '@/lib/store/adventures/adventures.selector';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
-import { useSearchParams } from 'next/navigation';
+import { getChapterRoute } from '@/app/routes';
+import { useGetAdventureQuery } from '@/lib/services/adventures.api';
+import { setAdventure } from '@/lib/store/adventures/adventures.reducer';
 
 export default function Adventure({ params }: { params: { adventureSlug: string } }) {
+  const dispatch = useAppDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [adventure, setAdventure] = useState<Adventure>();
-  const sessionUuid = useSearchParams().get('sessionUuid');
+  const { data: adventureData, isSuccess: isAdventureLoadingFulfilled } = useGetAdventureQuery(params.adventureSlug);
+  const adventure = useAppSelector(adventureSelector);
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
-    // todo do not fetch if not logged in
-    (async function () {
-      const response = await getAdventure(params.adventureSlug);
-      setAdventure(await response.json());
-    })();
-  }, [params.adventureSlug]);
+  }, []);
+
+  useEffect(() => {
+    if (isAdventureLoadingFulfilled) {
+      dispatch(setAdventure(adventureData));
+    }
+    // todo handle errors
+    // todo fix this dispatch import
+  }, [adventureData, dispatch, isAdventureLoadingFulfilled]);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>
@@ -63,12 +69,14 @@ export default function Adventure({ params }: { params: { adventureSlug: string 
                   <h3 className='text-2xl mb-4'>📚 Arcs</h3>
                   <ul className='ml-2 flex flex-col-reverse'>
                     {adventure.storyArcs.map((arc) => {
+                      console.log(arc);
                       return (
                         <li key={arc.storyArcSlug}>
                           {arc.name}
                           <ul>
                             {arc.chapters &&
                               arc.chapters.map((chapter: Chapter) => {
+                                let sessionUuid;
                                 return (
                                   <li className='ml-4' key={chapter.id}>
                                     {chapter.steps ? (

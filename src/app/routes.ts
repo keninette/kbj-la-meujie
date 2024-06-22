@@ -1,4 +1,4 @@
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { Session } from '@/model/session/session.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 

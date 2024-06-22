@@ -5,7 +5,7 @@ import { getChapterRoute } from '@/app/routes';
 import Header from '@/components/header/Header';
 import Sidenav from '@/components/sidenav/Sidenav';
 import RecursiveStepsDisplay from '@/components/step/RecursiveStepsDisplay';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
@@ -18,6 +18,10 @@ import { Seance } from '@/model/session/seance.class';
 import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
 import SeanceForm from '@/components/forms/SeanceForm.';
 import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/FeedbackBanner';
+import { useGetAdventureQuery } from '@/lib/services/adventures.api';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { adventureSelector } from '@/lib/store/adventures/adventures.selector';
+import { setAdventure } from '@/lib/store/adventures/adventures.reducer';
 
 // todo fix error in console
 export default function ChapterDisplay({
@@ -25,10 +29,10 @@ export default function ChapterDisplay({
 }: {
   params: { adventureSlug: string; storyArcSlug: string; id: string };
 }) {
+  const dispatch = useAppDispatch();
   const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStep, setActiveStep] = useState<Step>();
-  const [adventure, setAdventure] = useState<Adventure>();
   const [storyArc, setStoryArc] = useState<StoryArc>();
   const [chapter, setChapter] = useState<Chapter>();
   const [nextChapter, setNextChapter] = useState<Chapter>();
@@ -39,23 +43,29 @@ export default function ChapterDisplay({
   const [sessionNeedsSaving, setSessionNeedsSaving] = useState(false);
   const [feedback, setFeedback] = useState<FeedbackBannerProps>();
   const sessionUuid = useSearchParams().get('sessionUuid');
+  const { data: adventureData, isSuccess: isAdventureLoadingFulfilled } = useGetAdventureQuery(params.adventureSlug);
+  const adventure = useAppSelector(adventureSelector);
+
+  useEffect(() => {
+    if (isAdventureLoadingFulfilled) {
+      dispatch(setAdventure(adventureData));
+    }
+    // todo handle errors
+    // todo fix this dispatch import
+  }, [adventureData, dispatch, isAdventureLoadingFulfilled]);
 
   const onSeanceFormSubmit = async (seance: Seance) => {
-    console.log('here');
     if (!activeSession) {
       return;
     }
-    console.log('still here');
     setActiveSeance(seance);
     setActiveSession((prevState) => ({ ...prevState, seances: [...(prevState?.seances || []), seance] }) as Session);
     setSessionNeedsSaving(true);
   };
 
-  console.log(adventure, storyArc);
   // Save active session
   useEffect(() => {
     // todo fix this
-    console.log('session');
     (async function () {
       if (!sessionNeedsSaving) {
         return;
@@ -97,11 +107,11 @@ export default function ChapterDisplay({
     }
   }, [activeSession?.seances, params.storyArcSlug, params.adventureSlug, sessionUuid]);
 
-  // Load adventure, story arc & chapter data on first load
+  // Load adventures, story arc & chapter data on first load
   useEffect(() => {
     console.log('adventure');
     (async function () {
-      // Load adventure data
+      // Load adventures data
       const response = await getAdventure(params.adventureSlug);
       if (response.status !== 200) {
         console.error(response.body);
