@@ -2,7 +2,7 @@
 
 import Header from '@/components/header/Header';
 import { FormEvent, useEffect, useState } from 'react';
-import { Adventure } from '@/model/Adventure.class';
+import { Adventure } from '@/model/AdventureManager.class';
 import { UniverseEnum } from '@/model/enums/universe.enum';
 import { saveAdventure } from '@/app/data-provider';
 import { isUserLoggedIn } from '@/security/login';

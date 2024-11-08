@@ -1,10 +1,7 @@
-import { UniverseEnum } from '@/model/enums/universe.enum';
+import { Adventure } from '@/model/AdventureManager.class';
 
-export interface AdventureCardDto {
-  adventureSlug: string;
-  name: string;
-  universe: UniverseEnum;
-  players?: { min: number; max: number };
+// todo rename this
+export interface AdventureCardDto extends Adventure {
   editLink: string;
   readLink: string;
 }

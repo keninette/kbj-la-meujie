@@ -1,11 +1,13 @@
-import { Adventure } from '@/model/Adventure.class';
-import { Chapter } from '@/model/Chapter.class';
+import { Adventure } from '@/model/AdventureManager.class';
+import { Session } from '@/model/session/session.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 export type RouteType = {
   name: string;
   path: string;
 };
 
+// todo fix routes
 const routes = {
   home: {
     name: '🏡 Home',
@@ -13,11 +15,11 @@ const routes = {
   } as RouteType,
   adventure: {
     name: '{adventureName}',
-    path: '/game-master/adventure/{adventureSlug}',
+    path: '/game-master/adventures/{adventureSlug}',
   } as RouteType,
   chapter: {
     name: '{chapterName}',
-    path: '/game-master/adventure/{adventureSlug}/chapter/{id}',
+    path: '/game-master/adventures/{adventureSlug}/story-arcs/{storyArcSlug}/chapters/{id}',
   } as RouteType,
   editAdventure: {
     name: 'Edit {adventureName}',
@@ -27,14 +29,23 @@ const routes = {
     name: 'Nouvelle aventure',
     path: '/game-master/edit/new',
   } as RouteType,
+  editSession: {
+    name: 'Éditer la sessions',
+    path: '/game-master/sessions/{adventureSlug}/{uuid}/edit',
+  },
 };
 
-const getAdventureRoute = (adventure: Adventure): RouteType => {
+const getAdventureRoute = (adventure: Adventure, session?: Session): RouteType => {
   // todo handle empty
-  return {
+  const route = {
     name: routes.adventure.name.replace('{adventureName}', adventure.name || ''),
     path: routes.adventure.path.replace('{adventureSlug}', adventure.adventureSlug || ''),
   };
+
+  if (session) {
+    route.path += `?sessionUuid=${session.uuid}`;
+  }
+  return route;
 };
 
 const getEditAdventureRoute = (adventure: Adventure): RouteType => {
@@ -45,12 +56,35 @@ const getEditAdventureRoute = (adventure: Adventure): RouteType => {
   };
 };
 
-const getChapterRoute = (chapter: Chapter, adventureSlug: string): RouteType => {
-  return {
+const getChapterRoute = (
+  chapter: Chapter,
+  adventureSlug: string,
+  storyArcSlug: string,
+  sessionUuid?: string,
+): RouteType => {
+  const route = {
     name: routes.chapter.name.replace('{chapterName}', chapter.name || ''),
-    path: routes.chapter.path.replace('{adventureSlug}', adventureSlug).replace('{id}', chapter.id || ''),
+    path: routes.chapter.path
+      .replace('{adventureSlug}', adventureSlug)
+      .replace('{storyArcSlug}', storyArcSlug)
+      .replace('{id}', chapter.id || ''),
+  };
+
+  if (sessionUuid) {
+    route.path += `?sessionUuid=${sessionUuid}`;
+  }
+
+  return route;
+};
+
+const getEditSessionRoute = (session: Session): RouteType => {
+  return {
+    name: routes.editSession.name,
+    path: routes.editSession.path
+      .replace('{adventureSlug}', session.adventure.adventureSlug || '')
+      .replace('{uuid}', session.uuid),
   };
 };
 
 export default routes;
-export { getAdventureRoute, getEditAdventureRoute, getChapterRoute };
+export { getAdventureRoute, getEditAdventureRoute, getChapterRoute, getEditSessionRoute };

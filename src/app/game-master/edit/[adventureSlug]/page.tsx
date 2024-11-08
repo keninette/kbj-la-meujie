@@ -2,11 +2,9 @@
 
 import Header from '@/components/header/Header';
 import { useEffect, useState } from 'react';
-import { Adventure } from '@/model/Adventure.class';
 import ChapterForm from '@/components/forms/ChapterForm';
 import { default as StepComponent } from '@/components/step/step-display/StepDisplay';
 import { FeedbackBannerProps, FeedbackTypeEnum } from '@/components/feedback/FeedbackBanner';
-import { saveAdventure } from '@/app/data-provider';
 import StepForm from '@/components/forms/StepForm';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -28,6 +26,11 @@ import PlaceForm from '@/components/forms/PlaceForm';
 import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
+import { useGetAdventureQuery, useSetAdventureMutation } from '@/lib/services/adventures.api';
+import { useAppDispatch, useAppSelector } from '@/lib/store/hooks';
+import { adventureSelector } from '@/lib/store/adventures/adventures.selector';
+import { setAdventure } from '@/lib/store/adventures/adventures.reducer';
+import { Adventure, AdventureManager } from '@/model/AdventureManager.class';
 
 enum FormEnum {
   STORY_ARC = 'STORY_ARC',
@@ -42,9 +45,13 @@ enum FormEnum {
 }
 
 export default function EditAdventure({ params }: { params: { adventureSlug: string } }) {
+  const dispatch = useAppDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [storyArc, setStoryArc] = useState<StoryArc>();
-  const [adventure, setAdventure] = useState<Adventure>();
+  const { data: adventureData, isSuccess: isAdventureLoadingFulfilled } = useGetAdventureQuery(params.adventureSlug);
+  const [updateAdventure, result] = useSetAdventureMutation();
+  const adventure = useAppSelector(adventureSelector);
+  const [adventureManager, setAdventureManager] = useState<AdventureManager>();
   const [chapter, setChapter] = useState<Chapter>();
   const [step, setStep] = useState<Step>();
   const [formToDisplay, setFormToDisplay] = useState<FormEnum>();
@@ -61,6 +68,18 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     setStep(step);
     setFormToDisplay(FormEnum.STEP);
   };
+
+  console.log(adventureData, adventure);
+
+  useEffect(() => {
+    if (isAdventureLoadingFulfilled) {
+      dispatch(setAdventure(adventureData));
+      setAdventureManager(new AdventureManager(adventureData));
+    }
+    // todo handle errors
+    // todo fix this dispatch import
+  }, [adventureData, dispatch, isAdventureLoadingFulfilled]);
+
   // todo revoir tous les messages d'erreur
   // todo fix erreurs console
   // todo fix erreur login
@@ -77,22 +96,11 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: 'Sauvegarde en cours', setFeedback });
     // todo find out why this doesn't work
-    /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventure));
+    /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventures));
     updatedAdventure.saveChapter(updatedChapter);
     setAdventure(updatedAdventure);*/
-    adventure.saveStoryArc(updatedStoryArc);
 
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du chapitre', setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde réussie', setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    updateAdventure(adventureManager?.saveStoryArc(updatedStoryArc) as Adventure);
   };
   const onChapterFormSubmit = async (updatedChapter: Chapter) => {
     // todo setFeedback useful in object ?
@@ -106,22 +114,11 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: 'Sauvegarde du chapitre en cours', setFeedback });
     // todo find out why this doesn't work
-    /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventure));
+    /*const updatedAdventure: Adventure = Adventure.createFromJson(JSON.stringify(adventures));
     updatedAdventure.saveChapter(updatedChapter);
     setAdventure(updatedAdventure);*/
-    adventure.saveChapter(storyArc, updatedChapter);
 
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du chapitre', setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du chapitre réussie', setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    updateAdventure(adventureManager?.saveChapter(storyArc, updatedChapter) as Adventure);
   };
   const onStepFormSubmit = async (updatedStep: Step) => {
     if (!adventure || !storyArc || !chapter) {
@@ -133,20 +130,10 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       return;
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'étape en cours", setFeedback });
-    adventure.saveStep(storyArc, chapter, updatedStep);
 
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: "Echec de la sauvegarde de l'étape", setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'étape réussie", setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    // todo handle errors
+    updateAdventure(adventureManager?.saveStep(storyArc, chapter, updatedStep) as Adventure);
+    setFormToDisplay(undefined);
   };
   const onAudioFormSubmit = async (audio: Audio) => {
     if (!adventure || !storyArc || !chapter || !step) {
@@ -174,18 +161,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     targetStep.audios.push(audio);
 
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: "Echec de la sauvegarde de l'audio", setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    // todo handle errors
+    updateAdventure(adventure);
+    setFormToDisplay(undefined);
   };
   const onImageFormSubmit = async (image: Image) => {
     if (!adventure || !storyArc || !chapter || !step) {
@@ -213,18 +191,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     targetStep.images.push(image);
 
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: "Echec de la sauvegarde de l'audio", setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    // todo handle errors
+    updateAdventure(adventure);
+    setFormToDisplay(undefined);
   };
   const onClueFormSubmit = async (clue: Clue) => {
     if (!adventure || !storyArc || !chapter || !step) {
@@ -237,7 +206,7 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     setFeedback({ type: FeedbackTypeEnum.LOADING, message: "Sauvegarde de l'audio en cours", setFeedback });
     // todo fix this whole thing
-    const targetChapter = adventure.findChapterById(storyArc, chapter.id);
+    const targetChapter = adventureManager?.findChapterById(storyArc, chapter.id);
     if (!targetChapter) {
       setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Chapitre non trouvé', setFeedback });
       return;
@@ -252,18 +221,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     targetStep.clues.push(clue);
 
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: "Echec de la sauvegarde de l'audio", setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    // todo handle errors
+    updateAdventure(adventure);
+    setFormToDisplay(undefined);
   };
   const onDiceRollSubmit = async (diceRoll: DiceRoll) => {
     if (!adventure || !storyArc || !chapter || !step) {
@@ -291,18 +251,9 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     }
     targetStep.diceRolls.push(diceRoll);
 
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: "Echec de la sauvegarde de l'audio", setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: "Sauvegarde de l'audio réussie", setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    // todo handle errors
+    updateAdventure(adventure);
+    setFormToDisplay(undefined);
   };
 
   const onNpcFormSubmit = async (npc: NonPlayerCharacter) => {
@@ -323,22 +274,15 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
       };
     });*/
     // todo fix this, it's awful
-    step.nonPlayerCharacters = [...(step.nonPlayerCharacters || []), npc];
-    adventure.saveStep(storyArc, chapter, step);
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    // todo use constante here
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du PNJ', setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du PNJ réussie', setFeedback });
-      const data = await response.json();
-      // Re-build adventure otherwise we don't have access to methods in class
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+    //step.nonPlayerCharacters = [...(step.nonPlayerCharacters || []), npc];
+    // todo handle errors
+    updateAdventure(
+      adventureManager?.saveStep(storyArc, chapter, {
+        ...step,
+        nonPlayerCharacters: [...(step.nonPlayerCharacters || []), npc],
+      }) as Adventure,
+    );
+    setFormToDisplay(undefined);
   };
 
   const onPlaceFormSubmit = async (place: Place) => {
@@ -360,37 +304,17 @@ export default function EditAdventure({ params }: { params: { adventureSlug: str
     });*/
     // todo fix this, it's awful
     step.place = place;
-    adventure.saveStep(storyArc, chapter, step);
-    // todo duplicate
-    const response = await saveAdventure(adventure);
-    // todo use constante here
-    if (response.status !== 201) {
-      setFeedback({ type: FeedbackTypeEnum.ERROR, message: 'Echec de la sauvegarde du lieu', setFeedback });
-      console.error(response);
-    } else {
-      setFeedback({ type: FeedbackTypeEnum.SUCCESS, message: 'Sauvegarde du lieu réussie', setFeedback });
-      const data = await response.json();
-      const adventure = Adventure.createFromJson(JSON.stringify(data));
-      setAdventure(adventure);
-      setFormToDisplay(undefined);
-    }
+
+    // todo handle errors
+    updateAdventure(adventureManager?.saveStep(storyArc, chapter, step) as Adventure);
+    setFormToDisplay(undefined);
   };
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
 
     if (isLoggedIn) {
-      (async function () {
-        const response = await fetch(`/api?adventureSlug=${params.adventureSlug}`, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        const data = await response.json();
-        // Re-build adventure otherwise we don't have access to methods in class
-        const adventure = Adventure.createFromJson(JSON.stringify(data));
-        setAdventure(adventure);
-      })();
+      // todo load here
     }
   }, [params.adventureSlug, isLoggedIn]);
 

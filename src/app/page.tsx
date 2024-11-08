@@ -1,13 +1,13 @@
 'use client';
 
 import Header from '@/components/header/Header';
-import Adventures from '@/components/adventures/Adventures';
+import AdventuresDisplay from '@/components/adventures/AdventuresDisplay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import LoginForm from '@/components/forms/LoginForm';
-import { isUserLoggedIn, logInUser, logOutUser } from '@/security/login';
+import { isUserLoggedIn } from '@/security/login';
 import Routes from '@/app/routes';
+import LoginForm from '@/components/forms/LoginForm';
 
 export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,13 +16,15 @@ export default function Home() {
     setIsLoggedIn(isUserLoggedIn());
   }, []);
 
+  // todo state pour nouvelle aventure
+
   return (
     <main className='flex min-h-screen flex-col text-white'>
       <Header></Header>
       {!isLoggedIn && <LoginForm loginCallback={setIsLoggedIn} />}
       {isLoggedIn && (
         <ul className='flex w-full mx-8'>
-          <Adventures />
+          <AdventuresDisplay />
           <li className='flex ml-6'>
             <a
               href={Routes.newAdventure.path}
