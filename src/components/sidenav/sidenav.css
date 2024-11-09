@@ -1,0 +1,47 @@
+.sidenav__item{
+    color: var(--color-white--dark);
+}
+
+.sidenav__item--level-0 > div > .sidenav__item__bookmark {
+    color: var(--color-blue--dark);
+}
+
+.sidenav__item--level-1 {
+    padding-left: 0.6rem !important;
+}
+
+.sidenav__item--level-1 .sidenav__item__bookmark {
+    color: var(--color-green--dark);
+}
+
+.sidenav__item--level-2 {
+    padding-left: 1.1rem !important;
+}
+
+.sidenav__item--level-2 .sidenav__item__bookmark {
+    color: var(--color-yellow--dark);
+}
+
+.sidenav__item--level-3 {
+    padding-left: 1.6rem !important;
+}
+
+.sidenav__item--level-3 .sidenav__item__bookmark {
+    color: var(--color-orange--dark);
+}
+
+.sidenav__item--level-4 {
+    padding-left: 2.1rem !important;
+}
+
+.sidenav__item--level-4 .sidenav__item__bookmark{
+    color: var(--color-red--dark);
+}
+
+.sidenav__item--level-5 {
+    padding-left: 2.6rem !important;
+}
+
+.sidenav__item--level-5 .sidenav__item__bookmark{
+    color: var(--color-purple--dark);
+}

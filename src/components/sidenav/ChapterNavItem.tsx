@@ -1,8 +1,8 @@
 import { faBookmark, faLink } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getChapterRoute, RouteType } from '@/app/routes';
-import { Chapter } from '@/model/Chapter.class';
 import { useEffect, useState } from 'react';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 type ChapterNavItemPropsType = {
   chapterUid: string;
@@ -33,7 +33,7 @@ export default function ChapterNavItem({ chapterUid }: ChapterNavItemPropsType) 
     chapter &&
     route && (
       <>
-        <FontAwesomeIcon icon={faBookmark} size='xs' className='mx-2' />
+        <FontAwesomeIcon icon={faBookmark} size='xs' className='mx-2 sidenav__item__bookmark' />
         {route.name}
         {chapter.steps?.length > 0 && route && (
           <a href={route.path} className='ml-2'>

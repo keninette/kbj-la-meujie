@@ -1,6 +1,9 @@
 import React from 'react';
 import { TreeItem, TreeItemContentProps, TreeItemProps, useTreeItem } from '@mui/x-tree-view';
 import clsx from 'clsx';
+import './sidenav.css';
+import { faBookmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // todo clean code
 const CustomContent = React.forwardRef(function CustomContent(props: TreeItemContentProps, ref) {
@@ -25,7 +28,10 @@ const CustomContent = React.forwardRef(function CustomContent(props: TreeItemCon
       ref={ref as React.Ref<HTMLDivElement>}
       onClick={props.onClick}
     >
-      <div>{props.label}</div>
+      <div className='sidenav__item'>
+        <FontAwesomeIcon icon={faBookmark} size='xs' className='mx-2 sidenav__item--level-0 sidenav__item__bookmark' />
+        {props.label}
+      </div>
     </div>
   );
 });

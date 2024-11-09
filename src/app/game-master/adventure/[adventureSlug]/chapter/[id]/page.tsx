@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { getChapterRoute } from '@/app/routes';
 import Header from '@/components/header/Header';
 import Sidenav from '@/components/sidenav/Sidenav';
-import RecursiveStepsDisplay from '@/components/step/RecursiveStepsDisplay';
 import { Adventure } from '@/model/Adventure.class';
 import { isUserLoggedIn } from '@/security/login';
 import LoginForm from '@/components/forms/LoginForm';
 import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
+import CustomTabs from '@/components/customTabs/CustomTabs';
+import StepTab from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/StepTab';
+import { MuiTabThemes, MuiThemes } from '@/model/types/external-libs.type';
 
 export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
@@ -103,48 +104,56 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
     return eligibleStoryArcs[0].chapters;
   };
 
+  const tab1 = (
+    <div className='flex h-full w-full'>
+      <StepTab step={activeStep} referer='read' />
+    </div>
+  );
+  const tab2 = <div className='flex h-full w-full bg-orange-400'>Session</div>;
+
   return (
     <>
-      <main className='flex min-h-screen flex-col text-white min-w-full'>
+      <main className='flex h-100vh max-h-100vh flex-col text-white min-w-full overflow-y-scroll'>
         <Header></Header>
         {!isLoggedIn && <LoginForm loginCallback={setIsLoggedIn} />}
         {isLoggedIn && adventure && (
-          <div className='flex'>
+          <div className='flex h-full'>
             <section className='flex'>
               <Sidenav
                 adventureSlug={adventure.adventureSlug}
                 chapters={storyArcChapters() || []}
                 onStepSelection={onStepSelection}
+                className='w-[20rem]'
+                selectedChapter={chapter}
               ></Sidenav>
             </section>
-            <section className='flex flex-col w-4/5'>
-              {isClient && chapter && adventure && (
-                <>
-                  <section className='flex h-full w-full flex-grow'>
-                    <div className='flex flex-col h-full w-full m-4'>
-                      <h2 className='flex justify-center w-full text-3xl'>{chapter.name}</h2>
-                      {
-                        <div className='flex'>
-                          {isClient &&
-                            activeSteps?.map((stepId) => (
-                              <RecursiveStepsDisplay key={stepId} stepIds={[stepId]} chapter={chapter} />
-                            ))}
-                        </div>
-                      }
-                    </div>
-                  </section>
-                </>
-              )}
-              {nextChapter && (
-                <div
-                  id='next-chapter'
-                  className='flex w-[94%] p-4 text-xl justify-center m-auto mt-10 border-solid border-2 flex-grow z-10 border-gradient border-gradient--red--to-right opacity-25'
-                >
-                  <a href={getChapterRoute(nextChapter, params.adventureSlug).path}>
-                    Prochain chapitre : {nextChapter.name}
-                  </a>
+            <section className='flex flex-col w-full'>
+              {/*
+              <section className='flex w-full bg-amber-200 mb-2'>audio + timer</section>
+*/}
+              <section className='flex w-full h-full'>
+                {/*
+                <div className='flex w-48 bg-red-400'>Timeline</div>
+*/}
+                <div className='flex flex-col w-full'>
+                  <div className='flex h-6 w-full'></div>
+                  <div className='flex h-full'>
+                    <CustomTabs
+                      tabs={[
+                        { id: 'tab-step', title: 'Step', content: tab1 },
+                        {
+                          id: 'tab-session',
+                          title: 'Session',
+                          content: tab2,
+                          disabled: true,
+                        },
+                      ]}
+                      color={MuiTabThemes.PRIMARY}
+                      className='flex flex-col h-full w-full'
+                    />
+                  </div>
                 </div>
-              )}
+              </section>
             </section>
           </div>
         )}
