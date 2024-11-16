@@ -49,7 +49,7 @@ export default function StepTab({ step, referer }: StepTabPropsType): ReactEleme
           );
         })}
       {step.nonPlayerCharacters && (
-        <ul className='flex'>
+        <ul className='flex flex-wrap'>
           {step.nonPlayerCharacters.map((npc: NonPlayerCharacter) => {
             const uniqId = `npc_${step.id}_${npc.name.toLowerCase().replaceAll(' ', '')}`;
             return <NonPlayerCharacterBlock key={uniqId} npc={npc} npcUniqId={uniqId} referer={referer} />;

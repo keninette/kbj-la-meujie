@@ -14,7 +14,11 @@ export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: Non
 
   return (
     <>
-      <li className='flex flex-col mr-4 mt-2 cursor-pointer' key={npcUniqId} data-tooltip-id={`tooltip_${npcUniqId}`}>
+      <li
+        className='flex flex-col w-[15rem] mr-4 mt-2 cursor-pointer'
+        key={npcUniqId}
+        data-tooltip-id={`tooltip_${npcUniqId}`}
+      >
         <div className='flex'>
           {npc.portrait && <img className='w-20 mr-2 object-cover' src={portraitSrc} alt='Portrait' />}
           <div>
