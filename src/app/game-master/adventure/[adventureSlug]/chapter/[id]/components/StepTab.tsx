@@ -5,7 +5,6 @@ import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 import NonPlayerCharacterBlock from '@/components/step/NonPlayerCharacterBlock';
 import { Light } from '@/model/Light.class';
 import { Audio } from '@/model/Audio.class';
-import AudioPlayer from '@/components/step/AudioPlayer';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Image } from '@/model/Image.class';

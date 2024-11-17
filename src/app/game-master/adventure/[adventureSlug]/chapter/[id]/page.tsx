@@ -10,23 +10,21 @@ import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 import CustomTabs from '@/components/customTabs/CustomTabs';
 import StepTab from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/StepTab';
-import { MuiTabThemes, MuiThemes } from '@/model/types/external-libs.type';
+import { MuiTabThemes } from '@/model/types/external-libs.type';
 import { TabHeader } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/TabHeader';
 import { Audio } from '@/model/Audio.class';
 
 export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
-  const [isClient, setIsClient] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStep, setActiveStep] = useState<Step>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
   const [audioPlaying, setAudioPlaying] = useState<Audio>();
-  const onAudioRequested = useCallback((audio: Audio) => {
+  const onAudioRequested = useCallback((audio?: Audio) => {
     setAudioPlaying(audio);
   }, []);
 
   useEffect(() => {
-    setIsClient(true);
     setIsLoggedIn(isUserLoggedIn());
   }, []);
 
