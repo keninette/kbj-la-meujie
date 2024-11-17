@@ -2,7 +2,7 @@ export class Audio {
   name: string;
   filename: string;
   loop: boolean;
-  autoplay: boolean;
+  autoPlay: boolean;
   volume: number;
   helper?: string;
 
@@ -10,7 +10,7 @@ export class Audio {
     this.name = name;
     this.filename = filename;
     this.loop = false;
-    this.autoplay = false;
+    this.autoPlay = false;
     this.volume = 1;
   }
 }

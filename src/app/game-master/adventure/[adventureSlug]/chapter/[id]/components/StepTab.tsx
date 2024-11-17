@@ -12,12 +12,15 @@ import { Image } from '@/model/Image.class';
 import { Clue } from '@/model/Clue.class';
 import { DiceRoll } from '@/model/DiceRoll.class';
 import DiceRollDisplay from '@/components/step/DiceRollDisplay';
+import { CustomAudioPlayer } from '@/components/audioPlayer/CustomAudioPlayer';
 
 type StepTabPropsType = {
   referer: 'edit' | 'read';
   step?: Step;
+  onAudioRequested: (audio?: Audio) => void;
 };
-export default function StepTab({ step, referer }: StepTabPropsType): ReactElement {
+
+export default function StepTab({ step, referer, onAudioRequested }: StepTabPropsType): ReactElement {
   const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
 
   if (!step) {
@@ -37,12 +40,12 @@ export default function StepTab({ step, referer }: StepTabPropsType): ReactEleme
           );
         })}
       {step.audios &&
-        step.audios.map((sound: Audio, index: number) => {
+        step.audios.map((audio: Audio, index: number) => {
           return (
-            <AudioPlayer
-              audio={sound}
-              id={index}
-              stepId={step.id}
+            <CustomAudioPlayer
+              requestedAudio={audio}
+              displaySendToHeaderButton={true}
+              onSendToHeaderButtonClicked={onAudioRequested}
               key={`audio-player_${index}`}
               assetsDir={assetsDir}
             />

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Header from '@/components/header/Header';
 import Sidenav from '@/components/sidenav/Sidenav';
 import { Adventure } from '@/model/Adventure.class';
@@ -11,6 +11,8 @@ import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 import CustomTabs from '@/components/customTabs/CustomTabs';
 import StepTab from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/StepTab';
 import { MuiTabThemes, MuiThemes } from '@/model/types/external-libs.type';
+import { TabHeader } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/TabHeader';
+import { Audio } from '@/model/Audio.class';
 
 export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isClient, setIsClient] = useState(false);
@@ -18,7 +20,10 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
   const [activeStep, setActiveStep] = useState<Step>();
   const [adventure, setAdventure] = useState<Adventure>();
   const [chapter, setChapter] = useState<Chapter>();
-  const [nextChapter, setNextChapter] = useState<Chapter>();
+  const [audioPlaying, setAudioPlaying] = useState<Audio>();
+  const onAudioRequested = useCallback((audio: Audio) => {
+    setAudioPlaying(audio);
+  }, []);
 
   useEffect(() => {
     setIsClient(true);
@@ -86,10 +91,6 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
     setActiveStep(step);
   };
 
-  const activeSteps = activeStep
-    ? [(activeStep as Step).id]
-    : chapter?.steps?.filter((step) => step.level === 1).map((step) => step.id);
-
   const storyArcChapters = () => {
     // todo improve this (in params)
     if (!adventure) {
@@ -106,7 +107,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
 
   const tab1 = (
     <div className='flex h-full w-full'>
-      <StepTab step={activeStep} referer='read' />
+      <StepTab step={activeStep} referer='read' onAudioRequested={onAudioRequested} />
     </div>
   );
   const tab2 = <div className='flex h-full w-full bg-orange-400'>Session</div>;
@@ -128,15 +129,12 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
               ></Sidenav>
             </section>
             <section className='flex flex-col w-full'>
-              {/*
-              <section className='flex w-full bg-amber-200 mb-2'>audio + timer</section>
-*/}
+              <TabHeader requestedAudio={audioPlaying} />
               <section className='flex w-full h-full'>
                 {/*
                 <div className='flex w-48 bg-red-400'>Timeline</div>
 */}
                 <div className='flex flex-col w-full'>
-                  <div className='flex h-6 w-full'></div>
                   <div className='flex h-full'>
                     <CustomTabs
                       tabs={[

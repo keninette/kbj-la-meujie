@@ -81,7 +81,7 @@ export default function AudioForm({ onSubmitCallback, requestedAudio }: AudioFor
             type='checkbox'
             name='autoplay'
             placeholder='Autoplay'
-            checked={audio.autoplay}
+            checked={audio.autoPlay}
             onChange={(e) => onChange('autoplay', e.target.checked)}
             className='flex text-black mx-2'
           />
