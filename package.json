@@ -29,6 +29,7 @@
     "react-audio-player": "^0.17.0",
     "react-dom": "^18",
     "react-markdown": "^9.0.1",
+    "react-timer-hook": "^3.0.8",
     "react-tooltip": "^5.26.3",
     "react-xarrows": "^2.0.2",
     "remark-gfm": "^4.0.0",
