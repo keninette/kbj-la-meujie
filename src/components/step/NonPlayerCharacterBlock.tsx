@@ -49,8 +49,8 @@ export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: Non
             </p>
             <p>{npc.age} ans</p>
             <p>{npc.occupation}</p>
-            <p className='mt-2'>{npc.publicDescription}</p>
-            {npc.privateDescription && <p className='mt-2 italic opacity-80'>{npc.privateDescription}</p>}
+            <p className='mt-2'>{npc.backstory}</p>
+            {npc.privateBackstory && <p className='mt-2 italic opacity-80'>{npc.privateBackstory}</p>}
           </div>
         </div>
       </Tooltip>

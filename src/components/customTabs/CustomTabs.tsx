@@ -24,7 +24,7 @@ export default function CustomTabs({ tabs, color, ...rest }: TabsProps): ReactEl
   };
 
   return (
-    <div {...rest}>
+    <div className='flex flex-col w-full' {...rest}>
       <Tabs
         value={activeTabIndex}
         onChange={handleChange}

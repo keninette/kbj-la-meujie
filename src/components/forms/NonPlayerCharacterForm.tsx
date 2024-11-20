@@ -97,7 +97,7 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
         <textarea
           name='publicDescription'
           placeholder='Description publique'
-          value={npc.publicDescription}
+          value={npc.backstory}
           onChange={(e) => onFormChange('publicDescription', e.target.value)}
           className='flex text-black my-2'
           disabled={isAdventureNpc}
@@ -105,7 +105,7 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
         <textarea
           name='privateDescription'
           placeholder='Description privée'
-          value={npc.privateDescription}
+          value={npc.privateBackstory}
           onChange={(e) => onFormChange('privateDescription', e.target.value)}
           className='flex text-black my-2'
           disabled={isAdventureNpc}

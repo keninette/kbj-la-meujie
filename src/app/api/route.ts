@@ -4,8 +4,8 @@ import * as fs from 'fs';
 import { Adventure } from '@/model/Adventure.class';
 import { constants } from 'node:http2';
 import { AdventureMapper } from '@/model/adventure/adventure.mapper';
-import { Chapter } from '@/model/Chapter.class';
 import { CHAPTER_NOT_FOUND } from '@/model/errors';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 const adventuresDirPath: string = path.join(process.cwd(), '/src/lib/json/adventures');
 

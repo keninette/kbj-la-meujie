@@ -1,5 +1,5 @@
-import { Chapter } from '@/model/Chapter.class';
 import { v4 } from 'uuid';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 export class StoryArc {
   // public id so they don't get spoiled on players page

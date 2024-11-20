@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inconsolata } from 'next/font/google';
 import '../../public/globals.css';
+import React from 'react';
 
 const inconsolata = Inconsolata({ subsets: ['latin'] });
 
