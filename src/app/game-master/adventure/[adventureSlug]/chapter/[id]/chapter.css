@@ -1,0 +1,4 @@
+/* override mui theme */
+button[class*="MuiTab"][aria-selected="false"] {
+    color: gray;
+}

@@ -24,10 +24,8 @@ export function CustomAudioPlayer({
   };
   useEffect(() => setAudio(requestedAudio), [requestedAudio]);
 
-  console.log(audio);
-
   return audio ? (
-    <div className='flex flex-col w-1/2 mr-2'>
+    <div className='flex flex-col mr-2'>
       <div className='flex justify-between mx-4 pt-2'>
         <p>🔉 Son : {audio?.name}</p>
         <p>

@@ -9,15 +9,20 @@ import LoginForm from '@/components/forms/LoginForm';
 import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 import CustomTabs from '@/components/customTabs/CustomTabs';
-import StepTab from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/StepTab';
 import { MuiTabThemes } from '@/model/types/external-libs.type';
-import { TabHeader } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/TabHeader';
+import { ChapterHeader } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/components/ChapterHeader';
 import { Audio } from '@/model/Audio.class';
+import { SessionTab } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/SessionTab';
+import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
+import './chapter.css';
+import StepTab from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/step-tab/StepTab';
+import Tab from '@/components/tab/Tab';
 
 export default function ChapterDisplay({ params }: { params: { adventureSlug: string; id: string } }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeStep, setActiveStep] = useState<Step>();
   const [adventure, setAdventure] = useState<Adventure>();
+  const [storyArc, setStoryArc] = useState<StoryArc>();
   const [chapter, setChapter] = useState<Chapter>();
   const [audioPlaying, setAudioPlaying] = useState<Audio>();
   const onAudioRequested = useCallback((audio?: Audio) => {
@@ -40,10 +45,12 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
       let chapter: Chapter;
       if (activeStep) {
         // todo improve this (in params)
-        const storyArc = adventure.storyArcs.find((storyArc) =>
-          storyArc.chapters.find((thisChapter: Chapter) => {
-            return thisChapter.steps.find((thisStep) => thisStep.id === activeStep.id);
-          }),
+        setStoryArc(
+          adventure.storyArcs.find((storyArc) =>
+            storyArc.chapters.find((thisChapter: Chapter) => {
+              return thisChapter.steps.find((thisStep) => thisStep.id === activeStep.id);
+            }),
+          ),
         );
         if (!storyArc) {
           console.error("Pas d'arc trouvé pour ce châpitre");
@@ -59,6 +66,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
         if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
           console.error("Pas d'arc trouvé pour ce châpitre");
         }
+        setStoryArc(eligibleStoryArcs[0]);
         eligibleChapters = (eligibleStoryArcs[0].chapters || []).filter((thisChapter: Chapter) => {
           return thisChapter.id === params.id;
         });
@@ -71,15 +79,6 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
       }
 
       setChapter(chapter);
-      // todo fix
-      /*if (chapter && chapter.nextChapterId) {
-        const nextChapter = adventure?.chapters?.filter((thisChapter: Chapter) => {
-          return thisChapter.id === chapter.nextChapterId;
-        })[0];
-        if (nextChapter) {
-          setNextChapter(nextChapter);
-        }
-      }*/
       setAdventure(adventure);
     })();
   }, [params, params.adventureSlug, params.id, activeStep, isLoggedIn]);
@@ -103,13 +102,6 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
     return eligibleStoryArcs[0].chapters;
   };
 
-  const tab1 = (
-    <div className='flex h-full w-full'>
-      <StepTab step={activeStep} referer='read' onAudioRequested={onAudioRequested} />
-    </div>
-  );
-  const tab2 = <div className='flex h-full w-full bg-orange-400'>Session</div>;
-
   return (
     <>
       <main className='flex h-100vh max-h-100vh flex-col text-white min-w-full overflow-y-scroll'>
@@ -127,21 +119,37 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
               ></Sidenav>
             </section>
             <section className='flex flex-col w-full'>
-              <TabHeader requestedAudio={audioPlaying} />
+              <ChapterHeader requestedAudio={audioPlaying} />
               <section className='flex w-full h-full'>
                 {/*
                 <div className='flex w-48 bg-red-400'>Timeline</div>
 */}
                 <div className='flex flex-col w-full'>
-                  <div className='flex h-full'>
+                  <div className='flex w-full h-full'>
                     <CustomTabs
                       tabs={[
-                        { id: 'tab-step', title: 'Step', content: tab1 },
+                        {
+                          id: 'tab-step',
+                          title: 'Step',
+                          content: (
+                            <Tab>
+                              <StepTab step={activeStep} referer='read' onAudioRequested={onAudioRequested} />
+                            </Tab>
+                          ),
+                        },
                         {
                           id: 'tab-session',
                           title: 'Session',
-                          content: tab2,
-                          disabled: true,
+                          content: (
+                            <Tab>
+                              {adventure && storyArc && (
+                                <SessionTab
+                                  adventureSlug={adventure.adventureSlug}
+                                  storyArcSlug={storyArc.storyArcSlug}
+                                />
+                              )}
+                            </Tab>
+                          ),
                         },
                       ]}
                       color={MuiTabThemes.PRIMARY}
