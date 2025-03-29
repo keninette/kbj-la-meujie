@@ -23,17 +23,12 @@ export const AdventuresApi = {
     const storyArcNpcs = [];
     for (const chapter of storyArc?.chapters ?? []) {
       for (const step of chapter.steps) {
-        storyArcNpcs.push(step.nonPlayerCharacters);
+        if (step.nonPlayerCharacters) {
+          storyArcNpcs.push(step.nonPlayerCharacters);
+        }
       }
     }
 
-    console.log(
-      JSON.stringify(
-        storyArcNpcs.flat().filter((npc, index, self) => {
-          return index === self.findIndex((thisNpc) => thisNpc.id === npc.id);
-        }),
-      ),
-    );
     return storyArcNpcs.flat().filter((npc, index, self) => {
       return index === self.findIndex((thisNpc) => thisNpc.id === npc.id);
     }) as NonPlayerCharacter[];

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import CharacteristicModifier from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/characters-tab/character-card/CharacteristicModifier';
 import { Character, CharacterType } from '@/model/sessions/Character.class';
+import { sha256 } from 'js-sha256';
 
 type CharacterProps = {
   initialCharacter: Character;
@@ -18,17 +19,27 @@ export function CharacterCard({ initialCharacter, isEditable, onUpdateCallback }
   // LOCAL STATES & CONSTANTS
   const [character, setCharacter] = useState(initialCharacter);
   const defaultCharacterPortrait = `default-${(initialCharacter.identifiesAs ?? 'Non-binary').toLowerCase()}.jpg`;
+  // todo fix this
   const characterPortraitAsString =
     typeof initialCharacter?.portrait === 'string' && character?.portrait !== ''
       ? character.portrait
       : defaultCharacterPortrait;
+  // todo fix trim
   const characterPortraitAsObject =
-    initialCharacter?.portrait?.filename !== '' ? initialCharacter?.portrait?.filename : defaultCharacterPortrait;
+    typeof initialCharacter?.portrait === 'object' &&
+    initialCharacter?.portrait?.filename.trim() !== '' &&
+    initialCharacter?.portrait?.filename !== undefined
+      ? initialCharacter?.portrait?.filename
+      : defaultCharacterPortrait;
   const characterPortrait: string =
-    typeof initialCharacter?.portrait === 'string' ? characterPortraitAsString : characterPortraitAsObject;
+    typeof initialCharacter?.portrait === 'string' ? (characterPortraitAsString as string) : characterPortraitAsObject;
   const portraitDirectory =
     initialCharacter.type === CharacterType.PLAYER_CHARACTER ? '/assets/img/chars/' : '/assets/img/adventures/';
+  // todo fix duplicate
 
+  const computeObjectSha = (thisObject?: Object): string => {
+    return sha256(JSON.stringify(thisObject ?? {}));
+  };
   // EVENT HANDLERS
   const onCharacterChange = (
     characteristicName: keyof Character,
@@ -51,16 +62,21 @@ export function CharacterCard({ initialCharacter, isEditable, onUpdateCallback }
         ...prevState,
         [characteristicName]:
           operation === CharacteristicUpdate.INCREMENT
-            ? getNewCharacteristicValue(+prevState[characteristicName] + 1)
-            : getNewCharacteristicValue(+prevState[characteristicName] - 1),
+            ? getNewCharacteristicValue(+(prevState[characteristicName] ?? 0) + 1)
+            : getNewCharacteristicValue(+(prevState[characteristicName] ?? 0) - 1),
       };
     });
   };
 
   // USE EFFECTS
   useEffect(() => {
-    onUpdateCallback(character);
-  }, [onUpdateCallback, character]);
+    const initialCharacterSha = computeObjectSha(initialCharacter);
+    const characterSha = computeObjectSha(character);
+
+    if (characterSha !== initialCharacterSha) {
+      onUpdateCallback(character);
+    }
+  }, [onUpdateCallback, character, initialCharacter]);
 
   // todo tooltip with all info
   return (

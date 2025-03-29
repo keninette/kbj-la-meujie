@@ -13,8 +13,8 @@ import CustomTabs from '@/components/customTabs/CustomTabs';
 import { Character } from '@/model/sessions/Character.class';
 import { SessionsSelector } from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/SessionsSelector';
 import RefreshNonPlayerCharacters from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/RefreshNonPlayerCharactersButton';
-import { AdventuresApi } from '@/services/adventures.api';
 import AddSessionForm from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/AddSessionForm';
+import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 
 type SessionTabProps = {
   adventureSlug: string;
@@ -39,7 +39,6 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
   };
   const saveSession = useCallback(
     (thisSession: Session) => {
-      console.log('save session');
       const timeoutId = setTimeout(() => {
         SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
       }, 1000);
@@ -49,8 +48,6 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
     [adventureSlug, storyArcSlug],
   );
   const saveCharacter = (updatedCharacter: Character, keyInSession: 'nonPlayerCharacters' | 'playerCharacters') => {
-    console.log('saveCharacter');
-
     const matchingCharacterIndex = interactiveSession?.session[keyInSession].findIndex(
       (thisChar: Character) => thisChar.uuid === updatedCharacter.uuid,
     );
@@ -77,7 +74,6 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
     });
   };
   const saveDescription = (updatedDescription?: RawDraftContentState) => {
-    console.log('save description');
     if (
       updatedDescription &&
       computeObjectSha(updatedDescription?.blocks) !== computeObjectSha(interactiveSession?.session.description?.blocks)
@@ -93,16 +89,13 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
       });
     }
   };
-  const refreshSessionNonPlayerCharacters = async () => {
-    console.log('refreshSessionNonPlayerCharacters');
-    const allNpcs = await AdventuresApi.getSessionNonPlayerCharacters({ adventureSlug, storyArcSlug });
-
+  const onNonPlayerCharactersRefreshed = async (newNpcs: NonPlayerCharacter[]) => {
     setInteractiveSession((prevState) => {
       return {
         ...prevState,
         session: {
           ...prevState?.session,
-          nonPlayerCharacters: allNpcs,
+          nonPlayerCharacters: [...(prevState?.session.nonPlayerCharacters ?? []), ...newNpcs],
         },
       } as InteractiveSession;
     });
@@ -110,7 +103,7 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
 
   // EVENT HANDLERS
   const onSessionSelected = (selectedSession: Session) => {
-    if (interactiveSession) {
+    if (interactiveSession?.session) {
       confirm('Une session est déjà sélectionnée, êtes-vous sûr ?');
     }
     setInteractiveSession({ sha: computeObjectSha(selectedSession), session: selectedSession });
@@ -118,7 +111,6 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
 
   // USE EFFECTS
   useEffect(() => {
-    console.log('use effect');
     const newSha = computeObjectSha(interactiveSession?.session);
     if (interactiveSession?.sha && newSha !== interactiveSession?.sha) {
       console.log('Saving session');
@@ -142,7 +134,12 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
           />
         )}
         {interactiveSession?.session && (
-          <RefreshNonPlayerCharacters onClickCallback={refreshSessionNonPlayerCharacters} />
+          <RefreshNonPlayerCharacters
+            onRefreshCallback={onNonPlayerCharactersRefreshed}
+            existingCharactersInSession={interactiveSession.session.nonPlayerCharacters}
+            adventureSlug={adventureSlug}
+            storyArcSlug={storyArcSlug}
+          />
         )}
       </div>
       {interactiveSession?.session && (
@@ -175,7 +172,7 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
                     />
                   </Tab>
                 ),
-              } /*,
+              },
               {
                 id: 'tab-session-npcs',
                 title: 'PNJ',
@@ -190,7 +187,7 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
                     />
                   </Tab>
                 ),
-              },*/,
+              },
             ]}
           />
         </div>

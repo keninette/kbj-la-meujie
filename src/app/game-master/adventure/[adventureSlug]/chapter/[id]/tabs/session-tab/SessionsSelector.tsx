@@ -16,10 +16,6 @@ export function SessionsSelector({ adventureSlug, storyArcSlug, onSessionChangeC
   const onSessionChange = useCallback(
     (sessionSlug: string) => {
       const selectedSession = sessions?.find((session) => session.slug === sessionSlug);
-      if (!selectedSession) {
-        console.error(`Session slug ${sessionSlug} was not found.`);
-        return;
-      }
       onSessionChangeCallback(selectedSession);
     },
     [onSessionChangeCallback, sessions],
@@ -39,7 +35,7 @@ export function SessionsSelector({ adventureSlug, storyArcSlug, onSessionChangeC
       onChange={(e: ChangeEvent<HTMLSelectElement>) => onSessionChange(e.target.value)}
       placeholder='Session'
     >
-      <option>Aucune</option>
+      <option value={undefined}>Aucune</option>
       {sessions?.map((thisSession: Session) => (
         <option key={thisSession.slug} value={thisSession.slug}>
           {thisSession.name}

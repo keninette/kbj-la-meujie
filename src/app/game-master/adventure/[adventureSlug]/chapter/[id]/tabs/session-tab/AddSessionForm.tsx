@@ -18,6 +18,7 @@ export default function AddSessionForm({ onSessionCreatedCallback, adventureSlug
       return;
     }
 
+    console.log(await AdventuresApi.getSessionNonPlayerCharacters({ adventureSlug, storyArcSlug }));
     onSessionCreatedCallback({
       ...new Session(adventureSlug, storyArcSlug),
       name: sessionName,

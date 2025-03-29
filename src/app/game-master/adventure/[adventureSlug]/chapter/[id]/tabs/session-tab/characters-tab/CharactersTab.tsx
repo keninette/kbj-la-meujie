@@ -19,7 +19,6 @@ export default function CharactersTab({ characters, onUpdateCallback, type }: Pl
     maxSanPoints: 0,
     maxMagicPoints: 0,
   });
-
   const saveNewCharacter = () => {
     const newCharacter = type === 'playerCharacters' ? new PlayerCharacter() : new NonPlayerCharacter();
     onUpdateCallback({
@@ -39,15 +38,17 @@ export default function CharactersTab({ characters, onUpdateCallback, type }: Pl
   return (
     <div className='flex w-full'>
       {characters && (
-        <div className='flex w-full'>
-          <ul className='flex flex-wrap flex-none'>
+        <div className='flex w-full flex-wrap h-fit'>
+          <ul className='flex flex-wrap flex-none w-full h-fit'>
             {characters.map((character) => (
-              <li key={`li--${character.uuid ?? character.uuid}`}>
+              // todo clean this
+              <li key={`li--${character.uuid ?? (character as NonPlayerCharacter).id}`} className='h-[100px] mb-2'>
                 <CharacterCard
                   initialCharacter={character}
                   isEditable={true}
                   onUpdateCallback={(updatedCharacter) => onUpdateCallback(updatedCharacter as PlayerCharacter)}
-                  key={`card--${character.uuid ?? character.uuid}`}
+                  // todo clean this
+                  key={`card--${character.uuid ?? (character as NonPlayerCharacter).id}`}
                 />
               </li>
             ))}
@@ -112,7 +113,7 @@ export default function CharactersTab({ characters, onUpdateCallback, type }: Pl
                   className='mb-2 text-black'
                 >
                   <option value='Female>'>Femme</option>
-                  <option value='Male>'>Homme</option>
+                  <option value='Male'>Homme</option>
                   <option value='Non-binary>'>Non-binaire</option>
                 </select>
                 <button type='button' onClick={saveNewCharacter}>

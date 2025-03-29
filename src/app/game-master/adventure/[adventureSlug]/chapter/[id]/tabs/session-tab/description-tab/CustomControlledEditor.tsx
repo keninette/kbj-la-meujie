@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import dynamic from 'next/dynamic';
@@ -13,34 +13,23 @@ const Editor = dynamic(() => import('react-draft-wysiwyg').then((mod) => mod.Edi
 
 type CustomEditorProps = {
   sessionDescription?: RawDraftContentState;
-  onContentStateCallback: (description?: RawDraftContentState) => void;
+  // This is a bit strange but it doesn't trigger the error "TS71007: Props must be serializable for components in the "use client" entry file"
+  // todo dga : understand more about this https://github.com/vercel/next.js/discussions/46795
+  onContentStateCallback(description?: RawDraftContentState): void;
 };
 export function CustomControlledEditor({ sessionDescription, onContentStateCallback }: CustomEditorProps) {
   const [editorState, setEditorState] = useState<EditorState>(
     sessionDescription ? EditorState.createWithContent(convertFromRaw(sessionDescription)) : EditorState.createEmpty(),
   );
-  const [convertedContent, setConvertedContent] = useState<RawDraftContentState>();
-
+  const convertedContent = useMemo(() => convertToRaw(editorState.getCurrentContent()), [editorState]);
   const onEditorStateChange = (newEditorState: EditorState) => {
     setEditorState(newEditorState);
-  };
-
-  // Use effects
-  useEffect(() => {
-    if (!editorState.getCurrentContent().hasText()) {
-      return;
-    }
     const timeoutId = setTimeout(() => {
-      setConvertedContent(convertToRaw(editorState.getCurrentContent()));
+      onContentStateCallback(convertedContent);
     }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [editorState]);
-
-  // todo improve dependencies no ?
-  useEffect(() => {
-    onContentStateCallback(convertedContent);
-  }, [convertedContent, onContentStateCallback, sessionDescription]);
+  };
 
   return <Editor editorState={editorState} onEditorStateChange={onEditorStateChange} />;
 }
