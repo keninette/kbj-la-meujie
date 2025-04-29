@@ -97,7 +97,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
       storyArc.chapters.find((thisChapter: Chapter) => thisChapter.id === params.id),
     );
     if (!eligibleStoryArcs.length || eligibleStoryArcs.length > 1) {
-      console.error("Pas d'arc trouvé pour ce châpitre");
+      console.error("Pas d'arc trouvé pour ce chapitre");
     }
     return eligibleStoryArcs[0].chapters;
   };
@@ -105,7 +105,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
   return (
     <>
       <main className='flex h-100vh max-h-100vh flex-col text-white min-w-full overflow-y-scroll'>
-        <Header></Header>
+        <Header adventureName={adventure?.name} storyArcName={storyArc?.name}></Header>
         {!isLoggedIn && <LoginForm loginCallback={setIsLoggedIn} />}
         {isLoggedIn && adventure && (
           <div className='flex h-full'>

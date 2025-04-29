@@ -15,6 +15,7 @@ import { SessionsSelector } from '@/app/game-master/adventure/[adventureSlug]/ch
 import RefreshNonPlayerCharacters from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/RefreshNonPlayerCharactersButton';
 import AddSessionForm from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/AddSessionForm';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
+import { PlayerCharacter } from '@/model/sessions/PlayerCharacter.class';
 
 type SessionTabProps = {
   adventureSlug: string;
@@ -44,7 +45,10 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
       SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
     }, 2000);
   };
-  const saveCharacter = (updatedCharacter: Character, keyInSession: 'nonPlayerCharacters' | 'playerCharacters') => {
+  const saveCharacter = <T extends Character>(
+    updatedCharacter: T,
+    keyInSession: 'nonPlayerCharacters' | 'playerCharacters',
+  ) => {
     const matchingCharacterIndex = interactiveSession?.session[keyInSession].findIndex(
       (thisChar: Character) => thisChar.uuid === updatedCharacter.uuid,
     );
@@ -54,8 +58,10 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
       if (computeObjectSha(matchingCharacter) === computeObjectSha(updatedCharacter)) {
         return;
       }
-    } else {
-      interactiveSession?.session[keyInSession].push(updatedCharacter);
+    } else if (keyInSession === 'nonPlayerCharacters') {
+      interactiveSession?.session.nonPlayerCharacters.push(updatedCharacter as unknown as NonPlayerCharacter);
+    } else if (keyInSession === 'playerCharacters') {
+      interactiveSession?.session.playerCharacters.push(updatedCharacter as PlayerCharacter);
     }
 
     setInteractiveSession((prevState) => {

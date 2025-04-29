@@ -16,7 +16,9 @@ export function SessionsSelector({ adventureSlug, storyArcSlug, onSessionChangeC
   const onSessionChange = useCallback(
     (sessionSlug: string) => {
       const selectedSession = sessions?.find((session) => session.slug === sessionSlug);
-      onSessionChangeCallback(selectedSession);
+      if (selectedSession) {
+        onSessionChangeCallback(selectedSession);
+      }
     },
     [onSessionChangeCallback, sessions],
   );
