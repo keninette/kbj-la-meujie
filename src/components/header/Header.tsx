@@ -4,14 +4,19 @@ import FeedbackBanner, { FeedbackBannerProps, FeedbackTypeEnum } from '@/compone
 import { Dispatch, SetStateAction } from 'react';
 
 type HeaderPropsType = {
+  adventureName?: string;
+  storyArcName?: string;
   feedbackBannerProps?: FeedbackBannerProps;
 };
-export default function Header({ feedbackBannerProps }: HeaderPropsType) {
+export default function Header({ adventureName, storyArcName, feedbackBannerProps }: HeaderPropsType) {
   return (
     <header className='relative mb-2'>
       <a className='flex items-center px-6 py-4 mb-8' href='/'>
         <Image className='flex w-20 h-20 rounded-full' src={kbjImg} alt='avatar' />
-        <h1 className='text-3xl ml-4'>kbj la meujie</h1>
+        <h1 className='text-3xl ml-4'>
+          kbj la meujie{adventureName && ` > ${adventureName}`}
+          {storyArcName && ` > ${storyArcName}`}
+        </h1>
       </a>
       {feedbackBannerProps && <FeedbackBanner {...feedbackBannerProps} />}
     </header>

@@ -1,16 +1,21 @@
 import { Tooltip } from 'react-tooltip';
 import React from 'react';
 import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
+import { Image } from '@/model/Image.class';
 
 type NonPlayerCharacterProps = {
   npc: NonPlayerCharacter;
   npcUniqId: string;
-  referer: string;
+  referer: 'edit' | 'read' | 'players';
 };
 
 export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: NonPlayerCharacterProps) {
-  const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';
-  const portraitSrc = `${assetsDir}/img/adventures/${npc.portrait.filename}`;
+  const refererRelativePaths = {
+    ['edit']: '../../../assets',
+    ['read']: '../../../../assets',
+    ['players']: '../../../../../../assets',
+  };
+  const portraitSrc = `${refererRelativePaths[referer]}/img/adventures/${(npc.portrait as Image)?.filename}`;
 
   return (
     <>
@@ -39,18 +44,16 @@ export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: Non
           {npc.portrait && <img className='w-48 h-full' src={portraitSrc} alt='Portrait' />}
           <div className='flex flex-col px-4'>
             <p className='text-lg font-bold'>
-              <a
-                className='cursor-pointer'
-                href={`${assetsDir}/img/adventures/${npc.portrait.filename}`}
-                target='_blank'
-              >
+              <a className='cursor-pointer' href={portraitSrc} target='_blank'>
                 {npc.name}
               </a>
             </p>
             <p>{npc.age} ans</p>
             <p>{npc.occupation}</p>
             <p className='mt-2'>{npc.backstory}</p>
-            {npc.privateBackstory && <p className='mt-2 italic opacity-80'>{npc.privateBackstory}</p>}
+            {referer !== 'players' && npc.privateBackstory && (
+              <p className='mt-2 italic opacity-80'>{npc.privateBackstory}</p>
+            )}
           </div>
         </div>
       </Tooltip>

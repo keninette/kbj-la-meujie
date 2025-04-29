@@ -1,6 +1,19 @@
 import { Session } from '@/model/sessions/Session.class';
 
 export const SessionsApi = {
+  getSession: async (params: { adventureUuid: string; storyArcUuid: string; sessionSlug: string }) => {
+    const response = await fetch(`/api/sessions/${params.adventureUuid}/${params.storyArcUuid}/${params.sessionSlug}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status !== 200) {
+      return null;
+    }
+    return ((await response.json()) as Session) ?? null;
+  },
   getStoryArcSessions: async (params: { adventureSlug: string; storyArcSlug: string }) => {
     const response = await fetch(`/api/sessions/${params.adventureSlug}/${params.storyArcSlug}`, {
       method: 'GET',
