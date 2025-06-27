@@ -29,6 +29,7 @@ type InteractiveSession = {
 export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
   // LOCAL STATES & CONSTANTS
   const [interactiveSession, setInteractiveSession] = useState<InteractiveSession>();
+  let timeoutId;
 
   // LOCAL FUNCTIONS
   const computeObjectSha = (thisObject?: Object): string => {
@@ -38,11 +39,10 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
     SessionsApi.createSession({ adventureSlug, storyArcSlug }, newSession);
   };
   const saveSession = (thisSession: Session) => {
-    const timeoutId = setTimeout(() => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
       SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
     }, 2000);
-
-    clearTimeout(timeoutId);
   };
   const saveCharacter = (updatedCharacter: Character, keyInSession: 'nonPlayerCharacters' | 'playerCharacters') => {
     const matchingCharacterIndex = interactiveSession?.session[keyInSession].findIndex(
