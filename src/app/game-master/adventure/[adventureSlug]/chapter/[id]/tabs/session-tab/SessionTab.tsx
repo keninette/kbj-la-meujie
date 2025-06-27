@@ -37,16 +37,13 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
   const saveNewSession = (newSession: Session) => {
     SessionsApi.createSession({ adventureSlug, storyArcSlug }, newSession);
   };
-  const saveSession = useCallback(
-    (thisSession: Session) => {
-      const timeoutId = setTimeout(() => {
-        SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
-      }, 1000);
+  const saveSession = (thisSession: Session) => {
+    const timeoutId = setTimeout(() => {
+      SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
+    }, 2000);
 
-      return () => clearTimeout(timeoutId);
-    },
-    [adventureSlug, storyArcSlug],
-  );
+    clearTimeout(timeoutId);
+  };
   const saveCharacter = (updatedCharacter: Character, keyInSession: 'nonPlayerCharacters' | 'playerCharacters') => {
     const matchingCharacterIndex = interactiveSession?.session[keyInSession].findIndex(
       (thisChar: Character) => thisChar.uuid === updatedCharacter.uuid,

@@ -12,6 +12,7 @@ import { Clue } from '@/model/Clue.class';
 import { DiceRoll } from '@/model/DiceRoll.class';
 import DiceRollDisplay from '@/components/step/DiceRollDisplay';
 import { CustomAudioPlayer } from '@/components/audioPlayer/CustomAudioPlayer';
+import './step-tab.css';
 
 type StepTabPropsType = {
   referer: 'edit' | 'read';
@@ -27,7 +28,7 @@ export default function StepTab({ step, referer, onAudioRequested }: StepTabProp
   }
   return (
     <div className='h-full w-full'>
-      <h3 className='flex justify-center text-xl font-bold mb-4 '>{step.title}</h3>
+      <h3 className='flex justify-center text-xl font-bold mb-4 text-custom-blue'>{step.title}</h3>
       {step.place && <PlaceBlock place={step.place} referer={referer} />}
 
       {step.lights &&
@@ -61,9 +62,7 @@ export default function StepTab({ step, referer, onAudioRequested }: StepTabProp
       <div className='flex'>
         <div className='flex flex-col w-1/2 mt-4 border-r-2 border-gray-500 border-dotted'>
           {step.description && (
-            <Markdown className='step-display__markdown' remarkPlugins={[remarkGfm]}>
-              {step.description}
-            </Markdown>
+            <Markdown className='step-display__markdown' /*remarkPlugins={[remarkGfm]}*/>{step.description}</Markdown>
           )}
         </div>
         <div className='flex flex-col w-1/2'>

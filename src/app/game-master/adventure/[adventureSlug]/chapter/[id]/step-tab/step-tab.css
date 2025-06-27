@@ -1,0 +1,15 @@
+.step-display__markdown ul {
+    list-style: disc;
+    margin-left: 1rem;
+}
+
+.step-display__markdown h3 {
+    color: var(--color-green);
+    font-weight: bold;
+    margin-top: .5rem;
+}
+.step-display__markdown h4 {
+    color: var(--color-yellow);
+    font-weight: bold;
+    margin-top: .5rem;
+}
