@@ -6,6 +6,7 @@ export class NonPlayerCharacter extends Character {
   age: number;
   privateBackstory: string;
   isStepBound: boolean;
+  isPublic: boolean;
   // todo move portrait in parent class
 
   constructor() {
@@ -17,5 +18,6 @@ export class NonPlayerCharacter extends Character {
     this.age = 0;
     this.privateBackstory = '';
     this.isStepBound = true;
+    this.isPublic = false;
   }
 }

@@ -34,6 +34,7 @@ export default function CharactersTab({ characters, onUpdateCallback, type }: Pl
       currentMagicPoints: formValues.maxMagicPoints,
     });
   };
+  // todo fix type not saved
 
   return (
     <div className='flex w-full'>
