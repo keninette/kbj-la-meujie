@@ -3,6 +3,7 @@ import Image from 'next/image';
 import CharacteristicModifier from '@/app/game-master/adventure/[adventureSlug]/chapter/[id]/tabs/session-tab/characters-tab/character-card/CharacteristicModifier';
 import { Character, CharacterType } from '@/model/sessions/Character.class';
 import { sha256 } from 'js-sha256';
+import { NonPlayerCharacter } from '@/model/NonPlayerCharacter.class';
 
 type CharacterProps = {
   initialCharacter: Character;
@@ -68,6 +69,15 @@ export function CharacterCard({ initialCharacter, isEditable, onUpdateCallback }
     });
   };
 
+  const onIsPublicChange = (isPublic: boolean) => {
+    setCharacter((prevState) => {
+      return {
+        ...prevState,
+        isPublic,
+      };
+    });
+  };
+
   // USE EFFECTS
   useEffect(() => {
     const initialCharacterSha = computeObjectSha(initialCharacter);
@@ -81,7 +91,22 @@ export function CharacterCard({ initialCharacter, isEditable, onUpdateCallback }
   // todo tooltip with all info
   return (
     <div className='bg-white bg-opacity-10 mr-2 mb-2 border-t-2 border-white'>
-      <p className='font-bold'>{initialCharacter.name}</p>
+      <div className='flex w-full justify-between'>
+        <p className='font-bold'>{initialCharacter.name}</p>
+        {character.type === CharacterType.NON_PLAYER_CHARACTER && (
+          <p>
+            <label htmlFor='isPublic'>Public</label>{' '}
+            <input
+              type='checkbox'
+              name='isPublic'
+              checked={(character as NonPlayerCharacter).isPublic}
+              onChange={(e) => {
+                onIsPublicChange(e.target.checked);
+              }}
+            />
+          </p>
+        )}
+      </div>
       <div className='flex w-[300px] h-[75px]'>
         <div className='flex h-full'>
           <Image

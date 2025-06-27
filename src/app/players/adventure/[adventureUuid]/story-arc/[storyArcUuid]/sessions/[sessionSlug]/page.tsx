@@ -1,9 +1,11 @@
 'use client';
 import Header from '@/components/header/Header';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { SessionsApi } from '@/services/sessions.api';
 import { Session } from '@/model/sessions/Session.class';
-import NonPlayerCharacterBlock from '@/components/step/NonPlayerCharacterBlock';
+import { NonPlayerCharactersTab } from '@/app/players/adventure/[adventureUuid]/story-arc/[storyArcUuid]/sessions/[sessionSlug]/tabs/NonPlayerCharactersTab';
+import CustomTabs from '@/components/customTabs/CustomTabs';
+import Tab from '@/components/tab/Tab';
 
 type PlayersStoryArcProps = {
   params: {
@@ -34,19 +36,24 @@ export default function PlayersStoryArc({ params }: PlayersStoryArcProps) {
       <Header></Header>
       <section className='flex flex-col w-full'>
         {/*todo date dans session*/}
-        <p>🗓 3 octobre 2021</p>
-        <div className={'flex w-full'}>
-          <ul>
-            {session?.nonPlayerCharacters.map((character) => (
-              <NonPlayerCharacterBlock
-                key={character.uuid}
-                npc={character}
-                npcUniqId={`npc__${character.name.toLowerCase().replaceAll(' ', '')}`}
-                referer={'players'}
-              />
-            ))}
-          </ul>
+        <div className='flex w-full justify-between'>
+          <p>🗓 3 octobre 2021</p>
+          <button onClick={updateSession}>♻ Raffraîchir</button>
         </div>
+        <CustomTabs
+          className='mt-4'
+          tabs={[
+            {
+              id: 'tab-session-npcs',
+              title: 'PNJs',
+              content: (
+                <Tab>
+                  <NonPlayerCharactersTab characters={session?.nonPlayerCharacters?.filter((npc) => npc.isPublic)} />
+                </Tab>
+              ),
+            },
+          ]}
+        />
       </section>
     </main>
   );
