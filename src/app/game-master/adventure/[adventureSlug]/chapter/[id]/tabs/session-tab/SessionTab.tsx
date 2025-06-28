@@ -29,7 +29,7 @@ type InteractiveSession = {
 export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
   // LOCAL STATES & CONSTANTS
   const [interactiveSession, setInteractiveSession] = useState<InteractiveSession>();
-  let timeoutId;
+  let timeoutId: string | number | NodeJS.Timeout | undefined;
 
   // LOCAL FUNCTIONS
   const computeObjectSha = (thisObject?: Object): string => {
