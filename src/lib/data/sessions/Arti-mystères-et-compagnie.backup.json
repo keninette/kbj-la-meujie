@@ -68,6 +68,7 @@
   ],
   "nonPlayerCharacters": [
     {
+      "uuid": "coucou",
       "id": 1710197059980,
       "name": "Walter Skinner",
       "portrait": {
@@ -83,6 +84,7 @@
       "isStepBound": false
     },
     {
+      "uuid": "coucou2",
       "id": 1714747603483,
       "name": "Jonas Herrman",
       "portrait": {
