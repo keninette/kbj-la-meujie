@@ -18,6 +18,7 @@ type PlayersStoryArcProps = {
 export default function PlayersStoryArc({ params }: PlayersStoryArcProps) {
   const [session, setSession] = React.useState<Session | null>();
   const updateSession = useCallback(async () => {
+    console.log('update session');
     setSession(
       await SessionsApi.getSession({
         adventureUuid: params.adventureUuid,
@@ -28,8 +29,8 @@ export default function PlayersStoryArc({ params }: PlayersStoryArcProps) {
   }, [params]);
 
   useEffect(() => {
-    updateSession();
-  }, [updateSession]);
+    setInterval(updateSession, 1000);
+  }, []);
 
   return (
     <main className='flex min-h-screen flex-col text-white'>
