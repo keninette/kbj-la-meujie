@@ -1,5 +1,5 @@
 import { Adventure } from '@/model/Adventure.class';
-import { Chapter } from '@/model/Chapter.class';
+import { Chapter } from '@/model/adventure/story-arc/chapter/Chapter.class';
 
 export type RouteType = {
   name: string;

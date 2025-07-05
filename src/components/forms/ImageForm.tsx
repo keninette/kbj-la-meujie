@@ -11,13 +11,13 @@ export default function ImageForm({ onSubmitCallback, requestedImage }: ImageFor
 
   const onChange = (fieldName: string, value: string | number) => {
     const updatedImage: Image = { ...image };
+    // @ts-ignore
     updatedImage[fieldName] = value;
     setImage(updatedImage);
   };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    console.log('here');
     onSubmitCallback(image);
   };
 

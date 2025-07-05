@@ -14,9 +14,11 @@ export default function AudioForm({ onSubmitCallback, requestedAudio }: AudioFor
 
     switch (fieldName) {
       case 'autoplay':
+        updatedAudio.autoPlay = !!value;
       case 'loop':
-        updatedAudio[fieldName] = value as boolean;
+        updatedAudio.loop = !!value;
       default:
+        // @ts-ignore
         updatedAudio[fieldName] = value;
         break;
     }

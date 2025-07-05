@@ -81,7 +81,7 @@ export default function ChapterDisplay({ params }: { params: { adventureSlug: st
       setChapter(chapter);
       setAdventure(adventure);
     })();
-  }, [params, params.adventureSlug, params.id, activeStep, isLoggedIn]);
+  }, [params, params.adventureSlug, params.id, activeStep, isLoggedIn, storyArc]);
 
   const onStepSelection = (step: Step) => {
     // @ts-ignore

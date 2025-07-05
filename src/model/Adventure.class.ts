@@ -154,6 +154,7 @@ export class Adventure {
     });
 
     // Make it unique
+    // @ts-ignore
     adventure.nonPlayerCharacters = [...new Map(adventure.nonPlayerCharacters.map((npc) => [npc.id, npc])).values()];
   }
   static fetchAllPlaces(adventure: Adventure) {

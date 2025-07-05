@@ -10,20 +10,26 @@ import LoginForm from '@/components/forms/LoginForm';
 
 export default function NewAdventure() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [adventure, setAdventure] = useState<Adventure>(new Adventure());
+  const [adventure, setAdventure] = useState<Partial<Adventure>>(new Adventure());
   const universeTranslationsMapping = {
     [UniverseEnum.CHTULHU]: '🐙 Chtulhu',
   };
-  const handleChange = (fieldName: string, value: string) => {
-    const updatedAdventure: Adventure = { ...adventure };
-    if (fieldName === 'players.min') {
-      updatedAdventure.players = updatedAdventure.players || { min: 0, max: 0 };
-      updatedAdventure.players.min = +value;
-    } else if (fieldName === 'players.max') {
-      updatedAdventure.players = updatedAdventure.players || { min: 0, max: 0 };
-      updatedAdventure.players.max = +value;
-    } else {
-      updatedAdventure[fieldName] = value;
+  const handleChange = (fieldName: string | keyof Adventure | UniverseEnum, value: string) => {
+    const updatedAdventure: Partial<Adventure> = { ...adventure };
+
+    switch (fieldName) {
+      case 'players.min':
+        updatedAdventure.players = updatedAdventure.players || { min: 0, max: 0 };
+        updatedAdventure.players.min = +value;
+        break;
+      case 'players.max':
+        updatedAdventure.players = updatedAdventure.players || { min: 0, max: 0 };
+        updatedAdventure.players.max = +value;
+        break;
+      default:
+        // @ts-ignore
+        updatedAdventure[fieldName as keyof Adventure] = value;
+        break;
     }
 
     setAdventure(updatedAdventure);

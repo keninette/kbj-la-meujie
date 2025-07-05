@@ -1,6 +1,6 @@
-import { Step } from '@/model/Step.class';
-import { StoryArc } from '@/model/StoryArc.class';
 import { Light } from '@/model/Light.class';
+import { StoryArc } from '@/model/adventure/story-arc/StoryArc.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
 export class Chapter {
   id: string;

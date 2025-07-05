@@ -4,7 +4,7 @@ import React from 'react';
 
 type PlaceBlockProps = {
   place: Place;
-  referer: 'edit' | 'read';
+  referer: 'edit' | 'read' | 'adventure';
 };
 export default function PlaceBlock({ place, referer }: PlaceBlockProps) {
   const assetsDir = referer === 'edit' ? '../../../assets' : '../../../../assets';

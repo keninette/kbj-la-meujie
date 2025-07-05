@@ -1,7 +1,10 @@
-import { StepSubFormProps } from '@/components/forms/StepFormOld';
 import { FormEvent, useState } from 'react';
-import { Step } from '@/model/Step.class';
+import { Step } from '@/model/adventure/story-arc/chapter/step/Step.class';
 
+type StepSubFormProps = {
+  step: Step;
+  setStep: (step: Step) => void;
+};
 export default function NextStepForm({ step, setStep }: StepSubFormProps) {
   const [nextStepId, setNextStepId] = useState('');
   const onChange = (value: string) => {

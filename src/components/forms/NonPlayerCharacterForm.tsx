@@ -17,7 +17,7 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
         setNpc((prevState) => {
           return {
             ...prevState,
-            portrait: { ...prevState.portrait, filename: value as string },
+            portrait: { ...(prevState.portrait as Image), filename: value as string },
           };
         });
         break;
@@ -124,7 +124,7 @@ export default function NonPlayerCharacterForm({ onSubmitCallback, adventureNpcs
           type='text'
           name='filename'
           placeholder='Nom du fichier'
-          value={npc.portrait.filename}
+          value={(npc?.portrait as Image)?.filename}
           onChange={(e) => onFormChange('portrait', e.target.value)}
           className='flex text-black'
           required

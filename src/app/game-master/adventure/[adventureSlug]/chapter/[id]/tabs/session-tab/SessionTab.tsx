@@ -39,12 +39,7 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
   const saveNewSession = (newSession: Session) => {
     SessionsApi.createSession({ adventureSlug, storyArcSlug }, newSession);
   };
-  const saveSession = (thisSession: Session) => {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
-    }, 2000);
-  };
+
   const saveCharacter = <T extends Character>(
     updatedCharacter: T,
     keyInSession: 'nonPlayerCharacters' | 'playerCharacters',
@@ -114,12 +109,18 @@ export function SessionTab({ adventureSlug, storyArcSlug }: SessionTabProps) {
 
   // USE EFFECTS
   useEffect(() => {
+    const saveSession = (thisSession: Session) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        SessionsApi.updateSession({ adventureSlug, storyArcSlug, sessionSlug: thisSession.slug }, thisSession);
+      }, 2000);
+    };
     const newSha = computeObjectSha(interactiveSession?.session);
     if (interactiveSession?.sha && newSha !== interactiveSession?.sha) {
       console.log('Saving session');
       saveSession(interactiveSession.session);
     }
-  }, [interactiveSession, saveSession]);
+  }, [interactiveSession]);
 
   return (
     <div className='flex flex-col w-full h-full'>

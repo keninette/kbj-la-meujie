@@ -17,7 +17,7 @@ import './step-display.scss';
 type StepProps = {
   step: Step;
   uniqueStepKey: string;
-  referer: string;
+  referer: 'edit' | 'read' | 'adventure';
   stepIndex?: number;
 };
 

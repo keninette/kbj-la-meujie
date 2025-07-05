@@ -43,6 +43,7 @@ export default function RecursiveDiceRollFormItem({
         updatedDiceRoll.onFail.value = value;
         break;
       default:
+        // @ts-ignore
         updatedDiceRoll[fieldName] = value;
         break;
     }

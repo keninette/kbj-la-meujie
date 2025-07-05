@@ -6,13 +6,14 @@ import { Image } from '@/model/Image.class';
 type NonPlayerCharacterProps = {
   npc: NonPlayerCharacter;
   npcUniqId: string;
-  referer: 'edit' | 'read' | 'players';
+  referer: 'edit' | 'read' | 'players' | 'adventure';
 };
 
 export default function NonPlayerCharacterBlock({ npc, npcUniqId, referer }: NonPlayerCharacterProps) {
   const refererRelativePaths = {
     ['edit']: '../../../assets',
     ['read']: '../../../../assets',
+    ['adventure']: '../../../../assets',
     ['players']: '../../../../../../assets',
   };
   const portraitSrc = `${refererRelativePaths[referer]}/img/adventures/${(npc.portrait as Image)?.filename}`;
